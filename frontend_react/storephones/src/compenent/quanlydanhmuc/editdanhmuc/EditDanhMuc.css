@@ -1,0 +1,66 @@
+
+.container-edit-danh-muc{
+    z-index: 5;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(230, 225, 225, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.edit-danh-muc{
+
+    width: 400px;
+    height: auto;
+    background-color: #ffffff;
+    margin: 0 auto;
+    margin-top: 20px;
+    border: 2px solid;
+}
+#title-edit-danh-muc{
+    font-size: x-large;
+    text-align: center;
+    padding: 10px;
+}
+.ten-danh-muc-edit, .mo-ta-edit{
+    width: 80%;
+    margin: 0 auto;
+}.ten-danh-muc-edit p, .mo-ta-edit p{
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.ten-danh-muc-edit input{
+    width: 100%;
+    padding: 5px;
+}
+.mo-ta-edit textarea{
+    width: 100%;
+    height: 70px;
+    padding: 5px;
+}
+.submit-btn-edit{
+    margin: 20px 0 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#cancel-edit{
+    padding: 5px 20px 5px 20px;
+    border: 2px solid;
+    background-color: rgb(0, 255, 255);
+    border-radius: 10px;
+    cursor: pointer;
+}
+#save-edit{
+    padding: 5px 20px 5px 20px;
+    border: 2px solid;
+    background-color: rgb(0, 255, 76);
+    border-radius: 10px;
+    cursor: pointer;
+}
