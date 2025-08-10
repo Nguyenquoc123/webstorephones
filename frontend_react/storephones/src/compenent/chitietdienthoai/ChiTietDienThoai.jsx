@@ -2,20 +2,21 @@ import { useParams } from "react-router-dom";
 import MenuKhachHang from "../menukhachhang/MenuKhachHang";
 import ChiTietSanPham from "./chitietsanpham/ChiTietSanPham";
 import { useEffect, useState } from "react";
-import { fetchGetDSPhienBanByDienThoai } from "../../api/dienthoai";
+import { fetchAddVaoGioHang, fetchGetDSPhienBanByDienThoai } from "../../api/dienthoai";
 import ThongTinSanPham from "./thongtinsanpham/ThongTinSanPham";
 import DanhGia from "../danhgia/DanhGia";
-import { fetchAddDanhGia,  fetchDSDanhGiaByMaPhienBan } from "../../api/danhgia";
+import { fetchAddDanhGia, fetchDSDanhGiaByMaPhienBan } from "../../api/danhgia";
 
 function ChiTietDienThoai() {
     const { value } = useParams();
-    const [maPhienBan, maDienThoai, maKhachHang] = value.split('-')
+    const [maPhienBan, maDienThoai] = value.split('-')
     const [dsPhienBan, setDSPhienBan] = useState(new Map())
     const [dsDanhGia, setDSDanhGia] = useState([]);
     const [selectNow, setSelectNow] = useState(null);
     const [star, setStar] = useState(0);
     const [showDanhGia, setShowDanhGia] = useState(-1)
-    const [formAddDanhGia, setFormAddDanhGia] = useState({maKhachHang: '', maPhienBan: '', soSao: 0, noiDung: ''})
+    const [soLuong, setSoLuong] = useState(1);
+    const [formAddDanhGia, setFormAddDanhGia] = useState({ maPhienBan: '', soSao: 0, noiDung: '' })
 
 
     useEffect(() => {
@@ -30,16 +31,16 @@ function ChiTietDienThoai() {
         response();
     }, [])
     useEffect(() => {
-        if(selectNow)
-            setFormAddDanhGia({...formAddDanhGia, maKhachHang: Number(maKhachHang), maPhienBan: selectNow.maPhienBan })
+        if (selectNow)
+            setFormAddDanhGia({ ...formAddDanhGia, maPhienBan: selectNow.maPhienBan })
     }, [selectNow])
 
-    useEffect(()=>{
+    useEffect(() => {
         loadDanhGia(maPhienBan);
     }, [])
-    const loadDanhGia = async (maPhienBan) =>{
+    const loadDanhGia = async (maPhienBan) => {
         const result = await fetchDSDanhGiaByMaPhienBan(maPhienBan);
-        if(result.code === 200){
+        if (result.code === 200) {
             setDSDanhGia(result.result)
         }
     }
@@ -65,20 +66,19 @@ function ChiTietDienThoai() {
         const ds = dsPhienBan.get(key_);
         setSelectNow(ds[0])
     }
-    const clickChangeMauSac = (key_, maPhienBan) =>{
+    const clickChangeMauSac = (key_, maPhienBan) => {
         const ds = dsPhienBan.get(key_);
         const result = ds.find(item => item.maPhienBan === maPhienBan)
         setSelectNow(result)
     }
-    const inputData = (key, value) =>{
-        setFormAddDanhGia({...formAddDanhGia, [key]: value})
+    const inputData = (key, value) => {
+        setFormAddDanhGia({ ...formAddDanhGia, [key]: value })
     }
-    const resetFormAddDanhGia = () =>{
-        setFormAddDanhGia({maKhachHang: '', maPhienBan: '', soSao: 0, noiDung: ''})
+    const resetFormAddDanhGia = () => {
+        setFormAddDanhGia({ maPhienBan: '', soSao: 0, noiDung: '' })
     }
-    const saveDanhGia = async () =>{
-        const data= {
-            "maKhachHang": formAddDanhGia.maKhachHang,
+    const saveDanhGia = async () => {
+        const data = {
             "maPhienBan": formAddDanhGia.maPhienBan,
             "soSao": formAddDanhGia.soSao,
             "noiDung": formAddDanhGia.noiDung
@@ -86,12 +86,30 @@ function ChiTietDienThoai() {
         console.log(formAddDanhGia)
         console.log(selectNow)
         const response = await fetchAddDanhGia(data)
-        if(response.code === 200){
+        if (response.code === 200) {
             console.log("add thành công")
             loadDanhGia(selectNow.maPhienBan);
             console.log(response.result)
         }
-        
+
+    }
+    const themVaoGioHang = async () => {
+        const data = {
+            "soLuong": soLuong,
+            "maPhienBan": selectNow.maPhienBan
+        }
+        console.log(data)
+        const response = await fetchAddVaoGioHang(data);
+        if (response.code === 200) {
+            console.log(response.result)
+        }
+    }
+    const changeSoLuong = (value) => {
+        if (typeof value === "string") {
+            console.log(value)
+            value = value.replace(/[^0-9]/g, "");
+        }
+        setSoLuong(value)
     }
     return (
         <>
@@ -101,11 +119,14 @@ function ChiTietDienThoai() {
                 selectNow={selectNow}
                 clickChangeCauHinh={clickChangeCauHinh}
                 clickChangeMauSac={clickChangeMauSac}
+                soLuong={soLuong}
+                changeSoLuong={changeSoLuong}
+                themVaoGioHang={themVaoGioHang}
             />
-            <ThongTinSanPham 
+            <ThongTinSanPham
                 selectNow={selectNow}
             />
-            <DanhGia 
+            <DanhGia
                 formAddDanhGia={formAddDanhGia}
                 dsDanhGia={dsDanhGia}
                 inputData={inputData}

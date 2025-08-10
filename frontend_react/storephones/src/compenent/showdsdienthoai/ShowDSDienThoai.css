@@ -43,6 +43,7 @@
 }
 
 .hang button {
+    position: relative;
     height: 30px;
     width: 70px;
     background-color: #ffffff;
@@ -75,6 +76,7 @@
 .gia button{
     width: 90%;
     height: 30px;
+    position: relative;
 }
 
 .bo-nho{
@@ -101,6 +103,7 @@
     margin-bottom: 0;
 }
 .bo-nho button{
+    position: relative;
     width: 60px;
     height: 30px;
 }
@@ -174,3 +177,24 @@
     font-weight: 500;
     color: red;
 }
+
+/**=================================**/
+
+
+.select {}
+
+.select::after {
+
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    border: 3px solid red;
+    pointer-events: none;
+    box-sizing: border-box;
+   
+
+}
+

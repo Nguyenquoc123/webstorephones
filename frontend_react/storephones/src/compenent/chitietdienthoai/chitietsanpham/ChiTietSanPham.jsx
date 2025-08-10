@@ -3,7 +3,7 @@ import '../chitietsanpham/ChiTietSanPham.css'
 import { fetchGetDSPhienBanByDienThoai } from '../../../api/dienthoai';
 import { useState } from 'react';
 
-function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeMauSac}) {
+function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeMauSac, soLuong, changeSoLuong, themVaoGioHang}) {
     const [imgNow, setImgNow] = useState(0);
     const clickNextImg = (value)=>{
         console.log("run", imgNow+1)
@@ -21,6 +21,14 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                 setImgNow(0)
             }
             
+        }
+    }
+    const clickChangeSoLuong = (value) =>{
+        if(value < 0 && soLuong > 1){
+            changeSoLuong(Number.parseInt(soLuong) - 1)
+        }
+        else if(value > 0 ){
+            changeSoLuong(Number.parseInt(soLuong) + 1)
         }
     }
     return (
@@ -74,9 +82,9 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                     <div className="so-luong">
                         <h3>Số lượng:</h3>
                         <div className="btn-so-luong">
-                            <button>+</button>
-                            <input type="text" />
-                            <button>-</button>
+                            <button onClick={() => clickChangeSoLuong(-1)}>-</button>
+                            <input type="text" value={soLuong} onChange={(e) => changeSoLuong(e.target.value)}/>
+                            <button onClick={() => clickChangeSoLuong(1)}>+</button>
                         </div>
                     </div>
                     <div className="kho">
@@ -85,8 +93,7 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                     </div>
                     <div className="btn-chi-tiet">
                         <button id="mua-ngay">Mua ngay</button>
-                        <div className="btn-gio-hang">
-
+                        <div className="btn-gio-hang" onClick={themVaoGioHang}>
                             <button>Thêm vào giỏ hàng</button>
                             <img src="/images/ip.png" alt="" />
                         </div>
