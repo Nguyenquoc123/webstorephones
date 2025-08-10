@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DSDanhMuc from "./dsdanhmuc/DSDanhMuc";
-import { fetchAddDanhMuc, fetchDeleteDanhMuc, fetchGetDSDanhMuc, fetchUpdateDanhMuc } from "../../api/danhmuc";
+import { fetchAddDanhMuc, fetchDeleteDanhMuc, fetchGetDSDanhMucPhanTrang, fetchUpdateDanhMuc } from "../../api/danhmuc";
 import DelDanhMuc from "./deldanhmuc/DelDanhMuc";
 import EditDanhMuc from "./editdanhmuc/EditDanhMuc";
 import ThemDanhMuc from "./themdanhmuc/ThemDanhMuc";
@@ -29,7 +29,7 @@ function DanhMuc() {
     }, [dataPage.page])
     const loadDSDanhMuc = async (page) => {
             console.log(dataPage)
-            const result = await fetchGetDSDanhMuc(page);
+            const result = await fetchGetDSDanhMucPhanTrang(page);
             if (result.code === 200) {
                 setDSDanhMuc(result.result)
                 setDataPage({...dataPage, totalPage: result.result.totalPages})

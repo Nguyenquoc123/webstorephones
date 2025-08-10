@@ -44,7 +44,7 @@ function Signup() {
         console.log(result);
         if (result.code === 200) {
             localStorage.setItem("token", result.result.token);
-            navigate(`/home/${result.result.id}`);
+            navigate('/home');
         }
 
     }

@@ -28,10 +28,10 @@ function Login() {
             localStorage.setItem("token", result.result.token);
             console.log(localStorage.getItem("token"))
             if (result.result.role === "KHACHHANG") {
-                navigate(`/home/${result.result.id}`);
+                navigate('/home');
             }
             else if (result.result.role === "ADMIN") {
-                navigate('/adddanhmuc');
+                navigate('/dienthoai');
             }
 
 
