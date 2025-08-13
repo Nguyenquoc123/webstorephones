@@ -17,8 +17,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/dienthoai' element={<DienThoai />} />
         <Route path='/danhmuc' element={<DanhMuc />} />
-        <Route path='/home/:makhachhang' element={<HomeKhachHang />} />
-        <Route path='/home/:makhachhang/giohang' element={<Giohang />} />
+        <Route path='/home' element={<HomeKhachHang />} />
         <Route path='/chitietdienthoai/:value' element={<ChiTietDienThoai />} />
       </Routes>
     </BrowserRouter>
