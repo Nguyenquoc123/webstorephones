@@ -7,6 +7,7 @@ import ChiTietDienThoai from './compenent/chitietdienthoai/ChiTietDienThoai';
 import DienThoai from './compenent/quanlysanpham/dienthoai'
 import HomeKhachHang from './compenent/homekhachhang/HomeKhachHang';
 import DanhMuc from './compenent/quanlydanhmuc/DanhMuc';
+import Giohang from './compenent/giohang/Giohang';
 
 function App() {
   return (

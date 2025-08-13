@@ -34,7 +34,7 @@ function MenuKhachHang({search}) {
                 </div>
                 <div className="menu-right">
                     <img id="icon-thongbao" src="/images/icon-notifications.png" />
-                    <img id="icon-cart" src="/images/icon-cart.png" />
+                    <img id="icon-cart" src="/images/icon-cart.png" onClick={() => navigate('/home/:makhachhang/giohang')}/>
                     <div className="img-logout">
                         <img id="image-logout" src="/images/user-logout.png" onClick={() => setShowLogout(showLogout?false:true)} />
                     </div>
