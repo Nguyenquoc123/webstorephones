@@ -6,8 +6,10 @@ import MenuKhachHang from '../menukhachhang/MenuKhachHang'
 import ShowDSDienThoai from "../showdsdienthoai/ShowDSDienThoai";
 
 import { fetchGetDSPhienBan, fetchSearchAndFilter, fetchSearchPhienBan } from "../../api/dienthoai";
+import Loading from "../loading/Loading";
 
 function HomeKhachHang() {
+    const [loading, setLoading] = useState(false);
     const reloadPage = useLocation();
     const search = useLocation();
     const navigate = useNavigate();
@@ -59,7 +61,9 @@ function HomeKhachHang() {
             loadDSPhienBan();
     }, [])
     const loadDSPhienBan = async () => {
+        setLoading(true)
         const result = await fetchGetDSPhienBan();
+        setLoading(false)
         if (result.code === 200) {
             console.log(result.result)
             if (result.result.length > 0) {
@@ -133,7 +137,9 @@ function HomeKhachHang() {
             "filter": filter_
         }
         console.log(data)
+        setLoading(true)
         const response = await fetchSearchAndFilter(data);
+        setLoading(false)
         if (response.code === 200) {
             setDSPhienBan(response.result);
             console.log(response.result)
@@ -150,6 +156,7 @@ function HomeKhachHang() {
                 clickTieuChi={inputData}
                 clickFilter={clickSearchAndFilter}
             />
+            <Loading show={loading} />
         </>
 
     )

@@ -2,9 +2,11 @@ import react, { useState } from "react";
 import '../login/Login.css'
 import { fetchLogin } from "../../api/authApi";
 import { useNavigate } from "react-router-dom";
+import Loading from "../loading/Loading";
 
 
 function Login() {
+    const [loading, setLoading] = useState(false)
     const [inputData, setInputData] = useState({
         userName:'',
         password:''
@@ -21,7 +23,9 @@ function Login() {
             "userName": inputData.userName,
             "password": inputData.password
         }
+        setLoading(true)
         const result = await fetchLogin(data);
+        setLoading(false)
         if (result.code === 200) {
             console.log(result.result.role);
             console.log(result.result.token)
@@ -67,6 +71,8 @@ function Login() {
                 </div>
 
             </form>
+
+            <Loading show={loading} />
         </div>
     );
 }
