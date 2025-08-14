@@ -8,6 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 200;
 }
 .popup-child{
     width: 300px;
@@ -15,6 +16,7 @@
     text-align: center;
     background-color: white;
     border-radius: 20px;
+    
 }
 .btn-popup-active{
     display: flex;

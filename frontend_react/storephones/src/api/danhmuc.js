@@ -34,10 +34,33 @@ export async function fetchAddDanhMuc(data, token) {
 
 }
 
-export async function fetchGetDSDanhMuc(page){
+export async function fetchGetDSDanhMucPhanTrang(page){
     const token = localStorage.getItem("token")
     try {
         const response = await fetch(`http://localhost:8080/storephones/getdsdanhmuc/${page}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        if(!response.ok){
+            const error = await response.json();
+            return error;
+        }
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.log(error)
+        return {
+            code: -1,
+            message: 'Error System'
+        }
+    }
+}
+export async function fetchGetDSDanhMuc(){
+    const token = localStorage.getItem("token")
+    try {
+        const response = await fetch('http://localhost:8080/storephones/getdsdanhmuc', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`

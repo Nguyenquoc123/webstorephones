@@ -22,12 +22,10 @@
   font-weight: bold;
   margin: 0 auto 20px;
 }
-
 .AD-sidebar ul {
   list-style: none;
   padding: 0;
 }
-
 .AD-sidebar li {
   padding: 12px 20px;
   cursor: pointer;

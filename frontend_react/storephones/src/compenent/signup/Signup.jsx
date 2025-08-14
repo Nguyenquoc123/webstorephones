@@ -44,7 +44,7 @@ function Signup() {
         console.log(result);
         if (result.code === 200) {
             localStorage.setItem("token", result.result.token);
-            navigate(`/home/${result.result.id}`);
+            navigate('/home');
         }
 
     }
@@ -73,11 +73,11 @@ function Signup() {
             </div>
             <div className="email">
                 <img src='/images/email.png' />
-                <input id="email" type="text" placeholder="Email" name="email" value={formInput.email} onChange={(e) => changeInput('email', e.target.value)}/>
+                <input id="email" type="email" placeholder="Email" name="email" value={formInput.email} onChange={(e) => changeInput('email', e.target.value)}/>
             </div>
             <div className="sdt">
-                <img src='/images/phone-call.png' />
-                <input id="sdt" type="text" placeholder="Số điện thoại" name="sdt" value={formInput.soDienThoai} onChange={(e) => changeInput('soDienThoai', e.target.value)}/>
+                <img src='/images/phone-call.png' /> 
+                <input id="sdt" type="number" placeholder="Số điện thoại" name="sdt" value={formInput.soDienThoai} onChange={(e) => changeInput('soDienThoai', e.target.value)}/>
             </div>
             <div className="ho-ten">
                 <img src='/images/user.png' />
