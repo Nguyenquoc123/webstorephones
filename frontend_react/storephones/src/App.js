@@ -7,7 +7,9 @@ import ChiTietDienThoai from './compenent/chitietdienthoai/ChiTietDienThoai';
 import DienThoai from './compenent/quanlysanpham/dienthoai'
 import HomeKhachHang from './compenent/homekhachhang/HomeKhachHang';
 import DanhMuc from './compenent/quanlydanhmuc/DanhMuc';
-import Giohang from './compenent/giohang/Giohang';
+import GioHang from  './compenent/giohang/Giohang'
+import DonHang from './compenent/quanlydonhang/DonHang';
+import ChiTietDonHang from './compenent/quanlydonhang/chitietdonhang/PageChiTietDonHang';
 
 function App() {
   return (
@@ -18,7 +20,10 @@ function App() {
         <Route path='/dienthoai' element={<DienThoai />} />
         <Route path='/danhmuc' element={<DanhMuc />} />
         <Route path='/home' element={<HomeKhachHang />} />
+        <Route path='/home/giohang'element={<GioHang />} />
         <Route path='/chitietdienthoai/:value' element={<ChiTietDienThoai />} />
+        <Route path='/donhang' element={<DonHang />} />
+        <Route path='/chitietdonhang/:maDonHang' element={<ChiTietDonHang />} />
       </Routes>
     </BrowserRouter>
   );

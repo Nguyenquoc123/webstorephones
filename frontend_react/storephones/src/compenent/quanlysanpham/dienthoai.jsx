@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ThemDienThoai from '../quanlysanpham/themdienthoai/themdienthoai'
-import { fetchAddDienThoai, fetchAddPhienBan, fetchDeteleDienThoai, fetchDetelePhienBan, fetchGetDSDienThoai, fetchGetDSPhienBan, fetchUpdateDienThoai, fetchUpdatePhienBan } from "../../api/dienthoai";
+import { fetchAddDienThoai, fetchAddPhienBan, fetchDeteleDienThoai, fetchDetelePhienBan, fetchGetDSDienThoai, fetchGetDSDienThoaiPhanTrang, fetchGetDSPhienBan, fetchGetDSPhienBanPhanTrang, fetchUpdateDienThoai, fetchUpdatePhienBan } from "../../api/dienthoai";
 import MenuAdmin from '../menuadmin/MenuAdmin';
 import Menu from "../quanlysanpham/menu/Menu"
 import ThemPhienBan from "./themphienban/ThemPhienBan";
@@ -40,22 +40,45 @@ function DienThoai() {
         image: []
     })
 
-    useEffect(() => {
-        const result = async () => {
-            const lstdienthoai = await fetchGetDSDienThoai();
-            if (lstdienthoai.code === 200) {
-                setDSDienThoai(lstdienthoai.result)
-                console.log(lstdienthoai.result)
-            }
-        }
-        result();
-    }, [])
+    
+    const [dataPage, setDataPage] = useState({
+        page: 0,
+        totalPage: 1,
+        totalElements: 0,
+        size: 10
+    })
+
+    const [reload, setReload] = useState(false);
+
+
+    // useEffect(() => {
+    //     loadDSDienThoaiPhanTrang();
+    // }, [])
+
+    // useEffect(() => {
+    //     if (dsPhienBan.length === 0 && menubar === 4) {
+    //         loadDSPhienBan();
+    //     }
+    // }, [menubar, dsPhienBan])
 
     useEffect(() => {
-        if (dsPhienBan.length === 0 && menubar === 4) {
-            loadDSPhienBan();
+        console.log("CHuyener trang", menubar, "   ", dataPage.page)
+        if (menubar === 3 || menubar === 4) {
+            console.log("không chạy =======================")
+            setDataPage({ ...dataPage, page : 0 })
+            setReload(!reload)
         }
-    }, [menubar, dsPhienBan])
+    }, [menubar])
+
+    useEffect(() => {
+        console.log("run==================")
+        if (menubar === 3)
+            loadDSDienThoaiPhanTrang();
+        else if (menubar === 4)
+            loadDSPhienBanPhanTrang();
+    }, [reload, dataPage.page])
+
+
     const inputData = (key, value) => {
 
         setFormAddDienThoai({ ...formAddDienThoai, [key]: value })
@@ -74,6 +97,35 @@ function DienThoai() {
             console.log("load ds hoàn thành.")
         }
     }
+
+
+
+
+    const loadDSPhienBanPhanTrang = async () => {
+        const response = await fetchGetDSPhienBanPhanTrang(dataPage.page)
+        if (response.code === 200) {
+            console.log("Phien ban ", response.result)
+            setDSPhienBan(response.result.content)
+            setDataPage({
+                ...dataPage, totalPage: response.result.totalPages,
+                totalElements: response.result.totalElements,
+                size: response.result.size
+            })
+        }
+    }
+    const loadDSDienThoaiPhanTrang = async () => {
+        console.log(dataPage.page)
+        const response = await fetchGetDSDienThoaiPhanTrang(dataPage.page);
+        if (response.code === 200) {
+            console.log("Phân trang điện thoại", response)
+            setDSDienThoai(response.result.content)
+            setDataPage({
+                ...dataPage, totalPage: response.result.totalPages, totalElements: response.result.totalElements,
+                size: response.result.size
+            })
+        }
+    }
+
     const selectImgEdit = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -115,6 +167,7 @@ function DienThoai() {
 
         lst.splice(index, 1);
         setFormAddPhienBan({ ...formAddPhienBan, image: lst })
+        console.log("gì gì đó=====")
     }
 
     const resetFormAddDienThoai = () => {
@@ -129,14 +182,13 @@ function DienThoai() {
     }
     const clickSaveDienThoai = async (e) => {
         e.preventDefault();
+        if (formAddDienThoai.image === null) {
+            console.log("Vui lòng chọn 1 tấm ảnh")
+            return;
+        }
         console.log(formAddDienThoai)
         const data = new FormData();
-        // const tenDienThoai = document.getElementById('name-dien-thoai').value
-        // const hangSanXuat = document.getElementById('name-hang-san-xuat').value
-        // const maDanhMuc = document.getElementById('select-danh-muc').value
-        // const fileinput = document.getElementById('select-image');
-        // const moTa = document.getElementById('mo-ta').value;
-        // const image = fileinput.files[0];
+
         data.append("tenDienThoai", formAddDienThoai.tenDienThoai);
         data.append("hangSanXuat", formAddDienThoai.hangSanXuat);
         data.append("maDanhMuc", formAddDienThoai.maDanhMuc);
@@ -157,22 +209,10 @@ function DienThoai() {
 
     // thêm phiên bản mới
     const clickSavePhienBanDienThoai = async () => {
-        // const maDienThoai = document.getElementById('dien-thoai').value;
-        // const mauSac = document.getElementById('mau-sac').value;
-        // const rom = document.getElementById('rom').value;
-        // const ram = document.getElementById('ram').value;
-        // const soLuong = document.getElementById('so-luong').value;
-        // const giaBan = document.getElementById('gia-ban').value;
-        // const pin = document.getElementById('pin').value;
-        // const manHinh = document.getElementById('man-hinh').value;
-        // const camera = document.getElementById('camera').value;
-        // const moTa = document.getElementById('mo-ta-san-pham').value;
-        // const fileInput = document.getElementById('select-image2');
-        // if (fileInput.files.length === 0) {
-        //     console.log("Chọn ảnh");
-        //     return;
-        // }
-        // const image = fileInput.files[0];
+        if (formAddPhienBan.image.length <= 0) {
+            console.log("Vui lòng chọn ít nhất 1 tấm ảnh")
+            return;
+        }
 
         console.log(formAddPhienBan)
         console.log(JSON.stringify(formAddPhienBan.image))
@@ -187,7 +227,7 @@ function DienThoai() {
         data.append("manHinh", formAddPhienBan.manHinh);
         data.append("camera", formAddPhienBan.camera);
         data.append("moTa", formAddPhienBan.moTa);
-        // data.append("image", formAddPhienBan.image);
+
         formAddPhienBan.image.forEach(item => data.append("image", item));
         console.log("con gà")
         console.log(formAddPhienBan.image)
@@ -240,12 +280,6 @@ function DienThoai() {
     const clickSaveEditDienThoai = async (e) => {
 
         const data = new FormData();
-        // const tenDienThoai = document.getElementById('name-dien-thoai-edit').value
-        // const hangSanXuat = document.getElementById('name-hang-san-xuat-edit').value
-        // const maDanhMuc = document.getElementById('select-danh-muc-edit').value
-        // const fileinput = document.getElementById('select-image-edit');
-        // const moTa = document.getElementById('mo-ta-edit').value;
-        // const image = fileinput.files.length === 0 ? null : fileinput.files[0];
 
         data.append("maDienThoai", formAddDienThoai.maDienThoai);
         data.append("tenDienThoai", formAddDienThoai.tenDienThoai);
@@ -303,6 +337,13 @@ function DienThoai() {
         const result = await fetchDeteleDienThoai(maDienThoai);
         if (result.code === 200) {
             console.log("Xóa thành công")
+            if ((dataPage.totalElements - 1) % dataPage.size === 0) {
+                console.log("quần qued lỗi", dataPage)
+                setDataPage({ ...dataPage, page: dataPage.page - 1 });
+            }
+            else {
+                loadDSDienThoaiPhanTrang();
+            }
             clickCancelDelete();
             setDSDienThoai(dsDienThoai => dsDienThoai.filter(dienthoai => dienthoai.maDienThoai !== maDienThoai))
             showpopup(true, result.message)
@@ -339,22 +380,15 @@ function DienThoai() {
     const clickCancelUpdatePhienBan = () => {
         resetFormAddPhienBan();
         setShowAction(-1);
+        setLstImgDelete([])
     }
 
     const clickSaveUpdatePhienBan = async (maPhienBan) => {
+        if (formAddPhienBan.image.length <= 0) {
+            console.log("vui lòng chọn ít nhất 1 tấm ảnh")
+            return;
+        }
 
-        // const maDienThoai = document.getElementById('dien-thoai-edit').value;
-        // const mauSac = document.getElementById('mau-sac-edit').value;
-        // const rom = document.getElementById('rom-edit').value;
-        // const ram = document.getElementById('ram-edit').value;
-        // const soLuong = document.getElementById('so-luong-edit').value;
-        // const giaBan = document.getElementById('gia-ban-edit').value;
-        // const pin = document.getElementById('pin-edit').value;
-        // const manHinh = document.getElementById('man-hinh-edit').value;
-        // const camera = document.getElementById('camera-edit').value;
-        // const moTa = document.getElementById('mo-ta-san-pham-edit').value;
-        // const fileInput = document.getElementById('select-image-edit2');
-        // const image = fileInput.files.length === 0 ? null : fileInput.files[0];
         console.log(formAddPhienBan)
         const data = new FormData();
         data.append("maPhienBan", formAddPhienBan.maPhienBan)
@@ -386,6 +420,7 @@ function DienThoai() {
         else {
             showpopup(false, result.message)
         }
+        setLstImgDelete([])
     }
 
     const clickCancelDeletePhienBan = () => {
@@ -397,12 +432,29 @@ function DienThoai() {
         const result = await fetchDetelePhienBan(maPhienBan);
         if (result.code === 200) {
             console.log("Xoa thanh công")
+            if ((dataPage.totalElements - 1) % dataPage.size === 0) {
+                console.log("quần qued lỗi", dataPage)
+                setDataPage({ ...dataPage, page: dataPage.page - 1 });
+            }
+            else {
+                loadDSPhienBanPhanTrang();
+            }
             setDSPhienBan(dsPhienBan => dsPhienBan.filter(item => item.maPhienBan !== maPhienBan))
             showpopup(true, result.message)
             clickCancelDeletePhienBan();
         }
         else {
             showpopup(false, result.message)
+        }
+    }
+
+
+    const clickChangePage = (value) => {
+        if (value < 0 && dataPage.page > 0) {
+            setDataPage({ ...dataPage, page: dataPage.page - 1 })
+        }
+        else if (value > 0 && dataPage.page < dataPage.totalPage - 1) {
+            setDataPage({ ...dataPage, page: dataPage.page + 1 })
         }
     }
     return (
@@ -441,12 +493,18 @@ function DienThoai() {
                 dsDienThoai={dsDienThoai}
                 showEdit={showFormEditDienThoai}
                 showDelete={showDeleteDienThoai}
+                page={dataPage.page}
+                totalPage={dataPage.totalPage}
+                clickChangePage={clickChangePage}
             />
             <DSPhienBan menubar={menubar}
                 dsPhienBan={dsPhienBan}
                 delImage={delImage2}
                 clickUpdatePhienBan={clickUpdatePhienBan}
                 clickDeletePhienBan={clickDeletePhienBan}
+                page={dataPage.page}
+                totalPage={dataPage.totalPage}
+                clickChangePage={clickChangePage}
             />
             <SuaPhienBan menubar={showAction}
                 formUpdatePhienBan={formAddPhienBan}

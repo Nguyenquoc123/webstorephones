@@ -3,8 +3,10 @@ import react, { useState } from "react";
 import '../signup/Signup.css'
 import { useNavigate } from "react-router-dom";
 import { fetchSigup } from "../../api/authApi";
+import Loading from "../loading/Loading"
 
 function Signup() {
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [formInput, setFormInput] = useState({
         email:'',
@@ -39,7 +41,9 @@ function Signup() {
             "password": formInput.password
         }
         console.log(formInput)
+        setLoading(true)
         const result = await fetchSigup(data);
+        setLoading(false)
         console.log("no");
         console.log(result);
         if (result.code === 200) {
@@ -108,6 +112,8 @@ function Signup() {
                 <a onClick={handleclick}>Đăng nhập</a>
             </div>
         </form>
+
+        <Loading show={loading}/>
         </div>
     )
 
