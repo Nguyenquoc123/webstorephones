@@ -1,0 +1,14 @@
+.DMK-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.DMK-content {
+  margin-top: 60px;
+  background: #3333;
+  width: 300px;
+  height: 500px;
+}
+.DMK-password {
+  width: 200px;
+}
