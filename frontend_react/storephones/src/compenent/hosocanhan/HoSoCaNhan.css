@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.profile-container {
+  max-width: 900px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  margin-left: 300px;
+
+}
+
+.profile-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  margin-right: 8px;
+  color: #007bff;
+}
+
+.profile-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-label {
+  width: 200px;
+  font-size: 14px;
+}
+
+.profile-input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #8b7d7b;
+  background-color: #f9f9f9;
+}
+
+h3 {
+  font-size: 24px;
+  color: #070202;
+  margin-bottom: 20px;
+  padding-left: -200px;
+}
+
+.HSCN-profile-info {
+  display: flex;
+  flex-direction: column;   
+  justify-content: center;  
+  align-items: center;      
+  text-align: center;
+  margin: 20px 0;
+}
+
+.profile-name {
+  margin-top: 12px; 
+  font-weight: bold;
+}
+.HSCN-btn_xac_nhan{
+  background-color: #007bff;
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 1200px;
+
+}
