@@ -14,12 +14,12 @@ import DoiMatKhau from "./compenent/DoiMatKhau/DoiMatKhau";
 import GioHang from "./compenent/giohang/Giohang";
 import DonHang from "./compenent/quanlydonhang/DonHang";
 import ChiTietDonHang from "./compenent/quanlydonhang/chitietdonhang/PageChiTietDonHang";
-
+import KhuyenMai from "./compenent/Quanlykhuyenmai/Quanlykhuyenmai"
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<KhuyenMai />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dienthoai" element={<DienThoai />} />
         <Route path="/danhmuc" element={<DanhMuc />} />

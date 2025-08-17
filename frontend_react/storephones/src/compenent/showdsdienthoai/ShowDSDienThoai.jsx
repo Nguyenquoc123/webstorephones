@@ -3,6 +3,38 @@ import React from "react";
 import '../showdsdienthoai/ShowDSDienThoai.css'
 
 function ShowDSDienThoai({ dsPhienBan, clickXemChiTiet, searchAndFilter, clickTieuChi, clickFilter}) {
+    const showKhuyenMai = (km) => {
+        if(km === undefined)
+            return '';
+        console.log('Value' === 'Value')
+        if(km.maKhuyenMai && km.loaiKhuyenMai == "Fixed")
+            return "Giảm " + km.giaTriGiam + "đ"
+        else if(km.maKhuyenMai){
+            return "Giảm "+ km.giaTriGiam + "%"
+        }
+        else
+            return ''
+        console.log(km.maKhuyenMai !== null)
+        return ''
+    }
+
+    const showGiaGoc = (km) => {
+        if(km === undefined)
+            return true
+        if(!km.maKhuyenMai)
+            return true
+        return false
+    }
+    const showGiaKhuyenMai = (phienban) => {
+        if(phienban === undefined)
+            return '';
+        if(phienban.km === undefined || !phienban.km.maKhuyenMai)
+            return phienban.giaBan.toLocaleString('vi-VN')
+        if(phienban.km.loaiKhuyenMai === "Fixed"){
+            return (phienban.giaBan - phienban.km.giaTriGiam).toLocaleString('vi-VN')
+        }
+        return (phienban.giaBan - 0.01*phienban.km.giaTriGiam*phienban.giaBan).toLocaleString('vi-VN')
+    }
     return (
         <div className="content">
             <div className="fill-menu">
@@ -61,7 +93,8 @@ function ShowDSDienThoai({ dsPhienBan, clickXemChiTiet, searchAndFilter, clickTi
                                 <div key={phienban.maPhienBan} onClick={() => clickXemChiTiet(`${phienban.maPhienBan}-${phienban.maDienThoai}`)} className="san-pham">
                                     <img src={phienban.image[0].url} />
                                     <p id="name-san-pham">{phienban.tenDienThoai + ' ' + phienban.rom + ' ' + phienban.ram}</p>
-                                    <p id="gia">{phienban.giaBan.toLocaleString('vi-VN')} đ</p>
+                                    <p id="gia">{showGiaKhuyenMai(phienban)} đ   <span className="gia-ban-goc">{showGiaGoc(phienban.km)?'': phienban.giaBan.toLocaleString('vi-VN') + 'đ'}</span></p>
+                                    <span className="khuyen-mai-value">{showKhuyenMai(phienban.km)}</span>
                                 </div>
                             )
                         )

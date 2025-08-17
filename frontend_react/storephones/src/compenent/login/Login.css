@@ -1,17 +1,19 @@
-body{
+body {
     background-color: rgb(230, 235, 241);
 }
-.containerlogin{
+
+.containerlogin {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
-#login{
-    
+
+#login {
+
     width: 400px;
     height: 500px;
-   /* margin: 0 auto;
+    /* margin: 0 auto;
    /* border: 1px solid black;/
     margin-top: 50px;*/
     border-radius: 20px;
@@ -21,7 +23,8 @@ body{
     box-shadow: 7px 7px 11px 1px rgb(0 0 0), -7px -6px 7px 10px rgb(255, 255, 255);
     /*box-shadow: 2px;*/
 }
-#text-login{
+
+#text-login {
     height: 100px;
     align-content: center;
     text-align: center;
@@ -29,31 +32,41 @@ body{
     font-weight: bolder;
     color: #ff00ea;
 }
-.username, .password{
-   
+
+.username,
+.password {
+
     width: 350px;
     height: 50px;
     border-radius: 30px;
-   /* border: 2px solid black;*/
+    /* border: 2px solid black;*/
     display: flex;
     flex-direction: row;
     align-items: center;
     box-shadow: inset 1px 3px 5px 1px rgb(0 0 0), inset -7px -6px 11px 6px rgb(255, 255, 255);
 }
-.username{
+
+.username {
     margin-top: 15px;
+    position: relative;
 }
-.password{
+
+.password {
     margin-top: 30px;
+    position: relative;
 }
-.username img, .password img{
+
+.username img,
+.password img {
     width: 15%;
     height: 50%;
     max-width: 8%;
     padding: 10px;
     opacity: 0.4;
 }
-.username input, .password input{
+
+.username input,
+.password input {
     width: 85%;
     height: 70%;
     margin: auto 0;
@@ -62,16 +75,19 @@ body{
     background-color: transparent;
     font-size: medium;
     font-weight: bold;
-    
+
     border-radius: 30px;
 }
-.username input:hover{
+
+.username input:hover {
     z-index: 1;
 }
-.username input:focus{
+
+.username input:focus {
     z-index: -100;
 }
-.checkbox-group{
+
+.checkbox-group {
     height: 30px;
     display: flex;
     flex-direction: row;
@@ -80,7 +96,8 @@ body{
     margin-top: 10px;
     margin-left: -200px;
 }
-#click-login{
+
+#click-login {
     margin-top: 28px;
     font-size: x-large;
     font-weight: bold;
@@ -92,10 +109,12 @@ body{
     color: white;
     box-shadow: 3px 4px 8px 2px rgb(0 0 0), -7px -6px 10px 4px rgb(255, 255, 255);
 }
+
 #click-login:hover {
     cursor: pointer;
 }
-.create-signup{
+
+.create-signup {
     width: 80%;
     height: 50px;
     display: flex;
@@ -103,16 +122,28 @@ body{
     justify-content: center;
     align-items: center;
 }
-.create-signup p{
+
+.create-signup p {
     font-weight: 500;
-    
+
 }
-.create-signup a{
+
+.create-signup a {
     padding-left: 5px;
     font-size: large;
     font-weight: 500;
     color: rgb(223, 7, 133);
 }
-.create-signup a:hover{
+
+.create-signup a:hover {
     cursor: pointer;
+}
+
+/**==================== Error ============================**/
+.Err {
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+    color: red;
+    font-size: 12px;
 }

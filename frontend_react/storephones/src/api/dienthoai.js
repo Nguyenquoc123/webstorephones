@@ -259,3 +259,24 @@ export async function fetchDeteleDienThoai(madienthoai) {
     }
 }
 
+/// api test
+export async function fetchGetDSPhienBanAndKhuyenMai() {
+    const token = localStorage.getItem("token")
+    try {
+        const response = await fetch('http://localhost:8080/storephones/getdsphienbanandkhuyenmai', {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return {
+            code: -1,
+            message: 'Lỗi hệ thống.'
+        }
+    }
+}

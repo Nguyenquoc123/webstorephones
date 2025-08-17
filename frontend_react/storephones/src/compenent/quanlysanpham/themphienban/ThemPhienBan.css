@@ -1,5 +1,4 @@
-
-.menu2{
+.menu2 {
     width: 800px;
     height: 520px;
     margin: 0 auto;
@@ -7,7 +6,8 @@
     border-radius: 20px;
     border: 2px solid;
 }
-#title-menu2{
+
+#title-menu2 {
     width: 100%;
     height: 40px;
     font-size: 25px;
@@ -17,7 +17,9 @@
     margin-top: 10px;
     margin-bottom: 5px;
 }
-.content2{
+
+.content2 {
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -25,7 +27,8 @@
     background-color: azure;
     padding: 20px 0 20px 0;
 }
-.select-img2{
+
+.select-img2 {
     position: relative;
     margin-left: 20px;
     width: 30%;
@@ -40,28 +43,32 @@
     border-radius: 20px;
     background-color: white;
 }
-.img-selected2{
+
+.img-selected2 {
     width: 200px;
     height: 200px;
 }
-#select-image2{
+
+#select-image2 {
     display: none;
 }
-.select-btn2{
+
+.select-btn2 {
     padding: 0 10px 0 10px;
     border-radius: 10px;
     border: 2px solid;
-    background-color:aqua;
+    background-color: aqua;
 }
 
-#next-left{
+#next-left {
     position: absolute;
     bottom: 21px;
     left: 20px;
     background-color: rgb(0, 255, 255);
 
 }
-#next-right{
+
+#next-right {
     position: absolute;
     bottom: 21px;
     right: 20px;
@@ -69,7 +76,8 @@
 
 }
 
-.main-input{
+.main-input {
+    position: relative;
     width: 65%;
     display: grid;
     grid-template-areas:
@@ -83,42 +91,43 @@
     padding: 0 10px 0 10px;
 }
 
-#dien-thoai{
+#dien-thoai {
     grid-area: a;
 }
-#mau-sac{
+
+#mau-sac {
     grid-area: b;
 }
 
-#rom{
+#rom {
     grid-area: c;
 }
 
-#ram{
+#ram {
     grid-area: d;
 }
 
-#so-luong{
+#so-luong {
     grid-area: e;
 }
 
-#gia-ban{
+#gia-ban {
     grid-area: g;
 }
 
-#pin{
+#pin {
     grid-area: h;
 }
 
-#man-hinh{
+#man-hinh {
     grid-area: k;
 }
 
-#camera{
+#camera {
     grid-area: l;
 }
 
-#mo-ta-san-pham{
+#mo-ta-san-pham {
     grid-area: i;
     height: 60px;
     padding: 5px 10px 5px 10px;
@@ -126,20 +135,31 @@
     border-radius: 10px;
 
 }
-#dien-thoai, #mau-sac, #rom, #ram, #gia-ban, #so-luong, #man-hinh, #pin, #camera{
+
+#dien-thoai,
+#mau-sac,
+#rom,
+#ram,
+#gia-ban,
+#so-luong,
+#man-hinh,
+#pin,
+#camera {
     height: 40px;
     padding: 0 5px 0 5px;
     margin: 0;
     box-shadow: 4px -4px 1px 0px black;
     border-radius: 10px;
 }
-#cancel-menu2{
+
+#cancel-menu2 {
     background-color: greenyellow;
-    box-shadow:  3px -3px 0px 0px black;
+    box-shadow: 3px -3px 0px 0px black;
 }
-#save-menu2{
+
+#save-menu2 {
     background-color: red;
-    box-shadow:  3px -3px 0px 0px black;
+    box-shadow: 3px -3px 0px 0px black;
 }
 
 /**=============================================**/

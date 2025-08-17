@@ -54,7 +54,7 @@ function MenuKhachHang({ search }) {
           <img
             id="icon-cart"
             src="/images/icon-cart.png"
-            onClick={() => navigate("/home/:makhachhang/giohang")}
+            onClick={() => navigate("/home/giohang")}
           />
           <div className="img-logout">
             <img

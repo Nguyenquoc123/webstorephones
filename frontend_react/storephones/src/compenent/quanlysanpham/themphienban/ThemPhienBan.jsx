@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import '../themphienban/ThemPhienBan.css'
 
-function ThemPhienBan({ menubar, formAddPhienBan, inputData, dsDienThoai, clickSavePhienBanDienThoai, clickCancelThemPhienBan, delImage}) {
+function ThemPhienBan({ menubar, formAddPhienBan, inputData, dsDienThoai, clickSavePhienBanDienThoai, clickCancelThemPhienBan, delImage }) {
     const [imgNow, setImgNow] = useState(0);
+    
     const changeDienThoai = (e) => {
         inputData('maDienThoai', e.target.value)
     }
@@ -16,28 +17,47 @@ function ThemPhienBan({ menubar, formAddPhienBan, inputData, dsDienThoai, clickS
                 )
         )
         inputData('image', lstFile)
+       
     }
     const nextImg = (value) => {
         console.log(imgNow, value)
-        if(imgNow > 0 && value < 0 && imgNow - value > 0){
-            console.log(imgNow-value)
+        if (imgNow > 0 && value < 0 && imgNow - value > 0) {
+            console.log(imgNow - value)
             setImgNow(imgNow + value);
         }
-        else if(imgNow < formAddPhienBan.image.length-1 && value > 0 && imgNow + value < formAddPhienBan.image.length){
+        else if (imgNow < formAddPhienBan.image.length - 1 && value > 0 && imgNow + value < formAddPhienBan.image.length) {
             setImgNow(imgNow + value);
         }
+    }
+    const validCheck = () => {
+        let hasError = false;
+        let newErr = {
+            maPhienBan: "",
+            maDienThoai: "",
+            rom: "",
+            ram: "",
+            soLuong: "",
+            giaBan: "",
+            pin: "",
+            manHinh: "",
+            camera: "",
+            moTa: "",
+            mauSac: "",
+            image: [],
+        };
     }
     return (
         <div className="menu2" style={{ display: menubar === 2 ? 'block' : 'none' }}>
             <p id="title-menu2">Thêm phiên bản mới</p>
             <div className="content2">
                 <div className="select-img2">
-                    <img className="img-selected2"  src={formAddPhienBan.image.length > 0 && formAddPhienBan.image[imgNow] instanceof File? URL.createObjectURL(formAddPhienBan.image[imgNow]): null}/>
+                    <img className="img-selected2" src={formAddPhienBan.image.length > 0 && formAddPhienBan.image[imgNow] instanceof File ? URL.createObjectURL(formAddPhienBan.image[imgNow]) : null} />
                     <label htmlFor="select-image2" className="select-btn2"> Chọn ảnh</label>
                     <input id="select-image2" multiple type="file" onChange={selectImg} />
-                    <button style={{display: imgNow === 0? 'none':'block'}} onClick={() => nextImg(-1)} id='next-left'>{'<<'}</button>
-                    <button style={{display: imgNow === formAddPhienBan.image.length-1? 'none':'block'}} onClick={() => nextImg(1)} id='next-right'>{'>>'}</button>
-                    <button id='del-image' style={{display: formAddPhienBan.image.length > 0?'block':'none'}} onClick={() =>{delImage(imgNow); setImgNow(0)}}>x</button>
+                    <button style={{ display: imgNow === 0 ? 'none' : 'block' }} onClick={() => nextImg(-1)} id='next-left'>{'<<'}</button>
+                    <button style={{ display: imgNow === formAddPhienBan.image.length - 1 ? 'none' : 'block' }} onClick={() => nextImg(1)} id='next-right'>{'>>'}</button>
+                    <button id='del-image' style={{ display: formAddPhienBan.image.length > 0 ? 'block' : 'none' }} onClick={() => { delImage(imgNow); setImgNow(0) }}>x</button>
+                    
                 </div>
                 <div className="main-input">
                     <select id="dien-thoai" onChange={changeDienThoai}>
