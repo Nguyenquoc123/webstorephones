@@ -1,0 +1,62 @@
+.cart-container {
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #007bff;
+  color: white;
+}
+
+th, td {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-img {
+  width: 80px;
+  height: auto;
+}
+
+.qty-input {
+  width: 40px;
+  height: 25px;
+  text-align: center;
+}
+
+button {
+  padding: 5px 10px;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 30px;
+}
+
+.checkout-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.checkout-btn {
+  padding: 8px 15px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
