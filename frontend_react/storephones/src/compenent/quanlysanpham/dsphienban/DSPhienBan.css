@@ -1,8 +1,12 @@
-.menu4{
+/* .menu4{
     width: 90vw;
+    height: 800px;
     margin: 0 auto;
     padding: 5px;
     border: 2px solid;
     overflow-x: auto;
     overflow-y: auto;
+} */
+.menu4 {
+  overflow-x: auto;
 }

@@ -2,12 +2,15 @@ import { useParams } from "react-router-dom";
 import MenuKhachHang from "../menukhachhang/MenuKhachHang";
 import ChiTietSanPham from "./chitietsanpham/ChiTietSanPham";
 import { useEffect, useState } from "react";
-import { fetchAddVaoGioHang, fetchGetDSPhienBanByDienThoai } from "../../api/dienthoai";
+import {fetchGetDSPhienBanByDienThoai } from "../../api/dienthoai";
 import ThongTinSanPham from "./thongtinsanpham/ThongTinSanPham";
 import DanhGia from "../danhgia/DanhGia";
 import { fetchAddDanhGia, fetchDSDanhGiaByMaPhienBan } from "../../api/danhgia";
+import { fetchAddVaoGioHang } from "../../api/giohang";
+import Loading from "../loading/Loading";
 
 function ChiTietDienThoai() {
+    const [loading, setLoading] = useState(false)
     const { value } = useParams();
     const [maPhienBan, maDienThoai] = value.split('-')
     const [dsPhienBan, setDSPhienBan] = useState(new Map())
@@ -21,7 +24,9 @@ function ChiTietDienThoai() {
 
     useEffect(() => {
         const response = async () => {
+            setLoading(true)
             const result = await fetchGetDSPhienBanByDienThoai(maDienThoai);
+            setLoading(false)
             if (result.code === 200) {
                 console.log("Đang load data")
                 console.log(result.result)
@@ -39,7 +44,9 @@ function ChiTietDienThoai() {
         loadDanhGia(maPhienBan);
     }, [])
     const loadDanhGia = async (maPhienBan) => {
+        setLoading(true)
         const result = await fetchDSDanhGiaByMaPhienBan(maPhienBan);
+        setLoading(false)
         if (result.code === 200) {
             setDSDanhGia(result.result)
         }
@@ -85,7 +92,10 @@ function ChiTietDienThoai() {
         }
         console.log(formAddDanhGia)
         console.log(selectNow)
+
+        setLoading(true)
         const response = await fetchAddDanhGia(data)
+        setLoading(false)
         if (response.code === 200) {
             console.log("add thành công")
             loadDanhGia(selectNow.maPhienBan);
@@ -99,7 +109,9 @@ function ChiTietDienThoai() {
             "maPhienBan": selectNow.maPhienBan
         }
         console.log(data)
+        setLoading(true)
         const response = await fetchAddVaoGioHang(data);
+        setLoading(false)
         if (response.code === 200) {
             console.log(response.result)
         }
@@ -133,7 +145,7 @@ function ChiTietDienThoai() {
                 resetFormAddDanhGia={resetFormAddDanhGia}
                 saveDanhGia={saveDanhGia}
             />
-
+            <Loading show={loading}/>
         </>
     )
 }

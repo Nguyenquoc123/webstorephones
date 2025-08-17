@@ -20,6 +20,27 @@ export async function fetchGetDSDienThoai() {
     }
 }
 
+export async function fetchGetDSDienThoaiPhanTrang(page) {
+    const token = localStorage.getItem("token")
+    try {
+        const response = await fetch(`http://localhost:8080/storephones/getdsdienthoaiphantrang/${page}`, {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return {
+            code: -1,
+            message: 'Lỗi hệ thống.'
+        }
+    }
+}
+
 export async function fetchGetDSPhienBanByDienThoai(maDienThoai) {
     const token = localStorage.getItem('token')
     try {
@@ -128,6 +149,26 @@ export async function fetchGetDSPhienBan() {
         }
     }
 }
+export async function fetchGetDSPhienBanPhanTrang(page) {
+    const token = localStorage.getItem("token")
+    try {
+        const response = await fetch(`http://localhost:8080/storephones/getdsphienbanphantrang/${page}`, {
+            method: 'GET',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return {
+            code: -1,
+            message: 'Lỗi hệ thống.'
+        }
+    }
+}
 export async function fetchSearchAndFilter(data) {
     const token = localStorage.getItem("token")
     try {
@@ -218,47 +259,3 @@ export async function fetchDeteleDienThoai(madienthoai) {
     }
 }
 
-export async function fetchAddVaoGioHang(data) {
-    const token = localStorage.getItem("token")
-    try {
-        const response = await fetch('http://localhost:8080/storephones/themvaogiohang', {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-
-
-        })
-        const result = await response.json();
-        return result;
-
-    } catch (error) {
-        console.log(error)
-        return {
-            code: -1,
-            message: "Error ồi"
-        }
-    }
-
-}
-export async function fetchXoaKhoiGioHang(maPhienBan) {
-    const token = localStorage.getItem("token")
-    try {
-        const response = await fetch(`http://localhost:8080/storephones/xoakhoigiohang/${maPhienBan}`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        const result = await response.json();
-    } catch (error) {
-        console.log(error)
-        return {
-            code: -1,
-            message: "Lỗi ồi"
-        }
-    }
-    
-}
