@@ -30,7 +30,7 @@ const Table = ({ cart, setCart }) => {
     };
 
     return (
-        <div className="cart-container">
+        <div className="GH-cart-container">
             <table>
                 <thead>
                     <tr>
@@ -49,8 +49,8 @@ const Table = ({ cart, setCart }) => {
                                 <input type="checkbox"
                                     style={{ width: "20px", height: "20px" }} />
                             </td>
-                            <td className="product-cell">
-                                <img src={item.image} alt={item.name} className="product-img" />
+                            <td className="GH-product-cell">
+                                <img src={item.image} alt={item.name} className="GH-product-img" />
                                 <div>
                                     <strong>{item.name}</strong>
                                     <br />
@@ -64,13 +64,13 @@ const Table = ({ cart, setCart }) => {
                                     type="text"
                                     value={item.quantity}
                                     readOnly
-                                    className="qty-input"
+                                    className="GH-qty-input"
                                 />
                                 <button onClick={() => increaseQty(item.id)}>+</button>
                             </td>
                             <td>{formatPrice(item.price * item.quantity)}</td>
                             <td>
-                                <button className="delete-btn" onClick={() => removeItem(item.id)}>
+                                <button className="GH-delete-btn" onClick={() => removeItem(item.id)}>
                                     ❌
                                 </button>
                             </td>

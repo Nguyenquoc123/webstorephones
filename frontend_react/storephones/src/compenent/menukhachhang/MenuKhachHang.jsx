@@ -73,9 +73,14 @@ function MenuKhachHang({ search }) {
         className="btn-logout"
         style={{ display: showLogout ? "block" : "none" }}
       >
-        <button id="btn-logout-child" onClick={() => setClickedLogout(true)}>
-          Logout
-        </button>
+        <div className="btn-logout-child" style={{ display: "flex", flexDirection: "column" }}>
+          <button id="btn-logout-child" onClick={() => navigate("/home/HoSoCaNhan")}>
+            ho so ca nhan
+          </button>
+          <button id="btn-logout-child" onClick={() => setClickedLogout(true)}>
+            logout
+          </button>
+        </div>
       </div>
       <div
         style={{ display: showMenuByIcon ? "block" : "none" }}
