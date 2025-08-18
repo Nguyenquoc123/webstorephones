@@ -15,7 +15,6 @@ function HomeKhachHang() {
     const navigate = useNavigate();
     const [dsPhienBan, setDSPhienBan] = useState([]);
     const [searchAndFilter, setSearchAndFilter] = useState({
-        search: '',
         hang: [],
         gia: '',
         minGia: null,
@@ -90,7 +89,6 @@ function HomeKhachHang() {
     }
     const resetSearchAndFilter = () => {
         setSearchAndFilter({
-            search: '',
             hang: [],
             gia: '',
             minGia: null,
@@ -99,9 +97,7 @@ function HomeKhachHang() {
         })
     }
     const inputData = (key, value) => {
-        if (key === "search") {
-            setSearchAndFilter({ ...searchAndFilter, [key]: value })
-        }
+        
         if (key === "hang") {
             if (searchAndFilter.hang.includes(value)) {
                 const lstHang = searchAndFilter.hang.filter(item => item !== value);

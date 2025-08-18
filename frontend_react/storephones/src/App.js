@@ -14,7 +14,7 @@ import DoiMatKhau from "./compenent/DoiMatKhau/DoiMatKhau";
 import GioHang from "./compenent/giohang/Giohang";
 import DonHang from "./compenent/quanlydonhang/DonHang";
 import ChiTietDonHang from "./compenent/quanlydonhang/chitietdonhang/PageChiTietDonHang";
-
+import KhuyenMai from './compenent/Quanlykhuyenmai/Quanlykhuyenmai'
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +31,7 @@ function App() {
         <Route path="/home/giohang" element={<GioHang />} />
         <Route path="/donhang" element={<DonHang />} />
         <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
+        <Route path="/khuyenmai" element={<KhuyenMai />} />
       </Routes>
     </BrowserRouter>
   );
