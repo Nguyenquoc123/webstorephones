@@ -33,6 +33,7 @@ function MenuAdmin() {
                 <p onClick={() => { navigate('/danhmuc') }}>Quản lý danh mục</p>
                 <p onClick={() => navigate('/dienthoai')}>Quản lý điện thoại</p>
                 <p onClick={() => navigate('/donhang')}>Quản lý đơn hàng</p>
+                <p onClick={() => navigate('/khuyenmai')}>Quản lý khuyến mãi</p>
             </div>
 
             <div className="btn-logout-admin" style={{ display: showLogout ? "block" : "none" }}>

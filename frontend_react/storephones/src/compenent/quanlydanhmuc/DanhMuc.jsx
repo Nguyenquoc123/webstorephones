@@ -71,7 +71,7 @@ function DanhMuc() {
         const result = await fetchDeleteDanhMuc(maDanhMuc);
         if (result.code === 200) {
             console.log(result.result)
-            if((dsDanhMuc.totalElements-1) % dsDanhMuc.size === 0){
+            if(((dsDanhMuc.totalElements-1) % dsDanhMuc.size === 0) && dataPage.page > 1) {
                 console.log("quần qued lỗi", dataPage)
                 setDataPage({...dataPage, page: dataPage.page-1});
             }

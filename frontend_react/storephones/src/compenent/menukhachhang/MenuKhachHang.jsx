@@ -1,7 +1,7 @@
 import "../menukhachhang/MenuKhachHang.css";
 
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logout from "../logout/Logout";
 function MenuKhachHang({ search }) {
   const navigate = useNavigate();
@@ -20,6 +20,10 @@ function MenuKhachHang({ search }) {
   const handleSearch = () => {
     navigate("/home", { state: { searchValue: searchValue } });
   };
+
+  useEffect(()=>{
+    console.log("Tìm kiếm ", searchValue)
+  }, [searchValue])
   return (
     <div className="container">
       <div className="menu">
