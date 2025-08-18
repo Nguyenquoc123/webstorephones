@@ -80,7 +80,7 @@ const Table = ({ cart, setCart }) => {
             </table>
 
             <div className="checkout-container">
-                <button className="checkout-btn">Thanh toán</button>
+                <button className="GH-checkout-btn">Thanh toán</button>
             </div>
         </div>
     );
