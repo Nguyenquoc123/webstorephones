@@ -8,6 +8,10 @@ import DanhGia from "../danhgia/DanhGia";
 import { fetchAddDanhGia, fetchDSDanhGiaByMaPhienBan } from "../../api/danhgia";
 import { fetchAddVaoGioHang } from "../../api/giohang";
 import Loading from "../loading/Loading";
+import Popup from "../popup/Popup";
+
+
+
 
 function ChiTietDienThoai() {
     const [loading, setLoading] = useState(false)
@@ -20,8 +24,8 @@ function ChiTietDienThoai() {
     const [showDanhGia, setShowDanhGia] = useState(-1)
     const [soLuong, setSoLuong] = useState(1);
     const [formAddDanhGia, setFormAddDanhGia] = useState({ maPhienBan: '', soSao: 0, noiDung: '' })
-
-
+    const [showPopup, setShowPopup] = useState({show: false, type: '', message: ''})
+    const [soluongaddnew, setSoLuongAddNew] = useState(localStorage.getItem("soluongaddnew"))
     useEffect(() => {
         const response = async () => {
             setLoading(true)
@@ -85,8 +89,16 @@ function ChiTietDienThoai() {
         setFormAddDanhGia({ maPhienBan: '', soSao: 0, noiDung: '' })
     }
     const saveDanhGia = async () => {
+        if(formAddDanhGia.soSao <= 0){
+            setShowPopup({show: true, type: false, message: 'Vui lòng chọn số sao.'})
+            return;
+        }
+        if(!formAddDanhGia.noiDung.trim()){
+            setShowPopup({show: true, type: false, message: "Vui lòng nhập nội dung đánh giá"})
+            return;
+        }
         const data = {
-            "maPhienBan": formAddDanhGia.maPhienBan,
+            "maPhienBan": selectNow.maPhienBan,
             "soSao": formAddDanhGia.soSao,
             "noiDung": formAddDanhGia.noiDung
         }
@@ -97,6 +109,7 @@ function ChiTietDienThoai() {
         const response = await fetchAddDanhGia(data)
         setLoading(false)
         if (response.code === 200) {
+            setShowPopup({show: true, type: true, message: "Đã thêm."})
             console.log("add thành công")
             loadDanhGia(selectNow.maPhienBan);
             console.log(response.result)
@@ -113,8 +126,21 @@ function ChiTietDienThoai() {
         const response = await fetchAddVaoGioHang(data);
         setLoading(false)
         if (response.code === 200) {
+            const tmp = localStorage.getItem("soluongaddnew")
+            if(tmp){
+                localStorage.setItem("soluongaddnew", Number.parseInt(tmp)+1)
+                setSoLuongAddNew(Number.parseInt(tmp)+1)
+            }
+            else{
+                localStorage.setItem("soluongaddnew", 1)
+                setSoLuongAddNew(1)
+            }
+            setShowPopup({show: true, type: true, message: 'Đã thêm vào giỏ hàng'})
             console.log(response.result)
         }
+    }
+    const resetShowPopup = () => {
+        setShowPopup({show: false, type : '', message: ''})
     }
     const changeSoLuong = (value) => {
         if (typeof value === "string") {
@@ -146,6 +172,7 @@ function ChiTietDienThoai() {
                 saveDanhGia={saveDanhGia}
             />
             <Loading show={loading}/>
+            {showPopup.show && <Popup type={showPopup.type} message={showPopup.message} onclose={resetShowPopup}/>}
         </>
     )
 }

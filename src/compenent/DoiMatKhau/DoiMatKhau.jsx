@@ -16,17 +16,7 @@ const DoiMatKhau = () => {
 
   return (
     <div className="DMK-container">
-      <h2 className="DMK-title">Thông tin tài khoản</h2>
-
-      <div className="DMK-form-group">
-        <label>Tên đăng nhập hiện tại</label>
-        <input type="text" value="Văn Sang" disabled />
-      </div>
-
-      <div className="DMK-form-group">
-        <label>Tên đăng nhập mới</label>
-        <input type="text" placeholder="Nhập tên đăng nhập mới" />
-      </div>
+      <h2 className="DMK-title">Đổi mật khẩu</h2>
 
       <div className="DMK-form-group">
         <label>Mật khẩu cũ</label>

@@ -1,53 +1,64 @@
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import MenuKhachHang from '../menukhachhang/MenuKhachHang'
 import Table from '../../components/table/Table'
+import { fetchGetDSInGioHang, fetchXoaKhoiGioHang } from '../../api/giohang';
 
 
 
 
 const Giohang = () => {
-   const [cart,setCart] = useState([
-       {
-         id: 1,
-         name: "iPhone 16 pro",
-         price: 24000000,
-         quantity: 2,
-         image:
-           "/images/ip13trang.jpg",
-       },
-       {
-         id: 2,
-         name: "iPhone 11 pro",
-         price: 10000000,
-         quantity: 3,
-         image:
-           "/images/ip14 den.png",
-       },
-       {
-         id: 3,
-         name: "iPhone 12",
-         price: 12000000,
-         quantity: 1,
-         image:
-           "/images/ip14 trang.png",
-       },
-       {
-         id: 4,
-         name: "iP[hone 14 mini",
-         price: 15500000,
-         quantity: 2,
-         image:
-           "/images/ip15 vang.webp",
-       },
-     ]);
-   
-    const totalItems = cart.length;
-    return (
-        <div>
-            <MenuKhachHang />
-             <h1 style={{ marginLeft: 'auto', textAlign: 'center', fontWeight: 'normal' }}>Giỏ hàng ({totalItems})</h1>
-            <Table cart={cart} setCart={setCart} />
-        </div>
-    )
+  const [cart, setCart] = useState([]);
+  const [lstSelect, setLstSelect] = useState([]);
+  const [tongTien, setTongTien] = useState(0);
+  useEffect(() =>{
+    localStorage.removeItem("soluongaddnew")
+    loadDSInCart()
+  }, [])
+
+  useEffect(() => {
+    console.log('Thay đổi')
+    let total = 0
+    cart.forEach(item => {
+      if(lstSelect.includes(item.maPhienBan))
+      {
+        total += item.giaBan*item.soLuong;
+      }
+    })
+    setTongTien(total);
+  }, [cart])
+  const loadDSInCart = async () =>{
+    const response = await fetchGetDSInGioHang();
+    if(response.code === 200){
+      console.log("Ds sản phẩm ", response.result)
+      setCart(response.result);
+    }
+  }
+  const deleteInCart = async (maPhienBan) => {
+    const response = await fetchXoaKhoiGioHang(maPhienBan);
+    if(response.code === 200){
+      console.log("Xóa thành công")
+      loadDSInCart();
+    }
+  }
+  const selectSanPham = (maPhienBan) => {
+    const pb = cart.find(item => item.maPhienBan === maPhienBan)
+    if(lstSelect.includes(maPhienBan)){
+      setLstSelect(ds => ds.filter(item => item !== maPhienBan))
+      setTongTien(tongTien-(pb.soLuong*pb.giaBan))
+      console.log('cahyj')
+    }else{
+      setLstSelect([...lstSelect, maPhienBan])
+      setTongTien(tongTien+(pb.giaBan*pb.soLuong))
+      console.log('ko cahyj')
+    }
+  }
+  const totalItems = cart.length;
+  return (
+    <div>
+      <MenuKhachHang />
+      <h1 style={{ marginLeft: 'auto', textAlign: 'center', fontWeight: 'normal' }}>Giỏ hàng ({totalItems})</h1>
+      <Table cart={cart} setCart={setCart} deleteInCart={deleteInCart} tongTien={tongTien} SelectSanPham={selectSanPham}/>
+    </div>
+  )
 }
 export default Giohang
