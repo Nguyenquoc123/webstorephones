@@ -14,7 +14,7 @@ import com.bot.bandienthoai.entity.PhienBanDienThoai;
 public interface PhienBanDienThoaiRepository extends JpaRepository<PhienBanDienThoai, Integer>{
 	List<PhienBanDienThoai> findByDienThoai_MaDienThoai(Integer maDienThoai);
 	
-	@Query("select pb from PhienBanDienThoai pb JOIN pb.dienThoai JOIN pb.images where pb.trangThai <>-1")
+	@Query("select pb from PhienBanDienThoai pb JOIN pb.dienThoai JOIN pb.images  where pb.trangThai <>-1")
 	List<PhienBanDienThoai> getAllPhienBan();
 	
 	Page<PhienBanDienThoai> findByTrangThaiNot(Integer trangThai, Pageable pageable);

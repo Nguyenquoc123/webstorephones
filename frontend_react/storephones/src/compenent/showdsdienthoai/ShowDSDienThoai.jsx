@@ -6,9 +6,8 @@ function ShowDSDienThoai({ dsPhienBan, clickXemChiTiet, searchAndFilter, clickTi
     const showKhuyenMai = (km) => {
         if(km === undefined)
             return '';
-        console.log('Value' === 'Value')
         if(km.maKhuyenMai && km.loaiKhuyenMai == "Fixed")
-            return "Giảm " + km.giaTriGiam + "đ"
+            return "Giảm " + km.giaTriGiam.toLocaleString('vi-VN') + "đ"
         else if(km.maKhuyenMai){
             return "Giảm "+ km.giaTriGiam + "%"
         }

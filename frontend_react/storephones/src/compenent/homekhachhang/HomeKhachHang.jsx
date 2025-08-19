@@ -14,6 +14,7 @@ function HomeKhachHang() {
     const search = useLocation();
     const navigate = useNavigate();
     const [dsPhienBan, setDSPhienBan] = useState([]);
+    const [searchValue, setSearchValue] = useState(search.state?.searchValue ?? '');
     const [searchAndFilter, setSearchAndFilter] = useState({
         hang: [],
         gia: '',
@@ -42,18 +43,20 @@ function HomeKhachHang() {
     useEffect(() => {
         if (reloadPage.state?.reset) {
             console.log("=========================")
-            // loadDSPhienBan()
             loadDSPhienBanAndKhuyenMai()
             resetSearchAndFilter();
+            setSearchValue('')
         }
 
     }, [reloadPage.state?.reset])
 
     // search
     useEffect(() => {
-        clickSearchAndFilter();
+        setSearchValue(search.state?.searchValue) // setup giá trị tìm kiếm
+        clickSearchAndFilter(); // gọi hàm tìm kiếm
         console.log("akakaaaaaaaaaaaaaaaaa")
         console.log(search.state?.searchValue)
+
     }, [search.state?.searchValue])
 
     /// test 
@@ -97,7 +100,7 @@ function HomeKhachHang() {
         })
     }
     const inputData = (key, value) => {
-        
+
         if (key === "hang") {
             if (searchAndFilter.hang.includes(value)) {
                 const lstHang = searchAndFilter.hang.filter(item => item !== value);
@@ -159,7 +162,7 @@ function HomeKhachHang() {
     return (
         <>
             <MenuKhachHang
-                search={search.state?.searchValue ?? ''}
+                search={searchValue}
             />
             <ShowDSDienThoai dsPhienBan={dsPhienBan}
                 clickXemChiTiet={clickXemChiTiet}

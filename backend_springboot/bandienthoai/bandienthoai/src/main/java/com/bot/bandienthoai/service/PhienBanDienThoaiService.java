@@ -3,6 +3,7 @@ package com.bot.bandienthoai.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,12 +17,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiAndKhuyenMaiReponse;
+import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiKhuyenMaiReponse;
 import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiReponse;
 import com.bot.bandienthoai.entity.DienThoai;
 import com.bot.bandienthoai.entity.Images;
+import com.bot.bandienthoai.entity.KhuyenMai_DienThoai;
 import com.bot.bandienthoai.entity.PhienBanDienThoai;
 import com.bot.bandienthoai.exception.ErrorCode;
 import com.bot.bandienthoai.exception.RunException;
+import com.bot.bandienthoai.mapper.ImagesMapper;
+import com.bot.bandienthoai.mapper.KhuyenMaiDienThoaiMapper;
 import com.bot.bandienthoai.mapper.PhienBanDienThoaiMapper;
 import com.bot.bandienthoai.repository.DienThoaiRepository;
 import com.bot.bandienthoai.repository.ImagesRepository;
@@ -45,9 +51,15 @@ public class PhienBanDienThoaiService {
 
 	@Autowired
 	PhienBanDienThoaiMapper phienBanDienThoaiMapper;
-	
+
 	@Autowired
 	EntityManagerService entityManagerService;
+
+	@Autowired
+	ImagesMapper imagesMapper;
+
+	@Autowired
+	KhuyenMaiDienThoaiMapper khuyenMaiMapper;
 
 	public List<PhienBanDienThoaiReponse> getAllPhienBan() {
 		List<PhienBanDienThoai> lstPhienBan = phienBanDienThoaiRepository.getAllPhienBan();
@@ -55,17 +67,75 @@ public class PhienBanDienThoaiService {
 				.map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
 	}
 
+//	public List<PhienBanDienThoaiAndKhuyenMaiReponse> getDSPhienBanAndKhuyenMai(){
+	public List<PhienBanDienThoaiKhuyenMaiReponse> getDSPhienBanAndKhuyenMai() {
+		List<PhienBanDienThoai> lst = phienBanDienThoaiRepository.getAllPhienBan();
+		List<PhienBanDienThoaiKhuyenMaiReponse> tmp = lst.stream().map(item -> {
+			Date now = new Date();
+			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
+			PhienBanDienThoaiKhuyenMaiReponse t = new PhienBanDienThoaiKhuyenMaiReponse();
+			Double giaBan = item.getGiaBan();
+			KhuyenMai_DienThoai valueTmp = null;
+			if (km != null && km.size() > 0) {
+				
+				valueTmp = km.get(0);
+				for (KhuyenMai_DienThoai value : km) {
+					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+						continue;
+					
+					
+					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							? valueTmp.getKhuyenMai().getGiaTriGiam()
+							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+					if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							&& value.getKhuyenMai().getGiaTriGiam() > giam) {
+						valueTmp = value;
+					} else if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Value")) {
+						Double pt = value.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+						if (pt > giam) {
+							valueTmp = value;
+						}
+					}
+				}
+			}
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+				valueTmp = new KhuyenMai_DienThoai();
+			}
+			
+
+			t.setMaDienThoai(item.getDienThoai().getMaDienThoai());
+			t.setMaPhienBan(item.getMaPhienBan());
+			t.setCamera(item.getCamera());
+			t.setGiaBan(item.getGiaBan());
+			t.setHangSanXuat(item.getDienThoai().getHangSanXuat());
+			t.setTenDienThoai(item.getDienThoai().getTenDienThoai());
+			t.setManHinh(item.getManHinh());
+			t.setMauSac(item.getMauSac());
+			t.setPin(item.getPin());
+			t.setRam(item.getRam());
+			t.setRom(item.getRom());
+			t.setSoLuong(item.getSoLuong());
+			t.setMoTa(item.getMoTa());
+			t.setImage(imagesMapper.toImagesDTOList(item.getImages()));
+			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
+			return t;
+		}).collect(Collectors.toList());
+		return tmp;
+//		return lst.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiAndKhuyenMaiReponse).collect(Collectors.toList());
+	}
+
 	// get ds phan trang
-	public Page<PhienBanDienThoaiReponse> getDSPhienBanPhanTrang(Integer page, Integer size){
+	public Page<PhienBanDienThoaiReponse> getDSPhienBanPhanTrang(Integer page, Integer size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<PhienBanDienThoai> lst = phienBanDienThoaiRepository.findByTrangThaiNot(-1, pageable);
 		return lst.map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse);
 	}
-	
+
 	public List<PhienBanDienThoaiReponse> getDSPhienBanByMaDienThoai(Integer maDienThoai) {
 		List<PhienBanDienThoai> ds = phienBanDienThoaiRepository.findByDienThoai_MaDienThoai(maDienThoai);
 		return ds.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
 	}
+
 	@Transactional
 	public PhienBanDienThoaiReponse updatePhienBanDienThoai(PhienBanDienThoaiUpdateRequest request,
 			List<MultipartFile> images, List<Integer> lstImageDelete) {
@@ -92,7 +162,6 @@ public class PhienBanDienThoaiService {
 			System.out.println("Chắc là ko đâu");
 			throw new RunException(ErrorCode.Error_System);
 		}
-
 
 		List<Images> dsImages = new ArrayList<Images>();
 		if (images != null && !images.isEmpty()) {
@@ -207,23 +276,70 @@ public class PhienBanDienThoaiService {
 		}
 		return "Delete Successful.";
 	}
-	
 
-	public List<PhienBanDienThoaiReponse> searchAndFilter(SearchAndFilterRequest request){
-		List<PhienBanDienThoai> lst ;
-		if(request.getSearch() != null) {
-			List<String> keysword = Arrays.asList(request.getSearch().strip().split("[ ]")) ;
+//	public List<PhienBanDienThoaiReponse> searchAndFilter(SearchAndFilterRequest request){
+	public List<PhienBanDienThoaiKhuyenMaiReponse> searchAndFilter(SearchAndFilterRequest request) {
+		List<PhienBanDienThoai> lst;
+		if (request.getSearch() != null) {
+			List<String> keysword = Arrays.asList(request.getSearch().strip().split("[ ]"));
 			lst = entityManagerService.search(keysword);
+		} else {
+			lst = phienBanDienThoaiRepository.getAllPhienBan().stream().filter(pb -> pb.getTrangThai() != -1)
+					.collect(Collectors.toList());
 		}
-		else{
-			lst = phienBanDienThoaiRepository.getAllPhienBan().stream().filter(pb -> pb.getTrangThai() != -1 ).collect(Collectors.toList());
-		}
-		
-		if(request.getFilter()) {
+
+		if (request.getFilter()) {
 			lst = entityManagerService.filterPhienBan(lst, request);
 		}
-		
-		
-		return lst.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
+
+//		return lst.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
+		return lst.stream().map(item -> {
+			Date now = new Date();
+			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
+			PhienBanDienThoaiKhuyenMaiReponse t = new PhienBanDienThoaiKhuyenMaiReponse();
+			Double giaBan = item.getGiaBan();
+			KhuyenMai_DienThoai valueTmp = null;
+			if (km != null && km.size() > 0) {
+				
+				valueTmp = km.get(0);
+				for (KhuyenMai_DienThoai value : km) {
+					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+						continue;
+					
+					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							? valueTmp.getKhuyenMai().getGiaTriGiam()
+							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+					if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							&& value.getKhuyenMai().getGiaTriGiam() > giam) {
+						valueTmp = value;
+					} else if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Value")) {
+						Double pt = value.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+						if (pt > giam) {
+							valueTmp = value;
+						}
+					}
+				}
+			}
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+				valueTmp = new KhuyenMai_DienThoai();
+			}
+
+			t.setMaDienThoai(item.getDienThoai().getMaDienThoai());
+			t.setMaPhienBan(item.getMaPhienBan());
+			t.setCamera(item.getCamera());
+			t.setGiaBan(item.getGiaBan());
+			t.setHangSanXuat(item.getDienThoai().getHangSanXuat());
+			t.setTenDienThoai(item.getDienThoai().getTenDienThoai());
+			t.setManHinh(item.getManHinh());
+			t.setMauSac(item.getMauSac());
+			t.setPin(item.getPin());
+			t.setRam(item.getRam());
+			t.setRom(item.getRom());
+			t.setSoLuong(item.getSoLuong());
+			t.setMoTa(item.getMoTa());
+			t.setImage(imagesMapper.toImagesDTOList(item.getImages()));
+			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
+			return t;
+		}).collect(Collectors.toList());
 	}
 }

@@ -47,8 +47,9 @@ public class DanhGiaService {
 	}
 	
 	public DanhGiaReponse themDanhGia(DanhGiaRequest request) {
-		Integer maKhachHang_ = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
-		
+		String tmp = SecurityContextHolder.getContext().getAuthentication().getName();
+		Integer maKhachHang_ = Integer.valueOf(tmp);
+		System.out.println("Mã khách hang là: " + maKhachHang_);
 		Optional<KhachHang> khachHang = khachHangRepository.findById(maKhachHang_);
 		if(khachHang.isEmpty()) {
 			throw new RunException(ErrorCode.KhachHang_Not_Found);

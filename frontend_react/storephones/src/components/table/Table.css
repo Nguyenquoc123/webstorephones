@@ -1,4 +1,4 @@
-.cart-container {
+.GH-cart-container {
   padding: 20px;
 }
 
@@ -18,18 +18,18 @@ th, td {
   border: 1px solid #ddd;
 }
 
-.product-cell {
+.GH-product-cell {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.product-img {
+.GH-product-img {
   width: 80px;
   height: auto;
 }
 
-.qty-input {
+.GH-qty-input {
   width: 40px;
   height: 25px;
   text-align: center;
@@ -49,7 +49,8 @@ button {
 
 .checkout-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 15px;
 }
 
@@ -59,4 +60,12 @@ button {
   border: none;
   color: white;
   cursor: pointer;
+}
+.info-phone{
+  text-align: left;
+}
+.info-tong-tien{
+  color: red;
+  font-weight: bolder;
+  font-size: large;
 }

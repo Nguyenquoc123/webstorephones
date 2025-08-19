@@ -95,7 +95,7 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                         <button id="mua-ngay">Mua ngay</button>
                         <div className="btn-gio-hang" onClick={themVaoGioHang}>
                             <button>Thêm vào giỏ hàng</button>
-                            <img src="/images/ip.png" alt="" />
+                            <img src="/images/shopping-cart.png" alt="" />
                         </div>
                     </div>
                 </div>

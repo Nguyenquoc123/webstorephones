@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import "./Table.css";
 
 
-const Table = ({ cart, setCart }) => {
+const Table = ({ cart, setCart, deleteInCart, tongTien, SelectSanPham}) => {
     const decreaseQty = (id) => {
         setCart((prev) =>
             prev.map((item) =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
+                item.maPhienBan === id && item.soLuong > 1
+                    ? { ...item, soLuong: item.soLuong - 1, thanhTien: (item.soLuong-1)*item.giaBan }
                     : item
             )
         );
@@ -16,7 +16,7 @@ const Table = ({ cart, setCart }) => {
     const increaseQty = (id) => {
         setCart((prev) =>
             prev.map((item) =>
-                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+                item.maPhienBan === id ? { ...item, soLuong: item.soLuong + 1, thanhTien: (item.soLuong+1)*item.giaBan} : item
             )
         );
     };
@@ -26,9 +26,12 @@ const Table = ({ cart, setCart }) => {
     };
 
     const formatPrice = (price) => {
+        if(!price)
+            return ''
         return price.toLocaleString("vi-VN") + " đ";
     };
 
+    
     return (
         <div className="GH-cart-container">
             <table>
@@ -44,33 +47,33 @@ const Table = ({ cart, setCart }) => {
                 </thead>
                 <tbody>
                     {cart.map((item) => (
-                        <tr key={item.id}>
+                        <tr key={item.maPhienBan}>
                             <td>
-                                <input type="checkbox"
+                                <input type="checkbox" onClick={() => SelectSanPham(item.maPhienBan)}
                                     style={{ width: "20px", height: "20px" }} />
                             </td>
                             <td className="GH-product-cell">
-                                <img src={item.image} alt={item.name} className="GH-product-img" />
-                                <div>
-                                    <strong>{item.name}</strong>
+                                <img src={item?.image[0].url} alt={item.name} className="GH-product-img" />
+                                <div className="info-phone">
+                                    <strong>{item?.tenDienThoai}</strong>
                                     <br />
-                                    <small>Mô tả</small>
+                                    <small>{item?.moTa}</small>
                                 </div>
                             </td>
-                            <td>{formatPrice(item.price)}</td>
+                            <td>{formatPrice(item?.giaBan)}</td>
                             <td>
-                                <button onClick={() => decreaseQty(item.id)}>-</button>
+                                <button onClick={() => decreaseQty(item.maPhienBan)}>-</button>
                                 <input
                                     type="text"
-                                    value={item.quantity}
+                                    value={item?.soLuong}
                                     readOnly
                                     className="GH-qty-input"
                                 />
-                                <button onClick={() => increaseQty(item.id)}>+</button>
+                                <button onClick={() => increaseQty(item.maPhienBan)}>+</button>
                             </td>
-                            <td>{formatPrice(item.price * item.quantity)}</td>
+                            <td>{formatPrice(item.thanhTien)}</td>
                             <td>
-                                <button className="GH-delete-btn" onClick={() => removeItem(item.id)}>
+                                <button className="GH-delete-btn" onClick={() => deleteInCart(item.maPhienBan)}>
                                     ❌
                                 </button>
                             </td>
@@ -80,6 +83,9 @@ const Table = ({ cart, setCart }) => {
             </table>
 
             <div className="checkout-container">
+                <div>
+                    {tongTien > 0 && <span className="info-tong-tien">Tổng tiền: {tongTien.toLocaleString('vi-VN')}đ</span>}
+                </div>
                 <button className="checkout-btn">Thanh toán</button>
             </div>
         </div>

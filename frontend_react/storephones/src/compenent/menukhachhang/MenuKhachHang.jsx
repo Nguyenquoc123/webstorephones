@@ -11,6 +11,7 @@ function MenuKhachHang({ search }) {
   const [searchValue, setSearchValue] = useState(search ?? "");
   const clickLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("soluongaddnew")
     navigate("/");
   };
   const clickCancel = () => {
@@ -20,10 +21,11 @@ function MenuKhachHang({ search }) {
   const handleSearch = () => {
     navigate("/home", { state: { searchValue: searchValue } });
   };
-
-  useEffect(()=>{
-    console.log("Tìm kiếm ", searchValue)
-  }, [searchValue])
+  // setup lại từ khóa tìm kiếm
+  useEffect(() => {
+    console.log("==========?????????????")
+    setSearchValue(search || '')
+  }, [search])
   return (
     <div className="container">
       <div className="menu">
@@ -60,10 +62,13 @@ function MenuKhachHang({ search }) {
             src="/images/icon-cart.png"
             onClick={() => navigate("/home/giohang")}
           />
+          {localStorage.getItem('soluongaddnew') && <span className="so-luong-add-new">{localStorage.getItem('soluongaddnew') > 9? '9+': localStorage.getItem('soluongaddnew')}</span>}
           <div className="img-logout">
             <img
               id="image-logout"
               src="/images/user-logout.png"
+              onMouseEnter={() => setShowLogout(true)}
+              onMouseLeave={() => setShowLogout(false)}
               onClick={() => setShowLogout(showLogout ? false : true)}
             />
           </div>
@@ -71,23 +76,21 @@ function MenuKhachHang({ search }) {
       </div>
       <div
         className="btn-logout"
+        onMouseEnter={() => setShowLogout(true)}
+        onMouseLeave={() => setShowLogout(false)}
         style={{ display: showLogout ? "block" : "none" }}
       >
-        <div className="btn-logout-child" style={{ display: "flex", flexDirection: "column" }}>
-          <button id="btn-logout-child" onClick={() => navigate("/home/HoSoCaNhan")}>
-            ho so ca nhan
-          </button>
-          <button id="btn-logout-child" onClick={() => setClickedLogout(true)}>
-            logout
-          </button>
-        </div>
+        <button id="btn-logout-child" onClick={() => setClickedLogout(true)}>
+          logout
+        </button>
+
       </div>
       <div
         style={{ display: showMenuByIcon ? "block" : "none" }}
         className="nav-menu"
       >
-        <p onClick={() => navigate("/adddanhmuc")}>Quản lý danh mục</p>
-        <p onClick={() => navigate("/adddienthoai")}>Quản lý điện thoại</p>
+        <p onClick={() => navigate("/home/HoSoCaNhan")}>Hồ sơ cá nhân</p>
+
       </div>
 
       <Logout

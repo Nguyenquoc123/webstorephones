@@ -2,37 +2,40 @@ import DSDanhGia from "./dsdanhgia/DSDanhGia";
 import ThemDanhGia from "./themdanhgia/ThemDanhGia";
 import '../danhgia/DanhGia.css'
 import { useEffect, useState } from "react";
-function DanhGia({dsDanhGia, formAddDanhGia, resetFormAddDanhGia, inputData, saveDanhGia}) {
+import Popup from "../popup/Popup";
+function DanhGia({ dsDanhGia, formAddDanhGia, resetFormAddDanhGia, inputData, saveDanhGia }) {
     const [showFormAddDanhGia, setShowFormAddDanhGia] = useState(false);
-    const clickCancel = () =>{
+    const clickCancel = () => {
         setShowFormAddDanhGia(false)
         resetFormAddDanhGia();
     }
     
-    useEffect(() =>{
+    useEffect(() => {
         setShowFormAddDanhGia(false)
         resetFormAddDanhGia();
     }, [dsDanhGia])
-    
 
+    
     return (
         <>
             <span className="line"></span>
             <div className="title-danh-gia">
                 <h2>Đánh giá sản phẩm</h2>
-                <button onClick={()  => setShowFormAddDanhGia(true)}>Thêm đánh giá</button>
+                <button onClick={() => setShowFormAddDanhGia(true)}>Thêm đánh giá</button>
             </div>
-            <ThemDanhGia 
+            <ThemDanhGia
                 show={showFormAddDanhGia}
                 formAddDanhGia={formAddDanhGia}
                 clickCancel={clickCancel}
                 inpuData={inputData}
                 saveDanhGia={saveDanhGia}
             />
-            <DSDanhGia 
+            <DSDanhGia
                 dsDanhGia={dsDanhGia}
-                
+
             />
+
+            
         </>
     )
 }
