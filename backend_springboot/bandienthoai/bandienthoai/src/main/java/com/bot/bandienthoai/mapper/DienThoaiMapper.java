@@ -1,10 +1,12 @@
 package com.bot.bandienthoai.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 
 
 import com.bot.bandienthoai.dto.reponse.DienThoaiAdminReponse;
-
+import com.bot.bandienthoai.dto.reponse.DienThoaiUseKhuyenMaiReponse;
 import com.bot.bandienthoai.entity.DienThoai;
 
 @Mapper(componentModel = "spring")
@@ -25,5 +27,7 @@ public interface DienThoaiMapper {
 		return res;
 
 	}
+	
+	
 
 }

@@ -1,6 +1,3 @@
-import "./App.css";
-import logo from "./logo.jpg"; // hoặc logo.svg, tuỳ bạn chọn file muốn dùng
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Login from "./compenent/login/Login";
@@ -14,6 +11,9 @@ import DoiMatKhau from "./compenent/DoiMatKhau/DoiMatKhau";
 import GioHang from "./compenent/giohang/Giohang";
 import DonHang from "./compenent/quanlydonhang/DonHang";
 import ChiTietDonHang from "./compenent/quanlydonhang/chitietdonhang/PageChiTietDonHang";
+import KhuyenMai from "./compenent/Quanlykhuyenmai/Quanlykhuyenmai";
+import HoSoCaNhan from "./compenent/hosocanhan/HoSoCaNhan";
+import './App.css';
 
 function App() {
   return (
@@ -24,13 +24,15 @@ function App() {
         <Route path="/dienthoai" element={<DienThoai />} />
         <Route path="/danhmuc" element={<DanhMuc />} />
         <Route path="/home/:makhachhang" element={<HomeKhachHang />} />
+        <Route path="/home" element={<HomeKhachHang />} />
+        <Route path="/home/giohang" element={<GioHang />} />
+        <Route path="/home/hosocanhan" element={<HoSoCaNhan />} />
         <Route path="/chitietdienthoai/:value" element={<ChiTietDienThoai />} />
         <Route path="/Admin" element={<Admin />} />
         <Route path="/doimatkhau" element={<DoiMatKhau />} />
-        <Route path="/home" element={<HomeKhachHang />} />
-        <Route path="/home/giohang" element={<GioHang />} />
         <Route path="/donhang" element={<DonHang />} />
         <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
+        <Route path="/khuyenmai" element={<KhuyenMai />} />
       </Routes>
     </BrowserRouter>
   );

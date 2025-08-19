@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import MenuKhachHang from '../menukhachhang/MenuKhachHang'
 import ShowDSDienThoai from "../showdsdienthoai/ShowDSDienThoai";
 
-import { fetchGetDSPhienBan, fetchSearchAndFilter, fetchSearchPhienBan } from "../../api/dienthoai";
+import { fetchGetDSPhienBan, fetchGetDSPhienBanAndKhuyenMai, fetchSearchAndFilter, fetchSearchPhienBan } from "../../api/dienthoai";
 import Loading from "../loading/Loading";
 
 function HomeKhachHang() {
@@ -14,8 +14,8 @@ function HomeKhachHang() {
     const search = useLocation();
     const navigate = useNavigate();
     const [dsPhienBan, setDSPhienBan] = useState([]);
+    const [searchValue, setSearchValue] = useState(search.state?.searchValue ?? '');
     const [searchAndFilter, setSearchAndFilter] = useState({
-        search: '',
         hang: [],
         gia: '',
         minGia: null,
@@ -41,24 +41,41 @@ function HomeKhachHang() {
 
     // reload Page
     useEffect(() => {
-        if (reloadPage.state?.reset){
+        if (reloadPage.state?.reset) {
             console.log("=========================")
-            loadDSPhienBan()
+            loadDSPhienBanAndKhuyenMai()
             resetSearchAndFilter();
+            setSearchValue('')
         }
-            
+
     }, [reloadPage.state?.reset])
 
     // search
     useEffect(() => {
-        clickSearchAndFilter();
+        setSearchValue(search.state?.searchValue) // setup giá trị tìm kiếm
+        clickSearchAndFilter(); // gọi hàm tìm kiếm
         console.log("akakaaaaaaaaaaaaaaaaa")
         console.log(search.state?.searchValue)
+
     }, [search.state?.searchValue])
+
+    /// test 
+    const loadDSPhienBanAndKhuyenMai = async () => {
+        const response = await fetchGetDSPhienBanAndKhuyenMai();
+        if (response.code === 200) {
+            console.log("Danh sách phiên bản và khuyến mãi", response.result)
+            setDSPhienBan(response.result)
+        }
+    }
+
+
     // load danh sách điện thoại
     useEffect(() => {
-        if(!search.state?.searchValue)
-            loadDSPhienBan();
+        if (!search.state?.searchValue) {
+            // loadDSPhienBan();
+            loadDSPhienBanAndKhuyenMai()
+        }
+
     }, [])
     const loadDSPhienBan = async () => {
         setLoading(true)
@@ -75,7 +92,6 @@ function HomeKhachHang() {
     }
     const resetSearchAndFilter = () => {
         setSearchAndFilter({
-            search: '',
             hang: [],
             gia: '',
             minGia: null,
@@ -84,9 +100,7 @@ function HomeKhachHang() {
         })
     }
     const inputData = (key, value) => {
-        if (key === "search") {
-            setSearchAndFilter({ ...searchAndFilter, [key]: value })
-        }
+
         if (key === "hang") {
             if (searchAndFilter.hang.includes(value)) {
                 const lstHang = searchAndFilter.hang.filter(item => item !== value);
@@ -148,7 +162,7 @@ function HomeKhachHang() {
     return (
         <>
             <MenuKhachHang
-                search={search.state?.searchValue ?? ''}
+                search={searchValue}
             />
             <ShowDSDienThoai dsPhienBan={dsPhienBan}
                 clickXemChiTiet={clickXemChiTiet}

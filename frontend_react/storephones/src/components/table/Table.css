@@ -1,4 +1,4 @@
-.cart-container {
+.GH-cart-container {
   padding: 20px;
 }
 
@@ -18,18 +18,18 @@ th, td {
   border: 1px solid #ddd;
 }
 
-.product-cell {
+.GH-product-cell {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.product-img {
+.GH-product-img {
   width: 80px;
   height: auto;
 }
 
-.qty-input {
+.GH-qty-input {
   width: 40px;
   height: 25px;
   text-align: center;
@@ -41,22 +41,33 @@ button {
   cursor: pointer;
 }
 
-.delete-btn {
+.GH-delete-btn {
   background: none;
   border: none;
   font-size: 30px;
 }
 
-.checkout-container {
+.GH-checkout-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 15px;
 }
 
-.checkout-btn {
-  padding: 8px 15px;
+.GH-checkout-btn {
+  padding: 10px 15px;
   background-color: #007bff;
   border: none;
   color: white;
   cursor: pointer;
+  margin-top: 10px;
+  margin-left: 1370px;
+}
+.info-phone{
+  text-align: left;
+}
+.info-tong-tien{
+  color: red;
+  font-weight: bolder;
+  font-size: large;
 }
