@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bot.bandienthoai.dto.reponse.APIReponse;
 import com.bot.bandienthoai.dto.reponse.DienThoaiUpdateReponse;
+import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiAndKhuyenMaiReponse;
+import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiKhuyenMaiReponse;
 import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiReponse;
 import com.bot.bandienthoai.request.DienThoaiAddRequest;
 import com.bot.bandienthoai.request.DienThoaiUpdateRequets;
@@ -37,6 +39,15 @@ public class PhienBanDienThoaiController {
 	@GetMapping("/getdsphienban")
 	public APIReponse<List<PhienBanDienThoaiReponse>> getDSPhienBan(){
 		return APIReponse.<List<PhienBanDienThoaiReponse>>builder().result(phienBanDienThoaiService.getAllPhienBan()).build();
+	}
+	
+//	@GetMapping("/getdsphienbanandkhuyenmai")
+//	public APIReponse<List<PhienBanDienThoaiAndKhuyenMaiReponse>> getDSPhienBanAndKhuyenMai(){
+//		return APIReponse.<List<PhienBanDienThoaiAndKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanAndKhuyenMai()).build();
+//	}
+	@GetMapping("/getdsphienbanandkhuyenmai")
+	public APIReponse<List<PhienBanDienThoaiKhuyenMaiReponse>> getDSPhienBanAndKhuyenMai(){
+		return APIReponse.<List<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanAndKhuyenMai()).build();
 	}
 	
 	@GetMapping("getdsphienbanphantrang/{page}")
@@ -67,7 +78,7 @@ public class PhienBanDienThoaiController {
 	
 	// tìm kiếm và lọc
 	@PostMapping("/timkiemvaloc")
-	public APIReponse<List<PhienBanDienThoaiReponse>> searchAndFilter(@RequestBody SearchAndFilterRequest request){
-		return APIReponse.<List<PhienBanDienThoaiReponse>>builder().result(phienBanDienThoaiService.searchAndFilter(request)).build();
+	public APIReponse<List<PhienBanDienThoaiKhuyenMaiReponse>> searchAndFilter(@RequestBody SearchAndFilterRequest request){
+		return APIReponse.<List<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.searchAndFilter(request)).build();
 	}
 }

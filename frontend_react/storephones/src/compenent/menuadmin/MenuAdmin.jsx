@@ -23,7 +23,9 @@ function MenuAdmin() {
                     <p id="logo">Phone Stores</p>
                 </div>
                 <div className="logout-admin">
-                    <img src="/images/user-logout.png" alt="" onClick={() => setShowLogout(showLogout ? false : true)} />
+                    <img onMouseEnter={() => setShowLogout(true)} 
+                        onMouseLeave={() => setShowLogout(false)}
+                    src="/images/user-logout.png" alt="" onClick={() => setShowLogout(showLogout ? false : true)} />
                 </div>
 
             </div>
@@ -36,7 +38,9 @@ function MenuAdmin() {
                 <p onClick={() => navigate('/khuyenmai')}>Quản lý khuyến mãi</p>
             </div>
 
-            <div className="btn-logout-admin" style={{ display: showLogout ? "block" : "none" }}>
+            <div onMouseEnter={() => setShowLogout(true)} 
+                onMouseLeave={() => setShowLogout(false)}
+                className="btn-logout-admin" style={{ display: showLogout ? "block" : "none" }}>
                 <button id="btn-logout-admin-child" onClick={() => setClickedLogout(true)}>Logout</button>
             </div>
 
