@@ -45,3 +45,45 @@ export async function fetchSigup(data) {
         }
     }
 }
+
+export async function fetchGetInfo() {
+    const token = localStorage.getItem("token")
+    try {
+        const response = await fetch('http://localhost:8080/storephones/getinfo', {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.log(error)
+        return{
+            code: -1,
+            message: 'Lỗi ồi'
+        }
+    }
+    
+}
+export  async function fetchUpdateInfo(data) {
+    const token = localStorage.getItem("token")
+    try {
+        const response = await fetch('http://localhost:8080/storephones/updateinfo', {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: data
+        })
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.log(error)
+        return{
+            code: -1,
+            message: 'Lỗi ồi'
+        }
+    }
+    
+}

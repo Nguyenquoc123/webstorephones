@@ -56,9 +56,9 @@ function DSDonHang({ dsDonHang, clickXemChiTiet }) {
                                             <p>{item.hoTen}</p>
                                             <p>SĐT: {item.soDienThoai}</p>
                                             <p>Email: {item.email}</p>
-                                            <p>Địa chỉ: {item.diaChiNhanHang}</p>
+                                            <p>Địa chỉ: {item.diaChi}</p>
                                         </td>
-                                        <td>{item.tongTien}</td>
+                                        <td>{item.tongTien.toLocaleString('vi-VN')} đ</td>
                                         <td>{thanhToan(item.trangThaiThanhToan)}</td>
                                         <td>{phuongThucThanhToan(item.phuongThucThanhToan)}</td>
                                         <td>{trangThaiDonHang(item.trangThai)}</td>

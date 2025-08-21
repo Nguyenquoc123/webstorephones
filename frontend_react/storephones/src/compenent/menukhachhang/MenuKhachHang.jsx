@@ -19,6 +19,7 @@ function MenuKhachHang({ search }) {
     setShowLogout(false);
   };
   const handleSearch = () => {
+    console.log("Từ khóa tìm kiếm ", searchValue)
     navigate("/home", { state: { searchValue: searchValue } });
   };
   // setup lại từ khóa tìm kiếm
