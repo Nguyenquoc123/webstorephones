@@ -4,16 +4,19 @@ import TaoKhuyenMai from "./TaoKhuyenMai/TaoKhuyenMai";
 import XemChiTietKhuyenMai from "./XemChiTietKhuyenMai/XemChiTietKhuyenMai";
 import ChinhSuaKhuyenMai from "./ChinhSuaKhuyenMai/ChinhSuaKhuyenMai";
 import XoaKhuyenMai from "./XoaKhuyenMai/XoaKhuyenMai";
-import { fetchAddKhuyenMai, fetchGetDSKhuyenMai } from '../../api/khuyenmai'
+import { fetchAddKhuyenMai, fetchDeleteKhuyenMai, fetchGetDSKhuyenMai, fetchUpdateKhuyenMai } from '../../api/khuyenmai'
 import { fetchGetDSDienThoai } from '../../api/dienthoai'
+import Popup from "../popup/Popup";
 function Quanlykhuyenmai() {
   const [hienForm, setHienForm] = useState(false);
-  const [xemChiTiet, setXemChiTiet] = useState(null);
-  const [chinhSua, setChinhSua] = useState(null);
-  const [xoaKM, setXoaKM] = useState(null);
+  const [xemChiTiet, setXemChiTiet] = useState(false);
+  const [chinhSua, setChinhSua] = useState(false);
+  const [xoaKM, setXoaKM] = useState(false);
 
   const [danhSachKM, setDanhSachKM] = useState([]);
+  const [dsXoaDienThoai, setDSXoaDienThoai] = useState([]);
   const [formAddKhuyenMai, setFormAddKhuyenMai] = useState({
+    maKhuyenMai: '',
     tenKhuyenMai: '',
     loaiKhuyenMai: '',
     giaTriGiam: '',
@@ -22,6 +25,7 @@ function Quanlykhuyenmai() {
     dsDienThoai: []
   })
   const [dsDienThoai, setDSDienThoai] = useState([])
+  const [showPopup, setShowPopup] = useState({ show: false, type: '', message: '' });
 
   useEffect(() => {
     loadDSKhuyenMai()
@@ -43,6 +47,9 @@ function Quanlykhuyenmai() {
   }
 
   const handleAddPromo = async () => {
+    if(validateData())
+      return;
+
     console.log(formAddKhuyenMai)
     const data = {
       'tenKhuyenMai': formAddKhuyenMai.tenKhuyenMai,
@@ -59,14 +66,52 @@ function Quanlykhuyenmai() {
     }
   };
 
-  const handleEditPromo = (updated) => {
-    setDanhSachKM(
-      danhSachKM.map((km) => (km.tenKM === updated.tenKM ? updated : km))
-    );
+  const handleEditPromo = async () => {
+    if(validateData())
+      return;
+
+    let dsXoa = []
+    let dsNew = formAddKhuyenMai.dsDienThoai
+    const km = danhSachKM.find(item => item.maKhuyenMai === formAddKhuyenMai.maKhuyenMai)
+    km.dsDienThoai.forEach(item => {
+      if (dsXoaDienThoai.includes(item.maDienThoai))
+        dsXoa.push(item.maDienThoai)
+      if (dsNew.includes(item.maDienThoai)) {
+        dsNew = dsNew.filter(tmp => tmp !== item.maDienThoai)
+      }
+    })
+    console.log("Danh sách xóa", dsXoa)
+    console.log("Danh sách thêm ", dsNew)
+    const data = {
+      'maKhuyenMai': formAddKhuyenMai.maKhuyenMai,
+      'tenKhuyenMai': formAddKhuyenMai.tenKhuyenMai,
+      'loaiKhuyenMai': formAddKhuyenMai.loaiKhuyenMai,
+      'giaTriGiam': formAddKhuyenMai.giaTriGiam,
+      'ngayBatDau': formAddKhuyenMai.ngayBatDau,
+      'ngayKetThuc': formAddKhuyenMai.ngayKetThuc,
+      'dsDienThoaiNew': dsNew,
+      'dsDienThoaiDelete': dsXoa
+    }
+    const response = await fetchUpdateKhuyenMai(data);
+    if (response.code === 200) {
+      console.log("Update khuyến mãi success")
+      loadDSKhuyenMai();
+    }
+
+    setChinhSua(false)
   };
 
-  const handleDeletePromo = (promo) => {
-    setDanhSachKM(danhSachKM.filter((km) => km.tenKM !== promo.tenKM));
+  const handleDeletePromo = async (promo) => {
+    console.log("Xóa khuyên mãi có mã ", promo.maKhuyenMai)
+
+    const response = await fetchDeleteKhuyenMai(promo.maKhuyenMai);
+    if (response.code === 200) {
+      console.log("Delete khuyến mãi success")
+      loadDSKhuyenMai();
+
+    }
+
+    setXoaKM(false);
   };
 
   const inputData = (key, value) => {
@@ -74,10 +119,17 @@ function Quanlykhuyenmai() {
       setFormAddKhuyenMai({ ...formAddKhuyenMai, [key]: value })
     else {
       let ds = formAddKhuyenMai.dsDienThoai;
-      if (ds.includes(value))
+      if (ds.includes(value)) {
         ds = ds.filter(item => item !== value)
-      else
+        if (chinhSua) {
+          if (!dsXoaDienThoai.includes(value)) {
+            setDSXoaDienThoai([...dsXoaDienThoai, value])
+          }
+        }
+
+      } else {
         ds.push(value)
+      }
 
       setFormAddKhuyenMai({ ...formAddKhuyenMai, [key]: ds })
     }
@@ -86,6 +138,7 @@ function Quanlykhuyenmai() {
   // promo: object khuyến mãi
   // ví dụ: { ngayBatDau: "...", ngayKetThuc: "...", trangThai: 1 }
   const showTrangThai = (km) => {
+    if (!km) return ''
     const now = new Date();
     const start = new Date(km.ngayBatDau);
     const end = new Date(km.ngayKetThuc);
@@ -100,6 +153,7 @@ function Quanlykhuyenmai() {
   };
 
   const showNgay = (isoString) => {
+    if (!isoString) return '';
     const date = new Date(isoString);
 
     return date.toLocaleString("vi-VN", {
@@ -111,7 +165,94 @@ function Quanlykhuyenmai() {
     });
   };
 
+  const showGiaTriGiam = (km) => {
+    if (!km) return '';
+    if (km.loaiKhuyenMai === "Fixed")
+      return km.giaTriGiam.toLocaleString('vi-VN') + "đ"
+    return km.giaTriGiam + "%"
+  }
 
+  const clickEditKhuyenMai = (km) => {
+    const ds = km.dsDienThoai.map(item => item.maDienThoai)
+    console.log(km.dsDienThoai)
+    setFormAddKhuyenMai({
+      maKhuyenMai: km.maKhuyenMai,
+      tenKhuyenMai: km.tenKhuyenMai,
+      loaiKhuyenMai: km.loaiKhuyenMai,
+      giaTriGiam: km.giaTriGiam,
+      ngayBatDau: km.ngayBatDau,
+      ngayKetThuc: km.ngayKetThuc,
+      dsDienThoai: ds
+    })
+    setChinhSua(true)
+  }
+  const resetFormKhuyenMai = () => {
+    setFormAddKhuyenMai({
+      maKhuyenMai: '',
+      tenKhuyenMai: '',
+      loaiKhuyenMai: '',
+      giaTriGiam: '',
+      ngayBatDau: '',
+      ngayKetThuc: '',
+      dsDienThoai: []
+    })
+  }
+  const clickCancelEditKhuyenMai = () => {
+    setDSXoaDienThoai([])
+    resetFormKhuyenMai();
+    setChinhSua(false);
+  }
+
+  const validateData = () => {
+    if (formAddKhuyenMai.tenKhuyenMai.trim() === '') {
+      setShowPopup({ show: true, type: false, message: "Nhập tên khuyến mãi" })
+      return true;
+    }
+    else if (!/^[a-zA-Z0-9]+$/.test(formAddKhuyenMai.tenKhuyenMai)) {
+      setShowPopup({ show: true, type: false, message: "Tên khuyến mãi chỉ được nhập chữ cái và số" })
+      return true;
+    }
+    else if (!formAddKhuyenMai.loaiKhuyenMai) {
+      setShowPopup({ show: true, type: false, message: "Chưa chọn loại khuyến mãi" })
+      return true;
+    }
+    else if (!Number.parseInt(formAddKhuyenMai.giaTriGiam)) {
+      setShowPopup({ show: true, type: false, message: "Chỉ được nhập số" })
+      return true;
+    }
+    else if (Number.parseInt(formAddKhuyenMai.giaTriGiam) <= 0) {
+      setShowPopup({ show: true, type: false, message: "Giá trị giảm phải lớn hơn 0" })
+      return true;
+    }
+    else if (formAddKhuyenMai.loaiKhuyenMai === "Percent" && Number.parseInt(formAddKhuyenMai.giaTriGiam) > 100) {
+      setShowPopup({ show: true, type: false, message: "Vui lòng không nhập quá 100%" })
+      return true;
+    }
+    else if (!formAddKhuyenMai.ngayBatDau) {
+      setShowPopup({ show: true, type: false, message: "Chọn ngày bắt đầu" })
+      return true;
+    }
+    else if (!formAddKhuyenMai.ngayKetThuc) {
+      setShowPopup({ show: true, type: false, message: "Chọn ngày kết thúc" })
+      return true;
+    }
+    const now = new Date();
+    const bd = new Date(formAddKhuyenMai.ngayBatDau)
+    const kt = new Date(formAddKhuyenMai.ngayKetThuc)
+    if (kt < bd) {
+      setShowPopup({ show: true, type: false, message: "Ngày kết thúc phải lớn hơn ngày bắt đầu" })
+      return true;
+    }
+    else if (kt < now) {
+      setShowPopup({ show: true, type: false, message: "Ngày kết thúc phải lớn ngày hiện tại" })
+      return true;
+    }
+    else if (formAddKhuyenMai.dsDienThoai.length <= 0) {
+      setShowPopup({ show: true, type: false, message: "Vui lòng chọn điện thoại áp dụng" })
+      return true;
+    }
+    return false;
+  }
   return (
     <div className="promo-container">
       <div className="promo-header">
@@ -146,7 +287,7 @@ function Quanlykhuyenmai() {
           {danhSachKM.map((km) => (
             <tr key={km.maKhuyenMai}>
               <td>{km.tenKhuyenMai}</td>
-              <td className="green">{km.giaTriGiam}</td>
+              <td className="green">{showGiaTriGiam(km)}</td>
               <td>
                 {showNgay(km.ngayBatDau)} - {showNgay(km.ngayKetThuc)}
               </td>
@@ -165,7 +306,7 @@ function Quanlykhuyenmai() {
                 </span>{" "}
                 <span
                   style={{ cursor: "pointer" }}
-                  onClick={() => setChinhSua(km)}
+                  onClick={() => clickEditKhuyenMai(km)}
                 >
                   ✏
                 </span>{" "}
@@ -190,19 +331,26 @@ function Quanlykhuyenmai() {
 
       {chinhSua && (
         <ChinhSuaKhuyenMai
-          promo={chinhSua}
-          onClose={() => setChinhSua(null)}
+          promo={formAddKhuyenMai}
+          onClose={clickCancelEditKhuyenMai}
           onSave={handleEditPromo}
+          inputData={inputData}
+          dsDienThoai={dsDienThoai}
         />
       )}
 
       {xoaKM && (
         <XoaKhuyenMai
           promo={xoaKM}
-          onClose={() => setXoaKM(null)}
+          onClose={setXoaKM}
           onDelete={handleDeletePromo}
         />
       )}
+      {showPopup.show &&
+        <Popup type={showPopup.type} message={showPopup.message}
+          onclose={() => setShowPopup({ ...showPopup, show: false })}
+        />
+      }
     </div>
   );
 }

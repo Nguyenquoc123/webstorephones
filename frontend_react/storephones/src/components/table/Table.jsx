@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Table.css";
 
 
-const Table = ({ cart, setCart, deleteInCart, tongTien, SelectSanPham}) => {
+const Table = ({ cart, setCart, deleteInCart, tongTien, SelectSanPham, datHang}) => {
     const decreaseQty = (id) => {
         setCart((prev) =>
             prev.map((item) =>
@@ -82,11 +82,11 @@ const Table = ({ cart, setCart, deleteInCart, tongTien, SelectSanPham}) => {
                 </tbody>
             </table>
 
-            <div className="checkout-container">
+            <div className="GH-checkout-container">
                 <div>
                     {tongTien > 0 && <span className="info-tong-tien">Tổng tiền: {tongTien.toLocaleString('vi-VN')}đ</span>}
                 </div>
-                <button className="checkout-btn">Thanh toán</button>
+                <button onClick={datHang} className="GH-checkout-btn">Thanh toán</button>
             </div>
         </div>
     );

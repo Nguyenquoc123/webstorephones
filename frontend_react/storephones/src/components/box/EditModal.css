@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,7 +17,7 @@
   padding: 24px 28px;
   border-radius: 16px;
   width: 420px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   animation: slideUp 0.3s ease;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -56,7 +56,7 @@
 
 .modal-group input:focus {
   border-color: #4cafef;
-  box-shadow: 0 0 0 3px rgba(76,175,239,0.2);
+  box-shadow: 0 0 0 3px rgba(76, 175, 239, 0.2);
 }
 
 .modal-actions {
@@ -97,16 +97,39 @@
 
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
+
 .ED-readonly {
   background-color: #f5f5f5;
   color: #777;
   cursor: not-allowed;
+}
+
+.gioi-tinh-info {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-size: 14px;
 }

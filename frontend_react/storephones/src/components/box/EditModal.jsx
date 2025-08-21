@@ -13,8 +13,8 @@ const EditModal = ({ data, setData, onClose }) => {
     };
 
     const handleConfirm = () => {
-        setData(formData); 
-        onClose();        
+        setData(formData);
+        onClose();
     };
 
     return (
@@ -22,15 +22,25 @@ const EditModal = ({ data, setData, onClose }) => {
             <div className="modal-content">
                 <h3>Chỉnh sửa thông tin</h3>
 
-                {formData.map((item, index) => (
+                {data.map((item, index) => (
                     <div key={index} className="modal-group">
                         <label>{item.label}</label>
                         {item.editable ? (
-                            <input
-                                type="text"
-                                value={item.value}
-                                onChange={(e) => handleChange(index, e.target.value)}
-                            />
+                            item.name === 'gioiTinh' ? (
+                                <select className="gioi-tinh-info" value={item.value} name="" id="" onChange={(e) => setData(item.name, e.target.value)}>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            ) : (
+                                <input
+                                    type="text"
+                                    value={item.value}
+                                    onChange={(e) => setData(item.name, e.target.value)}
+                                />
+                            )
+
+
                         ) : (
                             <p className="ED-readonly-text">{item.value}</p>
                         )}

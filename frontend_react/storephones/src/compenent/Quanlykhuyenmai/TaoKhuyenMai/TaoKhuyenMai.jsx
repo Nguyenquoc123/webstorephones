@@ -17,8 +17,9 @@ function TaoKhuyenMai({phoneList, formAddKhuyenMai, onClose, onSave, inputData})
     e.preventDefault();
     
     onSave();
-    onClose(); // Đóng form
+
   };
+  
 
   return (
     <div className="tao-container">

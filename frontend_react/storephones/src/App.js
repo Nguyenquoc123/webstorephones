@@ -14,26 +14,29 @@ import ChiTietDonHang from "./compenent/quanlydonhang/chitietdonhang/PageChiTiet
 import KhuyenMai from "./compenent/Quanlykhuyenmai/Quanlykhuyenmai";
 import HoSoCaNhan from "./compenent/hosocanhan/HoSoCaNhan";
 import './App.css';
+import ThongTinDatHang from "./compenent/thongtindathang/ThongTinDatHang";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/dienthoai" element={<DienThoai />} />
-        <Route path="/danhmuc" element={<DanhMuc />} />
-        <Route path="/home/:makhachhang" element={<HomeKhachHang />} />
-        <Route path="/home" element={<HomeKhachHang />} />
-        <Route path="/home/giohang" element={<GioHang />} />
-        <Route path="/home/hosocanhan" element={<HoSoCaNhan />} />
-        <Route path="/chitietdienthoai/:value" element={<ChiTietDienThoai />} />
-        <Route path="/Admin" element={<Admin />} />
-        <Route path="/doimatkhau" element={<DoiMatKhau />} />
-        <Route path="/donhang" element={<DonHang />} />
-        <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
-        <Route path="/khuyenmai" element={<KhuyenMai />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dienthoai" element={<DienThoai />} />
+          <Route path="/danhmuc" element={<DanhMuc />} />
+          <Route path="/home/:makhachhang" element={<HomeKhachHang />} />
+          <Route path="/home" element={<HomeKhachHang />} />
+          <Route path="/home/hosocanhan" element={<HoSoCaNhan />} />
+          <Route path="/chitietdienthoai/:value" element={<ChiTietDienThoai />} />
+          <Route path="/Admin" element={<Admin />} />
+          <Route path="/doimatkhau" element={<DoiMatKhau />} />
+          <Route path="/donhang" element={<DonHang />} />
+          <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
+          <Route path="/khuyenmai" element={<KhuyenMai />} />
+          <Route path="/home/giohang" element={<GioHang />} />
+          <Route path="/home/giohang/thongtingiaohang" element={<ThongTinDatHang />} />
+
+        </Routes>
     </BrowserRouter>
   );
 }

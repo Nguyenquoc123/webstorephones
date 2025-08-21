@@ -87,3 +87,28 @@ export async function fetchUpdateTrangThaiDonHang(data) {
         )
     }
 }
+
+
+export async function fetchAddDonHang(data) {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch('http://localhost:8080/storephones/adddonhang', {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            
+        })
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return (
+            {
+                code: -1,
+                message: "Lôi ồi"
+            }
+        )
+    }
+}
