@@ -14,6 +14,11 @@ public interface ItemInDonHangMapper {
 	@Mapping(source = "phienBanDienThoai.maPhienBan", target = "maPhienBan")
 	@Mapping(source = "phienBanDienThoai.dienThoai.tenDienThoai", target = "tenDienThoai")
 	@Mapping(source = "phienBanDienThoai.images", target = "image")
+	@Mapping(source = "phienBanDienThoai.rom", target = "rom")
+	@Mapping(source = "phienBanDienThoai.ram", target = "ram")
+	@Mapping(source = "phienBanDienThoai.mauSac", target = "mauSac")
+	@Mapping(source = "soLuong", target = "soLuong")
+	@Mapping(source = "giaBan", target = "giaBan")
 	ItemInDonHang toItemInDonHang(ChiTietDonHang chiTietDonHang);
 	
 	List<ItemInDonHang> toItemInDonHangDTOList(List<ChiTietDonHang> chiTietDonHang);

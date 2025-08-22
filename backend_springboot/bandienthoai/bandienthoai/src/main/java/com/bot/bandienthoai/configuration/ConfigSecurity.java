@@ -38,7 +38,7 @@ public class ConfigSecurity {
 
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/signup", "/checkfile", "/uploads/**").permitAll()// cho phép truy cập không cần auth
+                .requestMatchers("/login", "/signup", "/checkfile", "/uploads/**", "/thanhtoan").permitAll()// cho phép truy cập không cần auth
                 .requestMatchers("/adddanhmuc").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/adddienthoai").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/updatedienthoai").hasAuthority("ROLE_ADMIN")
@@ -62,10 +62,19 @@ public class ConfigSecurity {
                 .requestMatchers("/xoakhoigiohang/*").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/getdsgiohang").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/getdsdonhang/*").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/getindonhang").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/updatetrangthai").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/getindonhang").hasAnyAuthority("ROLE_ADMIN", "ROLE_KHACHHANG")
+                .requestMatchers("/updatetrangthai").hasAnyAuthority("ROLE_ADMIN", "ROLE_KHACHHANG")
                 .requestMatchers("/getdskhuyenmai").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/addkhuyenmai").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/updatekhuyenmai").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/deletekhuyenmai/*").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/checksoluong").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/getinfo").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/adddonhang").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/updateinfo").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/changepassword").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/dsdonhangkhachhang").hasAuthority("ROLE_KHACHHANG")
+               
                 .anyRequest().authenticated()
             );
             http.oauth2ResourceServer(oauth2 -> oauth2

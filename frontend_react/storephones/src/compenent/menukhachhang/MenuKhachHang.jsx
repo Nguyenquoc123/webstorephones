@@ -19,6 +19,7 @@ function MenuKhachHang({ search }) {
     setShowLogout(false);
   };
   const handleSearch = () => {
+    console.log("Từ khóa tìm kiếm ", searchValue)
     navigate("/home", { state: { searchValue: searchValue } });
   };
   // setup lại từ khóa tìm kiếm
@@ -62,7 +63,7 @@ function MenuKhachHang({ search }) {
             src="/images/icon-cart.png"
             onClick={() => navigate("/home/giohang")}
           />
-          {localStorage.getItem('soluongaddnew') && <span className="so-luong-add-new">{localStorage.getItem('soluongaddnew') > 9? '9+': localStorage.getItem('soluongaddnew')}</span>}
+          {localStorage.getItem('soluongaddnew') && <span className="so-luong-add-new">{localStorage.getItem('soluongaddnew') > 9 ? '9+' : localStorage.getItem('soluongaddnew')}</span>}
           <div className="img-logout">
             <img
               id="image-logout"
@@ -90,7 +91,7 @@ function MenuKhachHang({ search }) {
         className="nav-menu"
       >
         <p onClick={() => navigate("/home/HoSoCaNhan")}>Hồ sơ cá nhân</p>
-
+        <p onClick={() => navigate("/home/donhang")}>Đơn hàng đã mua</p>
       </div>
 
       <Logout

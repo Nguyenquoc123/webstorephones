@@ -19,6 +19,26 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
         else if(value === 6)
             return "Đã hủy"
     }
+    const showGiaBan = (value) => {
+        if(!value) return '';
+        return value.toLocaleString('vi-VN')
+    }
+    const showToTalSoLuong = (ds) => {
+        if(!ds) return '';
+        let total = 0;
+        ds.forEach(element => {
+            total += element.soLuong
+        });
+        return total;
+    }
+    const showTongTien = (ds) => {
+        if(!ds) return '';
+        let total = 0;
+        ds.forEach(element => {
+            total += (element.soLuong*element.giaBan);
+        });
+        return total.toLocaleString('vi-VN');
+    }
 
     return (
         <>
@@ -35,7 +55,7 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
                         </div>
                         <div>
                             <p><strong>Email: </strong>{dataChiTiet?.email}</p>
-                            <p><strong>Địa chỉ: </strong>{dataChiTiet?.diaChi}</p>
+                            <p><strong>Địa chỉ: </strong>{dataChiTiet?.diaChiNhanHang}</p>
                         </div>
                     </div>
                     <h3 className='title-thong-tin-don-hang'>Thông tin sản phẩm</h3>
@@ -55,10 +75,10 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
                                 (dataChiTiet.ds.map(item => (
                                     <tr key={item.maPhienBan}>
                                         <td><img className='img-chi-tiet' src={item.image[0].url} alt="iphone" /></td>
-                                        <td>{item.tenDienThoai}</td>
-                                        <td>20.000.000đ</td>
-                                        <td>2</td>
-                                        <td>40.000.000đ</td>
+                                        <td>{item.tenDienThoai} {item.rom} {item.ram} {item.mauSac}</td>
+                                        <td>{showGiaBan(item.giaBan)} đ</td>
+                                        <td>{item.soLuong}</td>
+                                        <td>{showGiaBan(item.soLuong*item.giaBan)} đ</td>
                                     </tr>
                                 )))
                             }
@@ -66,8 +86,8 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
 
                             <tr className="total-row">
                                 <td id='total' colSpan={3}>Tổng cộng</td>
-                                <td>4</td>
-                                <td>80.000.000đ</td>
+                                <td>{showToTalSoLuong(dataChiTiet.ds)}</td>
+                                <td>{showTongTien(dataChiTiet.ds)} đ</td>
                             </tr>
                         </tbody>
                     </table>
@@ -76,7 +96,7 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
                         <strong>Ghi chú:</strong> {dataChiTiet?.ghiChu}
                     </div>
 
-                    <div className="status">
+                    <div className="status-don-hang">
                         <strong>Trạng thái đơn hàng:</strong> {trangThaiDonHang(dataChiTiet?.trangThai)}
                     </div>
 
