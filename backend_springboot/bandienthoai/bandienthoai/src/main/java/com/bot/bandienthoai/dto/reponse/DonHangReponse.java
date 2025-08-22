@@ -16,5 +16,5 @@ public class DonHangReponse {
 	private String diaChi;
 	private Double tongTien;
 	private Integer phuongThucThanhToan;
-	private Boolean trangThaiThanhToan;
+	private Integer trangThaiThanhToan;
 }

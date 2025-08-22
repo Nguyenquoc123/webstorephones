@@ -38,7 +38,11 @@ public enum ErrorCode {
 	DanhMuc_Not_Null(26, "Chọn danh mục."),
 	Image_Not_Valid(27, "Ảnh không hợp lệ."),
 	CartItem_Not_Found(28, "Không tìm thấy sản phẩm"),
-	Admin_Not_Declare(-99, "Không thể khởi tạo admin")
+	Admin_Not_Declare(-99, "Không thể khởi tạo admin"),
+	SoLuong_Khong_Du(29, "Số lượng còn lại không đủ"),
+	CartItem_In_Cart(30, "Đã có trong giỏ hàng"),
+	Dia_Chi_Not_Null(31, "Vui lòng nhập địa chỉ"),
+	DonHang_Not_Found(32, "Không tìm thấy đơn hàng")
 	;
 	int code;
 	String message;

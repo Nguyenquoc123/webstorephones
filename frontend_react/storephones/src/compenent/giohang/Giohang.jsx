@@ -33,6 +33,7 @@ const Giohang = () => {
     if (response.code === 200) {
       console.log("Ds sản phẩm ", response.result)
       setCart(response.result);
+      localStorage.setItem("soluongaddnew", response.result.length)
     }
   }
   const deleteInCart = async (maPhienBan) => {

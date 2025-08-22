@@ -1,6 +1,7 @@
 package com.bot.bandienthoai.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ import com.bot.bandienthoai.repository.KhachHangRepository;
 import com.bot.bandienthoai.repository.PhienBanDienThoaiRepository;
 import com.bot.bandienthoai.request.CartItemRequest;
 import com.bot.bandienthoai.request.CartItemUpdateRequest;
+import com.bot.bandienthoai.request.SanPhamMuaRequest;
 
 
 
@@ -42,15 +44,18 @@ public class CartItemService {
 	
 	public List<CartItemReponse> getDSInCart(){
 		Integer maKhachHang_ = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+		Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang_);
 		Optional<Cart> cart_ = cartRepository.findByKhachHang_maKhachHang(maKhachHang_);
 		if(cart_.isEmpty()) {
-			throw new RunException(ErrorCode.Error_System);
+			Cart cart = new Cart();
+			cart.setKhachHang(kh.get());
+			cart = cartRepository.save(cart);
 		}
 		List<CartItem> lst = cartItemRepository.findByCart_cartId(cart_.get().getCartId());
 		return lst.stream().map(cartItemMapper::toCartItemReponse).collect(Collectors.toList());
 	}
 
-	public CartItemReponse addPhienBanInCart(CartItemRequest request) {
+	public List<CartItemReponse> addPhienBanInCart(CartItemRequest request) {
 		Integer maKhachHang_ = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
 
 		Optional<KhachHang> khachHang = khachHangRepository.findById(maKhachHang_);
@@ -75,6 +80,11 @@ public class CartItemService {
 		if(pb.isEmpty()) {
 			throw new RunException(ErrorCode.PhienBanDienThoai_Not_Found);
 		}
+		Optional<CartItem> cartTmp = cartItemRepository.findByCart_cartIdAndPhienBanDienThoai_maPhienBan(c.getCartId(), pb.get().getMaPhienBan());
+		if(cartTmp.isPresent()) {
+			throw new RunException(ErrorCode.CartItem_In_Cart);
+		}
+		
 		CartItem cartItem = new CartItem();
 		cartItem.setCart(c);
 		cartItem.setPhienBanDienThoai(pb.get());
@@ -84,7 +94,7 @@ public class CartItemService {
 		} catch (Exception e) {
 			throw new RunException(ErrorCode.Error_System);
 		}
-		return cartItemMapper.toCartItemReponse(cartItem);
+		return getDSInCart();
 	}
 	
 	public String deleteKhoiGioHang(Integer maPhienBan) {
@@ -105,5 +115,17 @@ public class CartItemService {
 			throw new RunException(ErrorCode.Error_System);
 		}
 		return "Delete Successful";
+	}
+	
+	public Boolean checkSoLuong(List<SanPhamMuaRequest> request) {
+		List<CartItemReponse> ds = getDSInCart();
+		Map<Integer, Integer> dsMap = ds.stream().collect(Collectors.toMap(CartItemReponse::getMaPhienBan, CartItemReponse::getSoLuongTonKho));
+		
+		for(SanPhamMuaRequest sanpham : request) {
+			Integer soLuongKho = dsMap.get(sanpham.getMaPhienBan());
+			if(soLuongKho < sanpham.getSoLuong())
+				throw new RunException(ErrorCode.SoLuong_Khong_Du);
+		}
+		return true;
 	}
 }
