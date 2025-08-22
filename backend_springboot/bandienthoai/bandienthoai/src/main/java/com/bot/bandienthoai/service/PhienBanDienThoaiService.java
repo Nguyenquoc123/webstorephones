@@ -131,9 +131,60 @@ public class PhienBanDienThoaiService {
 		return lst.map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse);
 	}
 
-	public List<PhienBanDienThoaiReponse> getDSPhienBanByMaDienThoai(Integer maDienThoai) {
+	public List<PhienBanDienThoaiKhuyenMaiReponse> getDSPhienBanByMaDienThoai(Integer maDienThoai) {
 		List<PhienBanDienThoai> ds = phienBanDienThoaiRepository.findByDienThoai_MaDienThoai(maDienThoai);
-		return ds.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
+//		return ds.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
+		return ds.stream().map(item -> {
+			Date now = new Date();
+			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
+			PhienBanDienThoaiKhuyenMaiReponse t = new PhienBanDienThoaiKhuyenMaiReponse();
+			Double giaBan = item.getGiaBan();
+			KhuyenMai_DienThoai valueTmp = null;
+			if (km != null && km.size() > 0) {
+				
+				valueTmp = km.get(0);
+				for (KhuyenMai_DienThoai value : km) {
+					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+						continue;
+					
+					
+					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							? valueTmp.getKhuyenMai().getGiaTriGiam()
+							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+					if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							&& value.getKhuyenMai().getGiaTriGiam() > giam) {
+						valueTmp = value;
+					} else if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Value")) {
+						Double pt = value.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+						if (pt > giam) {
+							valueTmp = value;
+						}
+					}
+				}
+			}
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+				valueTmp = new KhuyenMai_DienThoai();
+			}
+			
+
+			t.setMaDienThoai(item.getDienThoai().getMaDienThoai());
+			t.setMaPhienBan(item.getMaPhienBan());
+			t.setCamera(item.getCamera());
+			t.setGiaBan(item.getGiaBan());
+			t.setHangSanXuat(item.getDienThoai().getHangSanXuat());
+			t.setTenDienThoai(item.getDienThoai().getTenDienThoai());
+			t.setManHinh(item.getManHinh());
+			t.setMauSac(item.getMauSac());
+			t.setPin(item.getPin());
+			t.setRam(item.getRam());
+			t.setRom(item.getRom());
+			t.setSoLuong(item.getSoLuong());
+			t.setMoTa(item.getMoTa());
+			t.setImage(imagesMapper.toImagesDTOList(item.getImages()));
+			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
+			return t;
+		}).collect(Collectors.toList());
+		
 	}
 
 	@Transactional
@@ -289,7 +340,7 @@ public class PhienBanDienThoaiService {
 		}
 
 		if (request.getFilter()) {
-			lst = entityManagerService.filterPhienBan(lst, request);
+			 return entityManagerService.filterPhienBan(lst, request);
 		}
 
 //		return lst.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());

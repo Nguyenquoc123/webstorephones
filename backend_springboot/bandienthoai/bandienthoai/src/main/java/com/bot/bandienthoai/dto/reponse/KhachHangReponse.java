@@ -17,4 +17,11 @@ public class KhachHangReponse {
 	private Date ngaySinh;
 	private Integer gioiTinh;
 	private String diaChi;
+	private Integer trangThai;
+	private Double tongTien;
+	private Integer soDonHang;
+	private Date ngayDatHangGanNhat;
+	private String username;
+	private String avatar;
+	private Date ngayDangKy;
 }

@@ -21,6 +21,7 @@ public interface CartItemMapper {
 	@Mapping(source = "phienBanDienThoai.ram", target = "ram")
 	@Mapping(source = "phienBanDienThoai.moTa", target = "moTa")
 	@Mapping(source = "phienBanDienThoai.mauSac", target = "mauSac")
+	@Mapping(source = "phienBanDienThoai.soLuong", target = "soLuongTonKho")
 	@Mapping(target = "thanhTien", expression = "java(cartItem.getSoLuong() * cartItem.getPhienBanDienThoai().getGiaBan())")
 	CartItemReponse toCartItemReponse(CartItem cartItem);
 }

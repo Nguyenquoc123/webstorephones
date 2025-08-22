@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 @Data
 public class ChangePasswordRequest {
-	@NotNull(message = "")
-	private Integer maKhachHang;
 	
 	@NotNull(message = "Password_Not_Null")
 	@Length(min = 8, message = "Password_Not_Valid")
