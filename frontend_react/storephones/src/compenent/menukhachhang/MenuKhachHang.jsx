@@ -1,5 +1,5 @@
 import "../menukhachhang/MenuKhachHang.css";
-
+import ThongBao from "./thongbao/ThongBao";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logout from "../logout/Logout";
@@ -9,9 +9,10 @@ function MenuKhachHang({ search }) {
   const [showLogout, setShowLogout] = useState(false);
   const [clickedLogout, setClickedLogout] = useState(false);
   const [searchValue, setSearchValue] = useState(search ?? "");
+  const [showThongBao, setShowThongBao] = useState(false);
   const clickLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("soluongaddnew")
+    localStorage.removeItem("soluongaddnew");
     navigate("/");
   };
   const clickCancel = () => {
@@ -23,9 +24,9 @@ function MenuKhachHang({ search }) {
   };
   // setup lại từ khóa tìm kiếm
   useEffect(() => {
-    console.log("==========?????????????")
-    setSearchValue(search || '')
-  }, [search])
+    console.log("==========?????????????");
+    setSearchValue(search || "");
+  }, [search]);
   return (
     <div className="container">
       <div className="menu">
@@ -56,13 +57,23 @@ function MenuKhachHang({ search }) {
           />
         </div>
         <div className="menu-right">
-          <img id="icon-thongbao" src="/images/icon-notifications.png" />
+          <img
+            id="icon-thongbao"
+            src="/images/icon-notifications.png"
+            onClick={() => setShowThongBao(!showThongBao)}
+          />
           <img
             id="icon-cart"
             src="/images/icon-cart.png"
             onClick={() => navigate("/home/giohang")}
           />
-          {localStorage.getItem('soluongaddnew') && <span className="so-luong-add-new">{localStorage.getItem('soluongaddnew') > 9? '9+': localStorage.getItem('soluongaddnew')}</span>}
+          {localStorage.getItem("soluongaddnew") && (
+            <span className="so-luong-add-new">
+              {localStorage.getItem("soluongaddnew") > 9
+                ? "9+"
+                : localStorage.getItem("soluongaddnew")}
+            </span>
+          )}
           <div className="img-logout">
             <img
               id="image-logout"
@@ -74,6 +85,12 @@ function MenuKhachHang({ search }) {
           </div>
         </div>
       </div>
+      {showThongBao && (
+        <div>
+          <ThongBao />
+        </div>
+      )}
+
       <div
         className="btn-logout"
         onMouseEnter={() => setShowLogout(true)}
@@ -83,14 +100,12 @@ function MenuKhachHang({ search }) {
         <button id="btn-logout-child" onClick={() => setClickedLogout(true)}>
           logout
         </button>
-
       </div>
       <div
         style={{ display: showMenuByIcon ? "block" : "none" }}
         className="nav-menu"
       >
         <p onClick={() => navigate("/home/HoSoCaNhan")}>Hồ sơ cá nhân</p>
-
       </div>
 
       <Logout

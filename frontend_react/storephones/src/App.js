@@ -13,7 +13,10 @@ import DonHang from "./compenent/quanlydonhang/DonHang";
 import ChiTietDonHang from "./compenent/quanlydonhang/chitietdonhang/PageChiTietDonHang";
 import KhuyenMai from "./compenent/Quanlykhuyenmai/Quanlykhuyenmai";
 import HoSoCaNhan from "./compenent/hosocanhan/HoSoCaNhan";
-import './App.css';
+import QuanLyNguoiDung from "./compenent/quanlynguoidung/QuanLyNguoiDung";
+import MenuAdmin from "./compenent/menuadmin/MenuAdmin.jsx";
+
+import "./App.css";
 
 function App() {
   return (
@@ -28,11 +31,12 @@ function App() {
         <Route path="/home/giohang" element={<GioHang />} />
         <Route path="/home/hosocanhan" element={<HoSoCaNhan />} />
         <Route path="/chitietdienthoai/:value" element={<ChiTietDienThoai />} />
-        <Route path="/Admin" element={<Admin />} />
         <Route path="/doimatkhau" element={<DoiMatKhau />} />
         <Route path="/donhang" element={<DonHang />} />
         <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
         <Route path="/khuyenmai" element={<KhuyenMai />} />
+        <Route path="/quanlyUSE" element={<QuanLyNguoiDung />} />
+        <Route path="/Admin" element={<MenuAdmin />} />
       </Routes>
     </BrowserRouter>
   );
