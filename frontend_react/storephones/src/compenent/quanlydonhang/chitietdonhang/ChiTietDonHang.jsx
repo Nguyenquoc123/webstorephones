@@ -39,6 +39,26 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
         });
         return total.toLocaleString('vi-VN');
     }
+    const trangThaiThanhToan = (value) => {
+        if (value === 1) {
+            return "Chưa thanh toán";
+        }
+        else if (value === 2) {
+            return "Thanh toán thành công"
+        }
+        else if (value === 3)
+            return "Thanh toán thất bại"
+        
+    }
+
+    const phuongThucThanhToan = (value) => {
+        if (value === 1) {
+            return "Thanh toán khi nhận hàng";
+        }
+        else if (value === 2) {
+            return "Thanh toán online"
+        }
+    }
 
     return (
         <>
@@ -97,9 +117,14 @@ function ChiTietDonHang({ dataChiTiet, btnTrangThai, updateTrangThai }) {
                     </div>
 
                     <div className="status-don-hang">
+                        <strong>Phương thức thanh toán:</strong> {phuongThucThanhToan(dataChiTiet?.phuongThucThanhToan)}
+                    </div>
+                    <div className="status-don-hang">
                         <strong>Trạng thái đơn hàng:</strong> {trangThaiDonHang(dataChiTiet?.trangThai)}
                     </div>
-
+                    <div className="status-don-hang">
+                        <strong>Trạng thái thanh toán:</strong> {trangThaiThanhToan(dataChiTiet?.trangThaiThanhToan)}
+                    </div>
                     <div className="action-don-hang">
                         {btnTrangThai[dataChiTiet.trangThai]
                             && (

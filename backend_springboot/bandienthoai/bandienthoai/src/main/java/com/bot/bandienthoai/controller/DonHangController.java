@@ -81,5 +81,14 @@ public class DonHangController {
 		return APIReponse.<List<DonHangKhachHangReponse>>builder().result(donHangService.getDSDonHangByKhachHang()).build();
 	}
 	
+	@GetMapping("/dsdonhangkhachhanghientai")
+	public APIReponse<List<DonHangKhachHangReponse>> getDSDonHangKhachHangHienTai(){
+		return APIReponse.<List<DonHangKhachHangReponse>>builder().result(donHangService.getDSDonHangByKhachHangHienTai()).build();
+	}
+	@GetMapping("/dsdonhangkhachhanglichsu")
+	public APIReponse<List<DonHangKhachHangReponse>> getDSDonHangKhachHangLichSu(){
+		return APIReponse.<List<DonHangKhachHangReponse>>builder().result(donHangService.getDSDonHangByKhachHangLichSu()).build();
+	}
+	
 	
 }

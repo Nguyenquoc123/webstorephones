@@ -13,9 +13,11 @@ function HomeKhachHang() {
     const [loading, setLoading] = useState(false);
     const reloadPage = useLocation();
     const search = useLocation();
+    const query = new URLSearchParams(search.search);
+    let searchValue = query.get("search");
     const navigate = useNavigate();
     const [dsPhienBan, setDSPhienBan] = useState([]);
-    const [searchValue, setSearchValue] = useState(search.state?.searchValue ?? '');
+    // const [searchValue, setSearchValue] = useState(search.state?.searchValue ?? '');
     const [searchAndFilter, setSearchAndFilter] = useState({
         hang: [],
         gia: '',
@@ -23,6 +25,13 @@ function HomeKhachHang() {
         maxGia: null,
         boNho: []
     })
+    const [dataPage, setDataPage] = useState({
+        page: 0,
+        totalPage: 1,
+        size: 1,
+        typePhanTrang: false ,
+        changePhanTrang: ''
+    });
     const gia = {
         "<1": [0, 1000000],
         "1-3": [1000000, 3000000],
@@ -34,6 +43,7 @@ function HomeKhachHang() {
         "20-30": [20000000, 30000000],
         ">30": [30000000, null]
     };
+
     const clickXemChiTiet = (value) => {
         console.log(value);
         navigate(`/chitietdienthoai/${value}`)
@@ -44,48 +54,68 @@ function HomeKhachHang() {
     useEffect(() => {
         if (reloadPage.state?.reset) {
             console.log("=========================")
-            loadDSPhienBanAndKhuyenMai()
             resetSearchAndFilter();
-            setSearchValue('')
+            // setSearchValue('')
+            setDataPage({ ...dataPage, page: 0, totalPage: 1, typePhanTrang: false, changePhanTrang: new Date() })
         }
 
     }, [reloadPage.state?.reset])
 
     // search
     useEffect(() => {
-        setSearchValue(search.state?.searchValue) // setup giá trị tìm kiếm
-        clickSearchAndFilter(); // gọi hàm tìm kiếm
-        console.log("akakaaaaaaaaaaaaaaaaa")
-        console.log(search.state?.searchValue)
-
-    }, [search.state?.searchValue])
+        console.log("akakaaaaaaaaaaaaaaaaa", dataPage.typePhanTrang)
+        if (search.search) {
+            setDataPage({ ...dataPage, page: 0, totalPage: 1, typePhanTrang: true, changePhanTrang: new Date() })
+            // setSearchValue(search.state?.searchValue) // setup giá trị tìm kiếm
+            console.log("akakaaaaaaaaaaaaaaaaa")
+            console.log(dataPage.typePhanTrang)
+        }
+    }, [search.search])
 
     /// test 
     const loadDSPhienBanAndKhuyenMai = async () => {
-        const response = await fetchGetDSPhienBanAndKhuyenMai();
+        console.log("Chạy load ds", dataPage.typePhanTrang)
+        const response = await fetchGetDSPhienBanAndKhuyenMai(dataPage.page, dataPage.size);
         console.log("Error ", response)
         if (response.code === 200) {
-            console.log("Danh sách phiên bản và khuyến mãi", response.result)
-            setDSPhienBan(response.result)
+            // console.log("Danh sách phiên bản và khuyến mãi", response.result)
+            setDSPhienBan(response.result.content)
+
+            setDataPage(dataPage => {
+                if (dataPage.totalPage !== response.result.totalPages) {
+                    return { ...dataPage, totalPage: response.result.totalPages }
+                }
+                return dataPage;
+            })
         }
-        else{
+        else {
             console.log("Error ", response)
         }
     }
 
-
+    useEffect(() => {
+        console.log("Phan trang..............", search?.search, dataPage.typePhanTrang)
+        if (!search?.search && !dataPage.typePhanTrang) {
+            loadDSPhienBanAndKhuyenMai();
+            console.log("Phân tranng 1")
+        }
+        else {
+            clickSearchAndFilter();
+            console.log("Phân tranng 2")
+        }
+        console.log("Size ", dataPage.size)
+    }, [dataPage.page, dataPage.changePhanTrang])
     // load danh sách điện thoại
     useEffect(() => {
-        if (!search.state?.searchValue) {
-            // loadDSPhienBan();
+        if (!search.search) { // nếu ko có sự kiện tìm kiếm
             loadDSPhienBanAndKhuyenMai()
             loadGioHang()
+            console.log("Không có chạy")
         }
-
     }, [])
     const loadGioHang = async () => {
         const response = await fetchGetDSInGioHang();
-        if(response.code === 200){
+        if (response.code === 200) {
             localStorage.setItem("soluongaddnew", response.result.length)
         }
     }
@@ -149,27 +179,46 @@ function HomeKhachHang() {
     }
 
     const clickSearchAndFilter = async () => {
+
+
+        console.log("Chạy tìm kiếm", dataPage.typePhanTrang)
         let filter_ = false;
         if (searchAndFilter.hang.length > 0 || searchAndFilter.boNho.length > 0 || searchAndFilter.gia !== "") {
             filter_ = true;
         }
-        const valueSearch = search.state?.searchValue || ''
+        const valueSearch = query.get("search") || ''
         const data = {
             "search": valueSearch,
             "hang": searchAndFilter.hang,
             "boNho": searchAndFilter.boNho,
             "minGia": searchAndFilter.minGia,
             "maxGia": searchAndFilter.maxGia,
-            "filter": filter_
+            "filter": filter_,
+            "page": dataPage.page,
+            "size": dataPage.size
         }
         console.log(data)
         setLoading(true)
         const response = await fetchSearchAndFilter(data);
         setLoading(false)
         if (response.code === 200) {
-            setDSPhienBan(response.result);
+            setDSPhienBan(response.result.content);
+            if (dataPage.totalPage !== response.result.totalPages)
+                setDataPage({ ...dataPage, totalPage: response.result.totalPages })
             console.log(response.result)
         }
+    }
+
+    const clickChangePage = (value) => {
+        if (value < 0 && dataPage.page > 0) {
+            setDataPage({ ...dataPage, page: dataPage.page - 1 });
+        } else if (value > 0 && dataPage.page < dataPage.totalPage - 1) {
+            setDataPage({ ...dataPage, page: dataPage.page + 1 });
+        }
+    };
+
+    const clickFilter = () => {
+        setDataPage({ ...dataPage, page: 0, totalPage: 1, typePhanTrang: true, changePhanTrang: new Date() })
     }
     return (
         <>
@@ -180,7 +229,10 @@ function HomeKhachHang() {
                 clickXemChiTiet={clickXemChiTiet}
                 searchAndFilter={searchAndFilter}
                 clickTieuChi={inputData}
-                clickFilter={clickSearchAndFilter}
+                clickFilter={clickFilter}
+                page={dataPage.page}
+                totalPage={dataPage.totalPage}
+                clickChangePage={clickChangePage}
             />
             <Loading show={loading} />
         </>

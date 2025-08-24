@@ -49,14 +49,16 @@ public class ThanhToanController {
 	            DonHang dh = donHangOpt.get();
 	            if ("00".equals(responseCode)) { // Thanh toán thành công
 	            	donHangService.updateTrangThaiThanhToan(maDonHang, 2);
+	            	 return "redirect:http://localhost:3000/home/giaodichthanhcong/" + maDonHang;
 	             
 	            } else {      // Thanh toán thất bại
 	            	donHangService.updateTrangThaiThanhToan(maDonHang, 3);
+	            	 
 	            }
 	            
 	        }
-
-	        return "redirect:http://localhost:3000/home/chitietdonhang/" + maDonHang;
+	        return "redirect:http://localhost:3000/home/giaodichthatbai/" + maDonHang;
+	       
 	    } else {
 	        return "redirect:http://localhost:3000/home/chitietdonhang/";
 	    }

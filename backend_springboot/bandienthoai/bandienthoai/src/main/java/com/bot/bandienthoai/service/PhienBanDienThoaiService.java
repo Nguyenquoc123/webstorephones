@@ -3,6 +3,8 @@ package com.bot.bandienthoai.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -68,22 +71,23 @@ public class PhienBanDienThoaiService {
 	}
 
 //	public List<PhienBanDienThoaiAndKhuyenMaiReponse> getDSPhienBanAndKhuyenMai(){
-	public List<PhienBanDienThoaiKhuyenMaiReponse> getDSPhienBanAndKhuyenMai() {
-		List<PhienBanDienThoai> lst = phienBanDienThoaiRepository.getAllPhienBan();
-		List<PhienBanDienThoaiKhuyenMaiReponse> tmp = lst.stream().map(item -> {
+	public Page<PhienBanDienThoaiKhuyenMaiReponse> getDSPhienBanAndKhuyenMai(Integer page, Integer size) {
+		Pageable pageable = PageRequest.of(page, size);
+		Page<PhienBanDienThoai> lst = phienBanDienThoaiRepository.findByTrangThaiNot(-1, pageable);
+		return lst.map(item -> {
 			Date now = new Date();
 			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
 			PhienBanDienThoaiKhuyenMaiReponse t = new PhienBanDienThoaiKhuyenMaiReponse();
 			Double giaBan = item.getGiaBan();
 			KhuyenMai_DienThoai valueTmp = null;
 			if (km != null && km.size() > 0) {
-				
+
 				valueTmp = km.get(0);
 				for (KhuyenMai_DienThoai value : km) {
-					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+					if (value.getKhuyenMai().getNgayBatDau().after(now)
+							|| value.getKhuyenMai().getNgayKetThuc().before(now))
 						continue;
-					
-					
+
 					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
 							? valueTmp.getKhuyenMai().getGiaTriGiam()
 							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
@@ -98,10 +102,10 @@ public class PhienBanDienThoaiService {
 					}
 				}
 			}
-			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now)
+					|| valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
 				valueTmp = new KhuyenMai_DienThoai();
 			}
-			
 
 			t.setMaDienThoai(item.getDienThoai().getMaDienThoai());
 			t.setMaPhienBan(item.getMaPhienBan());
@@ -119,9 +123,8 @@ public class PhienBanDienThoaiService {
 			t.setImage(imagesMapper.toImagesDTOList(item.getImages()));
 			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
 			return t;
-		}).collect(Collectors.toList());
-		return tmp;
-//		return lst.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiAndKhuyenMaiReponse).collect(Collectors.toList());
+		});
+
 	}
 
 	// get ds phan trang
@@ -141,13 +144,13 @@ public class PhienBanDienThoaiService {
 			Double giaBan = item.getGiaBan();
 			KhuyenMai_DienThoai valueTmp = null;
 			if (km != null && km.size() > 0) {
-				
+
 				valueTmp = km.get(0);
 				for (KhuyenMai_DienThoai value : km) {
-					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+					if (value.getKhuyenMai().getNgayBatDau().after(now)
+							|| value.getKhuyenMai().getNgayKetThuc().before(now))
 						continue;
-					
-					
+
 					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
 							? valueTmp.getKhuyenMai().getGiaTriGiam()
 							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
@@ -162,10 +165,10 @@ public class PhienBanDienThoaiService {
 					}
 				}
 			}
-			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now)
+					|| valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
 				valueTmp = new KhuyenMai_DienThoai();
 			}
-			
 
 			t.setMaDienThoai(item.getDienThoai().getMaDienThoai());
 			t.setMaPhienBan(item.getMaPhienBan());
@@ -184,7 +187,7 @@ public class PhienBanDienThoaiService {
 			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
 			return t;
 		}).collect(Collectors.toList());
-		
+
 	}
 
 	@Transactional
@@ -329,7 +332,9 @@ public class PhienBanDienThoaiService {
 	}
 
 //	public List<PhienBanDienThoaiReponse> searchAndFilter(SearchAndFilterRequest request){
-	public List<PhienBanDienThoaiKhuyenMaiReponse> searchAndFilter(SearchAndFilterRequest request) {
+	public Page<PhienBanDienThoaiKhuyenMaiReponse> searchAndFilter(SearchAndFilterRequest request) {
+		int page = request.getPage();
+		int size = request.getSize();
 		List<PhienBanDienThoai> lst;
 		if (request.getSearch() != null) {
 			List<String> keysword = Arrays.asList(request.getSearch().strip().split("[ ]"));
@@ -340,23 +345,30 @@ public class PhienBanDienThoaiService {
 		}
 
 		if (request.getFilter()) {
-			 return entityManagerService.filterPhienBan(lst, request);
+			return entityManagerService.filterPhienBan(lst, request, page, size);
 		}
 
 //		return lst.stream().map(phienBanDienThoaiMapper::toPhienBanDienThoaiReponse).collect(Collectors.toList());
-		return lst.stream().map(item -> {
+
+		Pageable pageable = PageRequest.of(page, size);
+		int from = page * size;
+		int to = Math.min(from + size, lst.size());
+		List<PhienBanDienThoai> ds = from > lst.size() ? Collections.emptyList() : lst.subList(from, to);
+
+		return new PageImpl<>(ds.stream().map(item -> {
 			Date now = new Date();
 			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
 			PhienBanDienThoaiKhuyenMaiReponse t = new PhienBanDienThoaiKhuyenMaiReponse();
 			Double giaBan = item.getGiaBan();
 			KhuyenMai_DienThoai valueTmp = null;
 			if (km != null && km.size() > 0) {
-				
+
 				valueTmp = km.get(0);
 				for (KhuyenMai_DienThoai value : km) {
-					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+					if (value.getKhuyenMai().getNgayBatDau().after(now)
+							|| value.getKhuyenMai().getNgayKetThuc().before(now))
 						continue;
-					
+
 					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
 							? valueTmp.getKhuyenMai().getGiaTriGiam()
 							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
@@ -371,7 +383,8 @@ public class PhienBanDienThoaiService {
 					}
 				}
 			}
-			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now)
+					|| valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
 				valueTmp = new KhuyenMai_DienThoai();
 			}
 
@@ -391,6 +404,6 @@ public class PhienBanDienThoaiService {
 			t.setImage(imagesMapper.toImagesDTOList(item.getImages()));
 			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
 			return t;
-		}).collect(Collectors.toList());
+		}).collect(Collectors.toList()), pageable, lst.size());
 	}
 }
