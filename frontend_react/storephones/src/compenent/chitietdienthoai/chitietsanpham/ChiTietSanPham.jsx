@@ -3,7 +3,7 @@ import '../chitietsanpham/ChiTietSanPham.css'
 import { fetchGetDSPhienBanByDienThoai } from '../../../api/dienthoai';
 import { useState } from 'react';
 
-function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeMauSac, soLuong, changeSoLuong, themVaoGioHang}) {
+function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeMauSac, soLuong, changeSoLuong, themVaoGioHang, clickMuaHang}) {
     const [imgNow, setImgNow] = useState(0);
     const clickNextImg = (value)=>{
         console.log("run", imgNow+1)
@@ -27,9 +27,16 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
         if(value < 0 && soLuong > 1){
             changeSoLuong(Number.parseInt(soLuong) - 1)
         }
-        else if(value > 0 ){
+        else if(value > 0 && selectNow.soLuong >= Number.parseInt(soLuong)+1){
             changeSoLuong(Number.parseInt(soLuong) + 1)
         }
+    }
+    const showGiaBan = (item) => {
+        if(!item.km)
+            return item.giaBan;
+        if(item.km.loaiKhuyenMai === "Fixed")
+            return (item.giaBan - item.km.giaTriGiam).toLocaleString("vi-VN") + " đ";
+        return (item.giaBan - item.km.giaTriGiam*item.giaBan*0.01).toLocaleString("vi-VN") + " đ";
     }
     return (
         <div className="content-details">
@@ -67,7 +74,7 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                                             <img src={item.image[0].url} alt="" />
                                             <div className="mau-sac-gia">
                                                 <p>{item.mauSac}</p>
-                                                <p>{item.giaBan}đ</p>
+                                                <p>{showGiaBan(item)}</p>
                                             </div>
                                         </div>
                                     )
@@ -83,7 +90,7 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                         <h3>Số lượng:</h3>
                         <div className="btn-so-luong">
                             <button onClick={() => clickChangeSoLuong(-1)}>-</button>
-                            <input type="text" value={soLuong} onChange={(e) => changeSoLuong(e.target.value)}/>
+                            <input type="text" readOnly value={soLuong} onChange={(e) => changeSoLuong(e.target.value)}/>
                             <button onClick={() => clickChangeSoLuong(1)}>+</button>
                         </div>
                     </div>
@@ -92,7 +99,7 @@ function ChiTietSanPham({dsPhienBan, selectNow, clickChangeCauHinh, clickChangeM
                         <span>{selectNow !== null ? selectNow.soLuong : ""}</span>
                     </div>
                     <div className="btn-chi-tiet">
-                        <button id="mua-ngay">Mua ngay</button>
+                        <button id="mua-ngay" onClick={clickMuaHang}>Mua ngay</button>
                         <div className="btn-gio-hang" onClick={themVaoGioHang}>
                             <button>Thêm vào giỏ hàng</button>
                             <img src="/images/shopping-cart.png" alt="" />

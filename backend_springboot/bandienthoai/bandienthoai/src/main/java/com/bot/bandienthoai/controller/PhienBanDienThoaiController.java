@@ -56,8 +56,8 @@ public class PhienBanDienThoaiController {
 	}
 	
 	@GetMapping("/getdsphienbanbydienthoai/{maDienThoai}")
-	public APIReponse<List<PhienBanDienThoaiReponse>> getDSPhienBanByDienThoai(@PathVariable(name = "maDienThoai")  Integer maDienThoai){
-		return APIReponse.<List<PhienBanDienThoaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanByMaDienThoai(maDienThoai)).build();
+	public APIReponse<List<PhienBanDienThoaiKhuyenMaiReponse>> getDSPhienBanByDienThoai(@PathVariable(name = "maDienThoai")  Integer maDienThoai){
+		return APIReponse.<List<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanByMaDienThoai(maDienThoai)).build();
 	}
 
 	@PostMapping("/addphienban")
