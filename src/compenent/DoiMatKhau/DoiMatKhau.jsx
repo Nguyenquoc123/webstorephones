@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./DoiMatKhau.css";
 import close_eye from "../../../src/icons/eye_close.png";
 import open_eye from "../../../src/icons/eye_open.png";
+import { useNavigate } from "react-router-dom";
 
 const DoiMatKhau = () => {
   const [showPassword, setShowPassword] = useState({
@@ -9,6 +10,8 @@ const DoiMatKhau = () => {
     new: false,
     confirm: false,
   });
+
+  const navigate = useNavigate();
 
   const togglePassword = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -81,7 +84,12 @@ const DoiMatKhau = () => {
       </div>
 
       <div className="DMK-form-footer">
-        <button className="DMK-btn-cancel">Hủy</button>
+        <button
+          className="DMK-btn-cancel"
+          onClick={() => navigate("/home/hosocanhan")}
+        >
+          Hủy
+        </button>
         <button className="DMK-btn-confirm">Xác nhận</button>
       </div>
     </div>

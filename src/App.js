@@ -36,6 +36,7 @@ function App() {
         <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
         <Route path="/khuyenmai" element={<KhuyenMai />} />
         <Route path="/quanlyUSE" element={<QuanLyNguoiDung />} />
+        <Route path="/Admin" element={<MenuAdmin />} />
       </Routes>
     </BrowserRouter>
   );

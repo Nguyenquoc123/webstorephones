@@ -10,8 +10,7 @@ body {
   padding: 16px;
   font-family: Arial, sans-serif;
   background-color: #fff;
-  margin-left: 300px;
-
+  margin: 0 auto;
 }
 
 .profile-title {
@@ -57,18 +56,18 @@ h3 {
 
 .HSCN-profile-info {
   display: flex;
-  flex-direction: column;   
-  justify-content: center;  
-  align-items: center;      
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   margin: 20px 0;
 }
 
 .profile-name {
-  margin-top: 12px; 
+  margin-top: 12px;
   font-weight: bold;
 }
-.HSCN-btn_xac_nhan{
+.HSCN-btn_xac_nhan {
   background-color: #007bff;
   color: white;
   padding: 10px 30px;
@@ -76,6 +75,30 @@ h3 {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
-  margin-left: 1200px;
-
+}
+.HSCN-btn {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 280px;
+  padding-bottom: 100px;
+}
+.HSCN-btn_doi_mat_khau {
+  background-color: #000ac0;
+  color: rgb(255, 255, 255);
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-left: 300px;
+}
+.HSCN-QL {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  border: 1px solid black;
 }
