@@ -1,0 +1,78 @@
+.promo-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.promo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.btn-add {
+  background: #3b82f6;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.promo-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.promo-filters input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.promo-filters select {
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.promo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.promo-table th,
+.promo-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.green {
+  color: green;
+  font-weight: bold;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.status.running {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status.upcoming {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.expired {
+  background: #e5e7eb;
+  color: #374151;
+}

@@ -10,7 +10,7 @@ body {
   padding: 16px;
   font-family: Arial, sans-serif;
   background-color: #fff;
-  margin-left: 300px;
+  margin: 0 auto;
 }
 
 .profile-title {
