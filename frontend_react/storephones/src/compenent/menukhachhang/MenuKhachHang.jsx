@@ -1,5 +1,5 @@
 import "../menukhachhang/MenuKhachHang.css";
-
+import ThongBao from "./thongbao/ThongBao";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Logout from "../logout/Logout";
@@ -12,7 +12,7 @@ function MenuKhachHang({ search }) {
   const [reloadPage, setReloadPage] = useState(false)
   const clickLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("soluongaddnew")
+    localStorage.removeItem("soluongaddnew");
     navigate("/");
   };
   const clickCancel = () => {
@@ -62,7 +62,11 @@ function MenuKhachHang({ search }) {
           />
         </div>
         <div className="menu-right">
-          <img id="icon-thongbao" src="/images/icon-notifications.png" />
+          <img
+            id="icon-thongbao"
+            src="/images/icon-notifications.png"
+            onClick={() => setShowThongBao(!showThongBao)}
+          />
           <img
             id="icon-cart"
             src="/images/icon-cart.png"
@@ -80,6 +84,12 @@ function MenuKhachHang({ search }) {
           </div>
         </div>
       </div>
+      {showThongBao && (
+        <div>
+          <ThongBao />
+        </div>
+      )}
+
       <div
         className="btn-logout"
         onMouseEnter={() => setShowLogout(true)}
@@ -89,7 +99,6 @@ function MenuKhachHang({ search }) {
         <button id="btn-logout-child" onClick={() => setClickedLogout(true)}>
           logout
         </button>
-
       </div>
       <div
         style={{ display: showMenuByIcon ? "block" : "none" }}
