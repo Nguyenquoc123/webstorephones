@@ -9,6 +9,7 @@ function MenuKhachHang({ search }) {
   const [showLogout, setShowLogout] = useState(false);
   const [clickedLogout, setClickedLogout] = useState(false);
   const [searchValue, setSearchValue] = useState(search ?? "");
+  const [reloadPage, setReloadPage] = useState(false)
   const clickLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("soluongaddnew")
@@ -20,13 +21,17 @@ function MenuKhachHang({ search }) {
   };
   const handleSearch = () => {
     console.log("Từ khóa tìm kiếm ", searchValue)
-    navigate("/home", { state: { searchValue: searchValue } });
+    navigate(`/home?search=${searchValue}` )//, { state: { searchValue: searchValue, trigger: new Date()} });
   };
   // setup lại từ khóa tìm kiếm
   useEffect(() => {
-    console.log("==========?????????????")
-    setSearchValue(search || '')
-  }, [search])
+    console.log("Khởi tạo menu khách hàng ==============",  search, searchValue)
+  }, [])
+  if(reloadPage){
+    console.log("Reload page")
+    setReloadPage(false)
+    setSearchValue('')
+  }
   return (
     <div className="container">
       <div className="menu">
@@ -38,7 +43,7 @@ function MenuKhachHang({ search }) {
           />
           <p
             id="KH-logo"
-            onClick={() => navigate("/home", { state: { reset: Date.now() } })}
+            onClick={() => {setReloadPage(true); navigate("/home", { state: { reset: Date.now() } })} }
           >
             Phone Stores
           </p>
@@ -91,7 +96,8 @@ function MenuKhachHang({ search }) {
         className="nav-menu"
       >
         <p onClick={() => navigate("/home/HoSoCaNhan")}>Hồ sơ cá nhân</p>
-        <p onClick={() => navigate("/home/donhang")}>Đơn hàng đã mua</p>
+        <p onClick={() => navigate("/home/donhang")}>Đơn hàng hiện tại</p>
+        <p onClick={() => navigate("/home/lichsudathang")}>Lịch sử đặt hàng</p>
       </div>
 
       <Logout

@@ -27,6 +27,7 @@ public interface DonHangMapper {
 	@Mapping(source = "ghiChu", target = "ghiChu")
 	@Mapping(source = "trangThai", target = "trangThai")
 	@Mapping(source = "chiTietDonHang", target = "ds")
+	@Mapping(source = "trangThaiThanhToan", target = "trangThaiThanhToan")
 	ChiTietDonHangReponse toChiTietDonHangReponse(DonHang donHang);
 	
 	@Mapping(source = "maDonHang", target = "maDonHang")

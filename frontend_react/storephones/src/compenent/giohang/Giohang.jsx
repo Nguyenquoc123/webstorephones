@@ -4,6 +4,8 @@ import Table from '../../components/table/Table'
 import { fetchCheckSoLuong, fetchGetDSInGioHang, fetchXoaKhoiGioHang } from '../../api/giohang';
 
 import { useNavigate } from 'react-router-dom';
+import Popup from '../popup/Popup';
+import Loading from '../loading/Loading';
 
 
 
@@ -13,7 +15,8 @@ const Giohang = () => {
   const [cart, setCart] = useState([]);
   const [lstSelect, setLstSelect] = useState([]);
   const [tongTien, setTongTien] = useState(0);
-
+  const [showPopup, setShowPopup] = useState({ show: false, type: '', message: '' })
+  const [showLoading, setShowLoading] = useState(false)
   useEffect(() => {
     loadDSInCart()
   }, [])
@@ -37,11 +40,15 @@ const Giohang = () => {
     }
   }
   const deleteInCart = async (maPhienBan) => {
+    setShowLoading(true)
     const response = await fetchXoaKhoiGioHang(maPhienBan);
     if (response.code === 200) {
       console.log("Xóa thành công")
       loadDSInCart();
+
+      setShowPopup({ show: true, type: true, message: "Đã xóa thành công" })
     }
+    setShowLoading(false)
   }
   const selectSanPham = (maPhienBan) => {
     const pb = cart.find(item => item.maPhienBan === maPhienBan)
@@ -56,21 +63,21 @@ const Giohang = () => {
     }
   }
   const datHang = async () => {
-    if(lstSelect.length <= 0){
+    if (lstSelect.length <= 0) {
 
-      return ;
+      return;
     }
     const dsMua = cart
       .filter(item => lstSelect.includes(item.maPhienBan))
       .map(v => ({ 'maPhienBan': v.maPhienBan, 'soLuong': v.soLuong, 'giaBan': v.giaBan }))
     console.log(dsMua)
-      const response = await fetchCheckSoLuong(dsMua)
+    const response = await fetchCheckSoLuong(dsMua)
     if (response.code === 200) {
       console.log("Check hoàn tất", response)
       localStorage.setItem("dsMua", JSON.stringify(dsMua))
-      navigate('/home/giohang/thongtingiaohang', {state: {dsMua}})
+      navigate('/home/giohang/thongtingiaohang', { state: { dsMua } })
     }
-    else{
+    else {
       console.log(response)
     }
   }
@@ -86,6 +93,10 @@ const Giohang = () => {
         tongTien={tongTien}
         SelectSanPham={selectSanPham}
         datHang={datHang} />
+
+      {showPopup.show && <Popup type={showPopup.type} message={showPopup.message}
+        onclose={() => setShowPopup({ ...showPopup, show: false })} />}
+      <Loading show={showLoading} />
     </div>
   )
 }

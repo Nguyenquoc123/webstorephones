@@ -1,15 +1,25 @@
 package com.bot.bandienthoai.request;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UpdateHoSoRequest {
 	@NotNull(message = "HoTen_Not_Null")
 	private String hoTen;
@@ -17,7 +27,7 @@ public class UpdateHoSoRequest {
 	
 	private Integer gioiTinh;
 	
-	@NotNull(message = "NgaySinh_Not_Null")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date ngaySinh;
 	
 	@NotNull(message = "SDT_Not_Null")
