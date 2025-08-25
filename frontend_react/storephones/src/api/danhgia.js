@@ -48,6 +48,9 @@ export async function fetchAddDanhGia(data) {
             body: JSON.stringify(data)
 
         })
+        if(response.status === 401){
+            window.location.href = '/'
+        }
         const result =await response.json();
         return result;
     } catch (error) {

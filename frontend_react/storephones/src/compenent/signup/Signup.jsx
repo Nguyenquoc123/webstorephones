@@ -4,6 +4,7 @@ import '../signup/Signup.css'
 import { useNavigate } from "react-router-dom";
 import { fetchSigup } from "../../api/authApi";
 import Loading from "../loading/Loading"
+import Popup from "../popup/Popup";
 
 function Signup() {
     const [loading, setLoading] = useState(false);
@@ -29,6 +30,8 @@ function Signup() {
         password: '',
         againpassword: ''
     })
+
+    const [showPopup, setShowPopup] = useState({ show: false, type: '', message: '' })
 
     const validCheck = () => {
         let hasError = false;
@@ -144,8 +147,15 @@ function Signup() {
             localStorage.setItem("token", result.result.token);
             navigate('/home');
         }
-        
-
+        else if (result.code === 10) {
+            setShowPopup({ show: true, type: false, message: 'Username đã tồn tại' })
+        }
+        else if (result.code === 11) {
+            setShowPopup({ show: true, type: false, message: 'Số điện thoại đã tồn tại' })
+        }
+        else if (result.code === 12) {
+            setShowPopup({ show: true, type: false, message: 'Email đã tồn tại' })
+        }
     }
 
 
@@ -216,6 +226,9 @@ function Signup() {
             </form>
 
             <Loading show={loading} />
+            {showPopup.show && <Popup type={showPopup.type} message={showPopup.message}
+                onclose={() => setShowPopup({...showPopup, show: false})}
+            />}
         </div>
     )
 

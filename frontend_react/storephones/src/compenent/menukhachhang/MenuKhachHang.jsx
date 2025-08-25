@@ -10,6 +10,8 @@ function MenuKhachHang({ search }) {
   const [clickedLogout, setClickedLogout] = useState(false);
   const [searchValue, setSearchValue] = useState(search ?? "");
   const [reloadPage, setReloadPage] = useState(false)
+  const [showThongBao, setShowThongBao] = useState(false);
+
   const clickLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("soluongaddnew");
@@ -21,13 +23,13 @@ function MenuKhachHang({ search }) {
   };
   const handleSearch = () => {
     console.log("Từ khóa tìm kiếm ", searchValue)
-    navigate(`/home?search=${searchValue}` )//, { state: { searchValue: searchValue, trigger: new Date()} });
+    navigate(`/home?search=${searchValue}`)//, { state: { searchValue: searchValue, trigger: new Date()} });
   };
   // setup lại từ khóa tìm kiếm
   useEffect(() => {
-    console.log("Khởi tạo menu khách hàng ==============",  search, searchValue)
+    console.log("Khởi tạo menu khách hàng ==============", search, searchValue)
   }, [])
-  if(reloadPage){
+  if (reloadPage) {
     console.log("Reload page")
     setReloadPage(false)
     setSearchValue('')
@@ -43,7 +45,7 @@ function MenuKhachHang({ search }) {
           />
           <p
             id="KH-logo"
-            onClick={() => {setReloadPage(true); navigate("/home", { state: { reset: Date.now() } })} }
+            onClick={() => { setReloadPage(true); navigate("/home", { state: { reset: Date.now() } }) }}
           >
             Phone Stores
           </p>
