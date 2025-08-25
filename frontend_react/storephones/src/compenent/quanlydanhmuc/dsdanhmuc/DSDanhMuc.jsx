@@ -36,9 +36,9 @@ function DSDanhMuc({ menubar, dsDanhMuc, showFormAddDanhMuc, clickShowEditDanhMu
                         </div>
 
                         <div className="main-phan-trang">
-                            <img src="/images/icon-edit.png" onClick={() => clickChangePage(-1)}/>
+                            <img src="/images/left.png" onClick={() => clickChangePage(-1)}/>
                             <span>Trang {page+1}/{totalPage}</span>
-                            <img src="/images/icon-edit.png" onClick={() => clickChangePage(1)}/>
+                            <img src="/images/icon-right.png" onClick={() => clickChangePage(1)}/>
                         </div>
 
                     </div>
