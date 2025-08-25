@@ -185,6 +185,7 @@ function Quanlykhuyenmai() {
     const ds = km.dsDienThoai.map((item) => item.maDienThoai);
     console.log(km.dsDienThoai);
     setFormAddKhuyenMai({
+      ...formAddKhuyenMai,
       maKhuyenMai: km.maKhuyenMai,
       tenKhuyenMai: km.tenKhuyenMai,
       loaiKhuyenMai: km.loaiKhuyenMai,
@@ -213,15 +214,15 @@ function Quanlykhuyenmai() {
   };
 
   const validateData = () => {
-    if (formAddKhuyenMai.tenKhuyenMai.trim() === "") {
-      setShowPopup({ show: true, type: false, message: "Nhập tên khuyến mãi" });
+    console.log(" Tên khuyên mãi: ", formAddKhuyenMai.tenKhuyenMai)
+
+
+    if (formAddKhuyenMai.tenKhuyenMai.trim() === '') {
+      setShowPopup({ show: true, type: false, message: "Nhập tên khuyến mãi" })
       return true;
-    } else if (!/^[a-zA-Z0-9]+$/.test(formAddKhuyenMai.tenKhuyenMai)) {
-      setShowPopup({
-        show: true,
-        type: false,
-        message: "Tên khuyến mãi chỉ được nhập chữ cái và số",
-      });
+    }
+    else if (!/^[\p{L}0-9 ]+$/u.test(formAddKhuyenMai.tenKhuyenMai)) {
+      setShowPopup({ show: true, type: false, message: "Tên khuyến mãi chỉ được nhập chữ cái và số" })
       return true;
     } else if (!formAddKhuyenMai.loaiKhuyenMai) {
       setShowPopup({

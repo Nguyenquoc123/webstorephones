@@ -1,18 +1,20 @@
 .main-page {
+    margin: 0 auto;
     width: 90%;
     display: flex;
-    justify-content: end;
+    justify-content: center;
+    align-items: center;
     gap: 7px;
     margin-top: 10px;
-    margin-right: 20px;
     padding-bottom: 50px;
 }
 
 .main-page span {
     font-weight: 600;
+    font-size: 25px;
 }
 
 .main-page img {
-    height: 20px;
+    height: 25px;
     cursor: pointer;
 }

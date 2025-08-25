@@ -22,6 +22,8 @@ import QuanLyUser from "./compenent/quanlyuser/QuanLyUsser";
 import PageLichSuDatHang from "./compenent/lichsudathang/PageLichSuDatHang";
 import GDThanhCong from './compenent/ketquagiaodich/GDThanhCong/GDThanhCong'
 import GDThatBai from "./compenent/ketquagiaodich/GDThatBai/GDThatBai";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -44,7 +46,7 @@ function App() {
         <Route path="/home/giohang/thongtingiaohang" element={<ThongTinDatHang />} />
         <Route path="/home/donhang" element={<DonHangKhachHang />} />
         <Route path="/home/chitietdonhang/:maDonHang" element={<PageChiTietDonHangKhachHang />} />
-        <Route path="/quanlyuser" element={<QuanLyUser />} />
+        <Route path="/quanlyuser" element={<QuanLyNguoiDung />} />
         <Route path="/home/lichsudathang" element={<PageLichSuDatHang />} />
         <Route path="/home/giaodichthanhcong/:maDonHang" element={<GDThanhCong />} />
         <Route path="/home/giaodichthatbai/:maDonHang" element={<GDThatBai />} />
