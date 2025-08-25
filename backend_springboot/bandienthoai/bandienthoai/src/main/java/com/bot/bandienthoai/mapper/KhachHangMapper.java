@@ -3,6 +3,7 @@ package com.bot.bandienthoai.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.bot.bandienthoai.dto.reponse.KhachHangInQuanLyReponse;
 import com.bot.bandienthoai.dto.reponse.KhachHangReponse;
 import com.bot.bandienthoai.entity.KhachHang;
 
@@ -16,4 +17,6 @@ public interface KhachHangMapper {
 	@Mapping(source = "gioiTinh", target = "gioiTinh")
 	@Mapping(source = "diaChi", target = "diaChi")
 	KhachHangReponse toKhachHangReponse(KhachHang khachHang);
+	
+	KhachHangInQuanLyReponse toKhachHangInQuanLyReponse(KhachHang khachHang);
 }

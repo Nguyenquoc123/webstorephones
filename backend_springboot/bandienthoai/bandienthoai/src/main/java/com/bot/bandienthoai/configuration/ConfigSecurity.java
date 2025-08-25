@@ -68,13 +68,17 @@ public class ConfigSecurity {
                 .requestMatchers("/addkhuyenmai").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/updatekhuyenmai").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/deletekhuyenmai/*").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/thongketaikhoan").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/dstaikhoan").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/searchkhachhang").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/checksoluong").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/getinfo").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/adddonhang").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/updateinfo").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/changepassword").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/dsdonhangkhachhang").hasAuthority("ROLE_KHACHHANG")
-               
+                .requestMatchers("/dsdonhangkhachhanghientai").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/dsdonhangkhachhanglichsu").hasAuthority("ROLE_KHACHHANG")
                 .anyRequest().authenticated()
             );
             http.oauth2ResourceServer(oauth2 -> oauth2

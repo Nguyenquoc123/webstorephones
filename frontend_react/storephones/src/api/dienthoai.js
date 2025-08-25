@@ -260,10 +260,10 @@ export async function fetchDeteleDienThoai(madienthoai) {
 }
 
 /// api test
-export async function fetchGetDSPhienBanAndKhuyenMai() {
+export async function fetchGetDSPhienBanAndKhuyenMai(page, size) {
     const token = localStorage.getItem("token")
     try {
-        const response = await fetch('http://localhost:8080/storephones/getdsphienbanandkhuyenmai', {
+        const response = await fetch(`http://localhost:8080/storephones/getdsphienbanandkhuyenmai?page=${page}&size=${size}`, {
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${token}`
