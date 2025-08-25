@@ -30,6 +30,27 @@ function ChiTietDonHangKhachHang({ ChiTietDonHang , huyDonHang}) {
         else if(value === 6)
             return "Đã hủy"
     }
+
+    const trangThaiThanhToan = (value) => {
+        if (value === 1) {
+            return "Chưa thanh toán";
+        }
+        else if (value === 2) {
+            return "Thanh toán thành công"
+        }
+        else if (value === 3)
+            return "Thanh toán thất bại"
+        
+    }
+
+    const phuongThucThanhToan = (value) => {
+        if (value === 1) {
+            return "Thanh toán khi nhận hàng";
+        }
+        else if (value === 2) {
+            return "Thanh toán online"
+        }
+    }
     
     return (
         <div className="container-chi-tiet-don-hang-kh">
@@ -63,9 +84,18 @@ function ChiTietDonHangKhachHang({ ChiTietDonHang , huyDonHang}) {
                 <span>{TongTien(ChiTietDonHang)}</span>
             </div>
             <div className="trang-thai-chi-tiet-kh">
-                <h3>Trạng thái: </h3>
+                <h3>Phương thức thanh toán: </h3>
+                {ChiTietDonHang && <span>{phuongThucThanhToan(ChiTietDonHang.phuongThucThanhToan)}</span>}
+            </div>
+            <div className="trang-thai-chi-tiet-kh">
+                <h3>Trạng thái đơn hàng: </h3>
                 {ChiTietDonHang && <span>{trangThaiDonHang(ChiTietDonHang.trangThai)}</span>}
             </div>
+            <div className="trang-thai-chi-tiet-kh">
+                <h3>Trạng thái thanh toán: </h3>
+                {ChiTietDonHang && <span>{trangThaiThanhToan(ChiTietDonHang.trangThaiThanhToan)}</span>}
+            </div>
+
 
             {ChiTietDonHang && ChiTietDonHang.trangThai === 1 &&
                 <button className='huy-don' onClick={() => huyDonHang(ChiTietDonHang.maDonHang)}>Hủy đơn</button>

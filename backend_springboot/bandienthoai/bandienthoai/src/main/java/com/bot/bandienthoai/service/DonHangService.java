@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +46,26 @@ public class DonHangService {
 	
 	
 	public List<DonHangReponse> getDSDonHang() {
-		List<DonHang> lst = donHangRepository.findAll();
+		List<DonHang> lst = donHangRepository.findAll(Sort.by(Sort.Direction.DESC , "ngayTao"));
 		return lst.stream().map(donHangMapper::toDonHangReponse).collect(Collectors.toList());
 	}
 
 	public List<DonHangKhachHangReponse> getDSDonHangByKhachHang() {
 		Integer maKhachHang_ = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
-		List<DonHang> lst = donHangRepository.findByKhachHang_maKhachHang(maKhachHang_);
+		List<DonHang> lst = donHangRepository.findByKhachHang_maKhachHangOrderByNgayTaoDesc(maKhachHang_);
 		return lst.stream().map(donHangMapper::toDonHangKhachHangReponse).collect(Collectors.toList());
+	}
+	
+	public List<DonHangKhachHangReponse> getDSDonHangByKhachHangHienTai() {
+		Integer maKhachHang_ = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+		List<DonHang> lst = donHangRepository.findByKhachHang_maKhachHangOrderByNgayTaoDesc(maKhachHang_);
+		return lst.stream().filter(item -> item.getTrangThai() == 1 || item.getTrangThai() == 2 || item.getTrangThai() == 3).map(donHangMapper::toDonHangKhachHangReponse).collect(Collectors.toList());
+	}
+	
+	public List<DonHangKhachHangReponse> getDSDonHangByKhachHangLichSu() {
+		Integer maKhachHang_ = Integer.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+		List<DonHang> lst = donHangRepository.findByKhachHang_maKhachHangOrderByNgayTaoDesc(maKhachHang_);
+		return lst.stream().filter(item -> item.getTrangThai() == 4 || item.getTrangThai() == 5 || item.getTrangThai() == 6).map(donHangMapper::toDonHangKhachHangReponse).collect(Collectors.toList());
 	}
 
 	public List<DonHangReponse> getDSByTrangThai(Integer trangThai) {

@@ -144,6 +144,7 @@ function Signup() {
             localStorage.setItem("token", result.result.token);
             navigate('/home');
         }
+        
 
     }
 

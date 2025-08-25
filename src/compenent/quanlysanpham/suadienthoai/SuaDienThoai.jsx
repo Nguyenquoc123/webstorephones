@@ -37,7 +37,7 @@ function SuaDienThoai({ menubar, formUpdateDienThoai, inputData, clickCancelEdit
                                 <div className="input-dien-thoai">
                                     <input id="name-dien-thoai-edit" type="text" placeholder="Tên điện thoại" value={formUpdateDienThoai.tenDienThoai} onChange={(e) => inputData('tenDienThoai', e.target.value)}/>
                                     <input id="name-hang-san-xuat-edit" type="text" placeholder="Hãng sản xuất" value={formUpdateDienThoai.hangSanXuat} onChange={(e) => inputData('hangSanXuat', e.target.value)}/>
-                                    <select id="select-danh-muc-edit" placeholder="Danh Mục" onChange={changeDanhMuc}>
+                                    <select id="select-danh-muc-edit" placeholder="Danh Mục" value={formUpdateDienThoai.maDanhMuc} onChange={changeDanhMuc}>
                                         {
                                             dsDanhMuc.length > 0 && (
                                                 dsDanhMuc.map((danhMuc) => (

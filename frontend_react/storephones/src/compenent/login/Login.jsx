@@ -3,7 +3,7 @@ import '../login/Login.css'
 import { fetchLogin } from "../../api/authApi";
 import { useNavigate } from "react-router-dom";
 import Loading from "../loading/Loading";
-
+import Popup from '../popup/Popup'
 
 function Login() {
     const [loading, setLoading] = useState(false)
@@ -18,6 +18,8 @@ function Login() {
         username: '',
         password: ''
     })
+    const [showPopup, setShowPopup] = useState({show: false, type: '', message: ''})
+
     const handleclick = () => {
         console.log('run')
         navigate('/signup');
@@ -73,9 +75,9 @@ function Login() {
             else if (result.result.role === "ADMIN") {
                 navigate('/dienthoai');
             }
-
-
-
+        }
+        else{
+            setShowPopup({show: true, type: false, message: result.message})
         }
 
 
@@ -112,6 +114,9 @@ function Login() {
             </form>
 
             <Loading show={loading} />
+            {showPopup.show && <Popup type={showPopup.type} message={showPopup.message}
+                onclose={() => setShowPopup({...showPopup, show: false})}
+            />}
         </div>
     );
 }

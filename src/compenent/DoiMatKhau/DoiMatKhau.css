@@ -17,6 +17,7 @@
 
 .DMK-form-group {
   margin-bottom: 15px;
+  position: relative;
 }
 
 .DMK-form-group label {
@@ -107,8 +108,17 @@
 .DMK-btn-confirm:hover {
   background: #218838;
 }
+
 .DMK-eye-icon img {
   width: 20px;
   height: 20px;
   cursor: pointer;
+}
+
+.err-message {
+  position: absolute;
+  left: 20px;
+  bottom: -15px;
+  color: red;
+  font-size: 11px;
 }

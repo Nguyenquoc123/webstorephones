@@ -17,5 +17,8 @@ public interface PhienBanDienThoaiRepository extends JpaRepository<PhienBanDienT
 	@Query("select pb from PhienBanDienThoai pb JOIN pb.dienThoai JOIN pb.images  where pb.trangThai <>-1")
 	List<PhienBanDienThoai> getAllPhienBan();
 	
+	@Query("select pb from PhienBanDienThoai pb JOIN pb.dienThoai JOIN pb.images  where pb.trangThai <>-1")
+	Page<PhienBanDienThoai> getAllPhienBanPhanTrang(Pageable pageable);
+	
 	Page<PhienBanDienThoai> findByTrangThaiNot(Integer trangThai, Pageable pageable);
 }

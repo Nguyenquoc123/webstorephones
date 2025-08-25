@@ -3,11 +3,20 @@ import "./HoSoCaNhan.css";
 import Box from "../../components/box/Box";
 import { Form, useNavigate } from "react-router-dom";
 import { fetchGetInfo, fetchUpdateInfo } from "../../api/authApi";
+import Loading from "../loading/Loading";
+import Popup from "../popup/Popup";
 
 const HoSoCaNhan = () => {
   const navigate = useNavigate();
   const [info, setInfo] = useState(null);
   const [avatarImg, setAvatarImg] = useState(null);
+  const [showLoading, setShowLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState({
+    show: false,
+    type: "",
+    message: "",
+  });
+
   useEffect(() => {
     loadInfo();
   }, []);
@@ -41,12 +50,22 @@ const HoSoCaNhan = () => {
   const convertDate = (isoDate) => {
     if (!isoDate) return "";
     const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const formatNgaySinh = (isoDate) => {
+    if (!isoDate) return "";
+    const date = new Date(isoDate);
     return date.toLocaleString("vi-VN", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
     });
   };
+
   const title1 = "Thông tin cá nhân";
   const data1 = [
     { label: "Họ và tên", name: "hoTen", value: info?.hoTen, editable: true },
@@ -134,6 +153,8 @@ const HoSoCaNhan = () => {
 
   const updateHoSo = async () => {
     console.log(info);
+    console.log(formatNgaySinh(info.ngaySinh));
+    console.log(info.ngaySinh);
     const data = new FormData();
     data.append("hoTen", info.hoTen);
     data.append("email", info.email);
@@ -144,12 +165,20 @@ const HoSoCaNhan = () => {
     data.append("diaChi", info.diaChi);
     data.append("image", avatarImg);
 
+    setShowLoading(true);
     const response = await fetchUpdateInfo(data);
     if (response.code === 200) {
       console.log("Update hồ sơ thành công", response);
+      loadInfo();
+      setShowPopup({
+        show: true,
+        type: true,
+        message: "Cập nhập thông tin thành công",
+      });
     } else {
       console.log("Update hồ sơ thất bại", response);
     }
+    setShowLoading(false);
   };
   const selectImg = (e) => {
     const file = e.target.files[0];
