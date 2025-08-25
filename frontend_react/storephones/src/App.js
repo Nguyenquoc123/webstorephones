@@ -6,7 +6,6 @@ import ChiTietDienThoai from "./compenent/chitietdienthoai/ChiTietDienThoai";
 import DienThoai from "./compenent/quanlysanpham/dienthoai";
 import HomeKhachHang from "./compenent/homekhachhang/HomeKhachHang";
 import DanhMuc from "./compenent/quanlydanhmuc/DanhMuc";
-import Admin from "./compenent/Admin/Admin";
 import DoiMatKhau from "./compenent/DoiMatKhau/DoiMatKhau";
 import GioHang from "./compenent/giohang/Giohang";
 import DonHang from "./compenent/quanlydonhang/DonHang";

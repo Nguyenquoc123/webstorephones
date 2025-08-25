@@ -1,0 +1,24 @@
+body{
+    background-color: white;
+}
+.thong-tin-chi-tiet{
+    width: 100%;
+    max-width: 1280px;
+    background-color: white;
+    margin: 0 auto;
+}
+.table-thong-tin{
+    border: 2px solid black;
+}
+.name-thong-tin{
+    padding-left: 20px;
+    min-width: 200px;
+    height: 40px;
+    background-color: rgb(190, 225, 255);
+    font-weight: bold;
+}
+.value-thong-tin{
+    width: 100%;
+    padding-left: 20px;
+    background-color: rgb(233, 244, 255);
+}
