@@ -9,6 +9,7 @@ import { fetchAddDanhGia, fetchDSDanhGiaByMaPhienBan } from "../../api/danhgia";
 import { fetchAddVaoGioHang } from "../../api/giohang";
 import Loading from "../loading/Loading";
 import Popup from "../popup/Popup";
+import DanhSachMua from "../danhsachmua/DanhSachMua";
 
 
 
@@ -26,6 +27,8 @@ function ChiTietDienThoai() {
     const [formAddDanhGia, setFormAddDanhGia] = useState({ maPhienBan: '', soSao: 0, noiDung: '' })
     const [showPopup, setShowPopup] = useState({show: false, type: '', message: ''})
     const [soluongaddnew, setSoLuongAddNew] = useState(localStorage.getItem("soluongaddnew"))
+    const [showFormMuaHang, setShowFormMuaHang] = useState(false)
+    const [formMuaHang, setFormMuaHang] = useState(null)
     useEffect(() => {
         const response = async () => {
             setLoading(true)
@@ -128,15 +131,19 @@ function ChiTietDienThoai() {
         if (response.code === 200) {
             const tmp = localStorage.getItem("soluongaddnew")
             if(tmp){
-                localStorage.setItem("soluongaddnew", Number.parseInt(tmp)+1)
-                setSoLuongAddNew(Number.parseInt(tmp)+1)
+                localStorage.setItem("soluongaddnew", response.result.length)
+                // setSoLuongAddNew(Number.parseInt(tmp)+1)
+                console.log("Nó có chạy đâu", response.result.length)
             }
             else{
-                localStorage.setItem("soluongaddnew", 1)
-                setSoLuongAddNew(1)
+                localStorage.setItem("soluongaddnew", response.result.length)
+                // setSoLuongAddNew(1)
             }
             setShowPopup({show: true, type: true, message: 'Đã thêm vào giỏ hàng'})
             console.log(response.result)
+        }
+        else if(response.code === 30){
+            setShowPopup({show: true, type: false, message: 'Đã có trong giỏ hàng'})
         }
     }
     const resetShowPopup = () => {
@@ -149,6 +156,24 @@ function ChiTietDienThoai() {
         }
         setSoLuong(value)
     }
+    const calGiaBan = (item) => {
+        if(!item.km) return item.giaBan;
+        if(item.km.loaiKhuyenMai === "Fixed")
+            return item.giaBan - item.km.giaTriGiam;
+        return item.giaBan - (item.giaBan*0.01*item.km.giaTriGiam)
+    }
+    const clickMuaHang = () => {
+        setFormMuaHang([{maPhienBan: selectNow.maPhienBan,
+            tenDienThoai: selectNow.tenDienThoai,
+            image: selectNow.image[0].url,
+            rom: selectNow.rom,
+            ram: selectNow.ram,
+            mauSac: selectNow.mauSac,
+            soLuong: soLuong,
+            giaBan: calGiaBan(selectNow)
+        }])
+        setShowFormMuaHang(true)
+    }
     return (
         <>
             <MenuKhachHang />
@@ -160,6 +185,7 @@ function ChiTietDienThoai() {
                 soLuong={soLuong}
                 changeSoLuong={changeSoLuong}
                 themVaoGioHang={themVaoGioHang}
+                clickMuaHang={clickMuaHang}
             />
             <ThongTinSanPham
                 selectNow={selectNow}
@@ -171,6 +197,10 @@ function ChiTietDienThoai() {
                 resetFormAddDanhGia={resetFormAddDanhGia}
                 saveDanhGia={saveDanhGia}
             />
+            {showFormMuaHang && <DanhSachMua lstSanPham={formMuaHang}
+                onClose={setShowFormMuaHang}
+
+            />}
             <Loading show={loading}/>
             {showPopup.show && <Popup type={showPopup.type} message={showPopup.message} onclose={resetShowPopup}/>}
         </>
