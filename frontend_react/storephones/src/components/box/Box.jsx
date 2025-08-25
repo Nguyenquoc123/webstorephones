@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaEdit } from "react-icons/fa"; // Icon cây bút
+import { FaEdit } from "react-icons/fa"; 
 import "./Box.css";
 import EditModal from "./EditModal";
 const Box = ({ title, data, setData }) => {

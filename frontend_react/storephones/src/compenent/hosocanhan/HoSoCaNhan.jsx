@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./HoSoCaNhan.css";
 import Box from "../../components/box/Box";
 import { useNavigate } from "react-router-dom";
+import MenuKhachHang from "../menukhachhang/MenuKhachHang";
 
 const HoSoCaNhan = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const HoSoCaNhan = () => {
   ])
   return (
     <div>
+      <MenuKhachHang/>
         <div className="HSCN-profile-info">
           <img
             src="/images/anh-dai-dien-mac-dinh-18.jpg"

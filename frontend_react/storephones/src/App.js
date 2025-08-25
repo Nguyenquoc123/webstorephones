@@ -14,6 +14,10 @@ import ChiTietDonHang from "./compenent/quanlydonhang/chitietdonhang/PageChiTiet
 import KhuyenMai from "./compenent/Quanlykhuyenmai/Quanlykhuyenmai";
 import HoSoCaNhan from "./compenent/hosocanhan/HoSoCaNhan";
 import './App.css';
+import ThongKeDoanhSo from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSo";
+import ThongKeKhachHang from "./compenent/ThongKe/ThongKeKhachHang/ThongKeKhachHang";
+import ThongKeDoanhSoTheoThang from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSoTheoThang";
+import ThongKeDoanhSoTHeoNam from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSoTheoNam";
 
 function App() {
   return (
@@ -33,6 +37,10 @@ function App() {
         <Route path="/donhang" element={<DonHang />} />
         <Route path="/chitietdonhang/:maDonHang" element={<ChiTietDonHang />} />
         <Route path="/khuyenmai" element={<KhuyenMai />} />
+        <Route path="/ThongKedoanhso" element={<ThongKeDoanhSo />} />
+        <Route path="/ThongKedoanhso/thang" element={<ThongKeDoanhSoTheoThang />} />
+        <Route path="/ThongKedoanhso/nam" element={<ThongKeDoanhSoTHeoNam />} />
+        <Route path="/Thongkekhachhang" element={<ThongKeKhachHang />} />
       </Routes>
     </BrowserRouter>
   );
