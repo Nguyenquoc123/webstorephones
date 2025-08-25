@@ -15,7 +15,7 @@ import com.bot.bandienthoai.entity.DonHang;
 public interface DonHangRepository extends JpaRepository<DonHang, Integer>{
 	List<DonHang> findByTrangThai(Integer trangThai);
 	Optional<DonHang> findByMaDonHang(String maDonHang);
-	List<DonHang> findByKhachHang_maKhachHang(Integer maKhachHang);
+	List<DonHang> findByKhachHang_maKhachHangOrderByNgayTaoDesc(Integer maKhachHang);
 	
 	@Query(""" 
 			Select SUM(d.tongTien), Count(d), Max(d.ngayTao) from DonHang d

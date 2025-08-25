@@ -45,7 +45,7 @@ public class DonHang {
     private Integer phuongThucThanhToan;
     
     @Column(name = "TrangThaiThanhToan")
-    private Boolean trangThaiThanhToan;
+    private Integer trangThaiThanhToan;
     
     @ManyToOne
     @JoinColumn(name = "maKhachHang")

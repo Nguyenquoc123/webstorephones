@@ -43,7 +43,13 @@ public class KhachHang {
 	private String email;
 	@Column(name = "DiaChi")
 	private String diaChi; 
+	@Column(name = "TrangThai")
+	private Integer trangThai;
 	
+	@Column(name = "NgayDangKy")
+	private Date ngayDangKy;
+	@Column(name = "Avatar")
+	private String avatar;
 	@Column(name = "UserName")
 	private String userName;
 	

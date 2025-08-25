@@ -1,11 +1,17 @@
 package com.bot.bandienthoai.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiKhuyenMaiReponse;
+import com.bot.bandienthoai.entity.KhuyenMai_DienThoai;
 import com.bot.bandienthoai.entity.PhienBanDienThoai;
+import com.bot.bandienthoai.mapper.ImagesMapper;
+import com.bot.bandienthoai.mapper.KhuyenMaiDienThoaiMapper;
 import com.bot.bandienthoai.request.SearchAndFilterRequest;
 
 import jakarta.persistence.EntityManager;
@@ -17,6 +23,12 @@ public class EntityManagerService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	ImagesMapper imagesMapper;
+
+	@Autowired
+	KhuyenMaiDienThoaiMapper khuyenMaiMapper;
+	
 	public List<PhienBanDienThoai> search(List<String> keywords) {
 		StringBuilder sql = new StringBuilder("Select pb From PhienBanDienThoai pb JOIN pb.dienThoai dt where");
 		for (int i = 0; i < keywords.size(); i++) {
@@ -72,21 +84,112 @@ public class EntityManagerService {
 		return value == null ? "" : value.toLowerCase();
 	}
 
-	public List<PhienBanDienThoai> filterPhienBan(List<PhienBanDienThoai> dsPhienBan, SearchAndFilterRequest request) {
+//	public List<PhienBanDienThoai> filterPhienBan(List<PhienBanDienThoai> dsPhienBan, SearchAndFilterRequest request) {
+//		List<String> boNho = request.getBoNho().stream().map(item -> kyTuThuong(item)).collect(Collectors.toList());
+//		return dsPhienBan.stream().filter(pb -> {
+//			if (request.getHang() != null && !request.getHang().isEmpty()) {
+//				String hangSX = kyTuThuong(pb.getDienThoai().getHangSanXuat());
+//				if (hangSX == null || !request.getHang().contains(hangSX)) {
+//					return false;
+//				}
+//			}
+//			
+//			if (request.getMinGia() != null && pb.getGiaBan() < request.getMinGia()) {
+//                return false;
+//            }
+//            if (request.getMaxGia() != null && pb.getGiaBan() > request.getMaxGia()) {
+//                return false;
+//            }
+//            
+//            if (boNho != null && !boNho.isEmpty()) {
+//                if (!(boNho.contains(kyTuThuong(pb.getRam()))  || boNho.contains(kyTuThuong( pb.getRom())))) {
+//                	return false;
+//                }
+//            }
+//			return true;
+//		}).collect(Collectors.toList());
+//
+//	}
+	public List<PhienBanDienThoaiKhuyenMaiReponse> filterPhienBan(List<PhienBanDienThoai> dsPhienBan, SearchAndFilterRequest request) {
+		List<PhienBanDienThoaiKhuyenMaiReponse> lst = dsPhienBan.stream().map(item -> {
+			Date now = new Date();
+			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
+			PhienBanDienThoaiKhuyenMaiReponse t = new PhienBanDienThoaiKhuyenMaiReponse();
+			Double giaBan = item.getGiaBan();
+			KhuyenMai_DienThoai valueTmp = null;
+			if (km != null && km.size() > 0) {
+				
+				valueTmp = km.get(0);
+				for (KhuyenMai_DienThoai value : km) {
+					if(value.getKhuyenMai().getNgayBatDau().after(now) || value.getKhuyenMai().getNgayKetThuc().before(now))
+						continue;
+					
+					Double giam = valueTmp.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							? valueTmp.getKhuyenMai().getGiaTriGiam()
+							: valueTmp.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+					if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Fixed")
+							&& value.getKhuyenMai().getGiaTriGiam() > giam) {
+						valueTmp = value;
+					} else if (value.getKhuyenMai().getLoaiKhuyenMai().equals("Value")) {
+						Double pt = value.getKhuyenMai().getGiaTriGiam() * 0.01 * giaBan;
+						if (pt > giam) {
+							valueTmp = value;
+						}
+					}
+				}
+			}
+			if (valueTmp == null || (valueTmp.getKhuyenMai().getNgayBatDau().after(now) || valueTmp.getKhuyenMai().getNgayKetThuc().before(now))) {
+				valueTmp = new KhuyenMai_DienThoai();
+			}
+
+			t.setMaDienThoai(item.getDienThoai().getMaDienThoai());
+			t.setMaPhienBan(item.getMaPhienBan());
+			t.setCamera(item.getCamera());
+			t.setGiaBan(item.getGiaBan());
+			t.setHangSanXuat(item.getDienThoai().getHangSanXuat());
+			t.setTenDienThoai(item.getDienThoai().getTenDienThoai());
+			t.setManHinh(item.getManHinh());
+			t.setMauSac(item.getMauSac());
+			t.setPin(item.getPin());
+			t.setRam(item.getRam());
+			t.setRom(item.getRom());
+			t.setSoLuong(item.getSoLuong());
+			t.setMoTa(item.getMoTa());
+			t.setImage(imagesMapper.toImagesDTOList(item.getImages()));
+			t.setKm(khuyenMaiMapper.toKhuyenMaiDienThoai(valueTmp));
+			return t;
+		}).collect(Collectors.toList());
+		
 		List<String> boNho = request.getBoNho().stream().map(item -> kyTuThuong(item)).collect(Collectors.toList());
-		return dsPhienBan.stream().filter(pb -> {
+		return lst.stream().filter(pb -> {
 			if (request.getHang() != null && !request.getHang().isEmpty()) {
-				String hangSX = kyTuThuong(pb.getDienThoai().getHangSanXuat());
+				String hangSX = kyTuThuong(pb.getHangSanXuat());
 				if (hangSX == null || !request.getHang().contains(hangSX)) {
 					return false;
 				}
 			}
 			
-			if (request.getMinGia() != null && pb.getGiaBan() < request.getMinGia()) {
+			if (pb.getKm().getMaKhuyenMai() == null && request.getMinGia() != null && pb.getGiaBan() < request.getMinGia()) {
                 return false;
             }
-            if (request.getMaxGia() != null && pb.getGiaBan() > request.getMaxGia()) {
+			else if(pb.getKm().getMaKhuyenMai() != null && request.getMinGia() != null) {
+				if(pb.getKm().getLoaiKhuyenMai().equals("Fixed") && pb.getGiaBan() - pb.getKm().getGiaTriGiam() < request.getMinGia()) {
+					return false;
+				}
+				else if(pb.getKm().getLoaiKhuyenMai().equals("Percent") && pb.getGiaBan() - pb.getKm().getGiaTriGiam()*0.01*pb.getGiaBan() < request.getMinGia()) {
+					return false;
+				}
+			}
+            if (pb.getKm().getMaKhuyenMai() == null && request.getMaxGia() != null && pb.getGiaBan() > request.getMaxGia()) {
                 return false;
+            }
+            else if(pb.getKm().getMaKhuyenMai() != null && request.getMaxGia() != null) {
+            	if(pb.getKm().getLoaiKhuyenMai().equals("Fixed") && pb.getGiaBan() - pb.getKm().getGiaTriGiam() > request.getMaxGia()) {
+					return false;
+				}
+				else if(pb.getKm().getLoaiKhuyenMai().equals("Percent") && pb.getGiaBan() - pb.getKm().getGiaTriGiam()*0.01*pb.getGiaBan() > request.getMaxGia()) {
+					return false;
+				}
             }
             
             if (boNho != null && !boNho.isEmpty()) {

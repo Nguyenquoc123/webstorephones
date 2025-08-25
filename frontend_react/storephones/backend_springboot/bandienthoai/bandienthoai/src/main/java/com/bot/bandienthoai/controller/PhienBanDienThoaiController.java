@@ -46,8 +46,8 @@ public class PhienBanDienThoaiController {
 //		return APIReponse.<List<PhienBanDienThoaiAndKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanAndKhuyenMai()).build();
 //	}
 	@GetMapping("/getdsphienbanandkhuyenmai")
-	public APIReponse<List<PhienBanDienThoaiKhuyenMaiReponse>> getDSPhienBanAndKhuyenMai(){
-		return APIReponse.<List<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanAndKhuyenMai()).build();
+	public APIReponse<Page<PhienBanDienThoaiKhuyenMaiReponse>> getDSPhienBanAndKhuyenMai(@RequestParam() Integer page, @RequestParam() Integer size){
+		return APIReponse.<Page<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.getDSPhienBanAndKhuyenMai(page, size)).build();
 	}
 	
 	@GetMapping("getdsphienbanphantrang/{page}")
@@ -78,7 +78,7 @@ public class PhienBanDienThoaiController {
 	
 	// tìm kiếm và lọc
 	@PostMapping("/timkiemvaloc")
-	public APIReponse<List<PhienBanDienThoaiKhuyenMaiReponse>> searchAndFilter(@RequestBody SearchAndFilterRequest request){
-		return APIReponse.<List<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.searchAndFilter(request)).build();
+	public APIReponse<Page<PhienBanDienThoaiKhuyenMaiReponse>> searchAndFilter(@RequestBody SearchAndFilterRequest request){
+		return APIReponse.<Page<PhienBanDienThoaiKhuyenMaiReponse>>builder().result(phienBanDienThoaiService.searchAndFilter(request)).build();
 	}
 }

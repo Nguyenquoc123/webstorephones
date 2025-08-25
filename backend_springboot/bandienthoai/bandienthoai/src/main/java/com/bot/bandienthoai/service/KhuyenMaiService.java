@@ -18,6 +18,7 @@ import com.bot.bandienthoai.repository.DienThoaiRepository;
 import com.bot.bandienthoai.repository.KhuyenMaiDienThoaiRepository;
 import com.bot.bandienthoai.repository.KhuyenMaiRepository;
 import com.bot.bandienthoai.request.KhuyenMaiRequest;
+import com.bot.bandienthoai.request.KhuyenMaiUpdateRequest;
 
 
 
@@ -69,5 +70,47 @@ public class KhuyenMaiService {
 		}
 		
 		return khuyenMaiMapper.toKhuyenMaiReponse(km);
+	}
+	
+	public KhuyenMaiReponse updateKhuyenMai(KhuyenMaiUpdateRequest request) {
+		Optional<KhuyenMai> km = khuyenMaiRepository.findById(request.getMaKhuyenMai());
+		if(km.isEmpty())
+			throw new RunException(ErrorCode.Error_System);
+		KhuyenMai khuyenMai = km.get();
+		khuyenMai.setTenKhuyenMai(request.getTenKhuyenMai());
+		khuyenMai.setLoaiKhuyenMai(request.getLoaiKhuyenMai());
+		khuyenMai.setGiaTriGiam(request.getGiaTriGiam());
+		khuyenMai.setNgayBatDau(request.getNgayBatDau());
+		khuyenMai.setNgayKetThuc(request.getNgayKetThuc());
+		try {
+			khuyenMai = khuyenMaiRepository.save(khuyenMai);
+			for(Integer madienthoai : request.getDsDienThoaiNew()) {
+				Optional<DienThoai> dt = dienThoaiRepository.findById(madienthoai);
+				if(dt.isPresent()) {
+					KhuyenMai_DienThoai kmdt = new KhuyenMai_DienThoai(khuyenMai, dt.get());
+					khuyenMaiDienThoaiRepository.save(kmdt);
+				}
+			}
+			
+			for(Integer madienthoai : request.getDsDienThoaiDelete()) {
+				Optional<DienThoai> dt = dienThoaiRepository.findById(madienthoai);
+				if(dt.isPresent()) {
+					khuyenMaiDienThoaiRepository.deleteByKmAndDt(khuyenMai.getMaKhuyenMai(), madienthoai);
+				}
+			}
+		} catch (Exception e) {
+			throw new RunException(ErrorCode.Error_System);
+		}
+		return khuyenMaiMapper.toKhuyenMaiReponse(khuyenMai);
+	}
+	
+	public String deleteKhuyenMai(Integer maKhuyenMai) {
+		try {
+			khuyenMaiDienThoaiRepository.deleteKhuyenMaiDienThoaiByMaKhuyenMai(maKhuyenMai);
+			khuyenMaiRepository.deleteKhuyenMai(maKhuyenMai);
+		} catch (Exception e) {
+			throw new RunException(ErrorCode.Error_System);
+		}
+		return "Delete success";
 	}
 }

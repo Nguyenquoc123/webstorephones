@@ -32,13 +32,22 @@ const EditModal = ({ data, setData, onClose }) => {
                                     <option value="Nữ">Nữ</option>
                                     <option value="Khác">Khác</option>
                                 </select>
-                            ) : (
-                                <input
-                                    type="text"
-                                    value={item.value}
-                                    onChange={(e) => setData(item.name, e.target.value)}
-                                />
-                            )
+                            ) :
+                                item.name === 'ngaySinh' ?
+                                    (
+                                        <input
+                                            type="date" lang="vi"
+                                            value={item.value}
+                                            onChange={(e) => setData(item.name, e.target.value)}
+                                        />
+                                    )
+                                    : (
+                                        <input
+                                            type="text"
+                                            value={item.value}
+                                            onChange={(e) => setData(item.name, e.target.value)}
+                                        />
+                                    )
 
 
                         ) : (

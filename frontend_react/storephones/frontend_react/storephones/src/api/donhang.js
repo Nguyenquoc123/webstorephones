@@ -117,7 +117,30 @@ export async function fetchAddDonHang(data) {
 export async function fetchGetDSDonHangKhachHang() {
     const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`http://localhost:8080/storephones/dsdonhangkhachhang`, {
+        const response = await fetch(`http://localhost:8080/storephones/dsdonhangkhachhanghientai`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return (
+            {
+                code: -1,
+                message: "Lôi ồi"
+            }
+        )
+    }
+
+    
+}
+
+export async function fetchGetDSDonHangKhachHangLichSu() {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`http://localhost:8080/storephones/dsdonhangkhachhanglichsu`, {
             method: "GET",
             headers: {
                 'Authorization': `Bearer ${token}`

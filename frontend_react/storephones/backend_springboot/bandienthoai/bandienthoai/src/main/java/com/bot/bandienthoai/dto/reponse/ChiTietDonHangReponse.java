@@ -13,5 +13,7 @@ public class ChiTietDonHangReponse {
 	private String diaChiNhanHang;
 	private String ghiChu;
 	private Integer trangThai;
+	private Integer trangThaiThanhToan;
+	private Integer phuongThucThanhToan;
 	private List<ItemInDonHang> ds;
 }

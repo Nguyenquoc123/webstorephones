@@ -1,10 +1,15 @@
 package com.bot.bandienthoai.service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiKhuyenMaiReponse;
@@ -110,7 +115,7 @@ public class EntityManagerService {
 //		}).collect(Collectors.toList());
 //
 //	}
-	public List<PhienBanDienThoaiKhuyenMaiReponse> filterPhienBan(List<PhienBanDienThoai> dsPhienBan, SearchAndFilterRequest request) {
+	public Page<PhienBanDienThoaiKhuyenMaiReponse> filterPhienBan(List<PhienBanDienThoai> dsPhienBan, SearchAndFilterRequest request, Integer page, Integer size) {
 		List<PhienBanDienThoaiKhuyenMaiReponse> lst = dsPhienBan.stream().map(item -> {
 			Date now = new Date();
 			List<KhuyenMai_DienThoai> km = item.getDienThoai().getKhuyenMaiDienThoai();
@@ -161,7 +166,8 @@ public class EntityManagerService {
 		}).collect(Collectors.toList());
 		
 		List<String> boNho = request.getBoNho().stream().map(item -> kyTuThuong(item)).collect(Collectors.toList());
-		return lst.stream().filter(pb -> {
+		
+		lst = lst.stream().filter(pb -> {
 			if (request.getHang() != null && !request.getHang().isEmpty()) {
 				String hangSX = kyTuThuong(pb.getHangSanXuat());
 				if (hangSX == null || !request.getHang().contains(hangSX)) {
@@ -200,5 +206,10 @@ public class EntityManagerService {
 			return true;
 		}).collect(Collectors.toList());
 
+		Pageable pageable = PageRequest.of(page, size);
+		int from = page * size;
+		int to = Math.min(from + size, lst.size());
+		List<PhienBanDienThoaiKhuyenMaiReponse> ds = from > lst.size() ? Collections.emptyList() : lst.subList(from, to);
+		return new PageImpl<>(ds, pageable, lst.size());
 	}
 }

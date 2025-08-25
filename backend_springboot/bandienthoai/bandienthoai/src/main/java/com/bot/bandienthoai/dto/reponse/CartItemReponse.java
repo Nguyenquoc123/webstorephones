@@ -3,7 +3,9 @@ package com.bot.bandienthoai.dto.reponse;
 import java.util.List;
 
 import lombok.Data;
+import lombok.Getter;
 @Data
+@Getter
 public class CartItemReponse {
 	private Integer maPhienBan;
     private String tenDienThoai;
@@ -15,4 +17,5 @@ public class CartItemReponse {
     private String ram;
     private String mauSac;
     private Double thanhTien;
+    private Integer soLuongTonKho;
 }

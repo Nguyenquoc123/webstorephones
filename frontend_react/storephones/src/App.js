@@ -14,9 +14,10 @@ import KhuyenMai from "./compenent/Quanlykhuyenmai/Quanlykhuyenmai";
 import HoSoCaNhan from "./compenent/hosocanhan/HoSoCaNhan";
 import QuanLyNguoiDung from "./compenent/quanlynguoidung/QuanLyNguoiDung";
 import MenuAdmin from "./compenent/menuadmin/MenuAdmin.jsx";
-
-import "./App.css";
-
+import './App.css';
+import ThongTinDatHang from "./compenent/thongtindathang/ThongTinDatHang";
+import DonHangKhachHang from "./compenent/donhangkhachhang/DonHangKhachHang";
+import PageChiTietDonHangKhachHang from "./compenent/pagechitietdonhangkhachhang/PageChiTietDonHangKhachHang";
 function App() {
   return (
     <BrowserRouter>
@@ -27,7 +28,6 @@ function App() {
         <Route path="/danhmuc" element={<DanhMuc />} />
         <Route path="/home/:makhachhang" element={<HomeKhachHang />} />
         <Route path="/home" element={<HomeKhachHang />} />
-        <Route path="/home/giohang" element={<GioHang />} />
         <Route path="/home/hosocanhan" element={<HoSoCaNhan />} />
         <Route path="/chitietdienthoai/:value" element={<ChiTietDienThoai />} />
         <Route path="/doimatkhau" element={<DoiMatKhau />} />
@@ -36,6 +36,10 @@ function App() {
         <Route path="/khuyenmai" element={<KhuyenMai />} />
         <Route path="/quanlyUSE" element={<QuanLyNguoiDung />} />
         <Route path="/Admin" element={<MenuAdmin />} />
+        <Route path="/home/giohang" element={<GioHang />} />
+        <Route path="/home/giohang/thongtingiaohang" element={<ThongTinDatHang />} />
+        <Route path="/home/donhang" element={<DonHangKhachHang />} />
+        <Route path="/home/chitietdonhang/:maDonHang" element={<PageChiTietDonHangKhachHang />} />
       </Routes>
     </BrowserRouter>
   );

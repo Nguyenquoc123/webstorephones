@@ -1,0 +1,165 @@
+.menu2 {
+    width: 800px;
+    height: 520px;
+    margin: 0 auto;
+    background-color: #eff9ff;
+    border-radius: 20px;
+    border: 2px solid;
+}
+
+#title-menu2 {
+    width: 100%;
+    height: 40px;
+    font-size: 25px;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.content2 {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: azure;
+    padding: 20px 0 20px 0;
+}
+
+.select-img2 {
+    position: relative;
+    margin-left: 20px;
+    width: 30%;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 10px 15px 10px;
+    border: 2px solid;
+    box-shadow: 8px -3px 4px black;
+    border-radius: 20px;
+    background-color: white;
+}
+
+.img-selected2 {
+    width: 200px;
+    height: 200px;
+}
+
+#select-image2 {
+    display: none;
+}
+
+.select-btn2 {
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    border: 2px solid;
+    background-color: aqua;
+}
+
+#next-left {
+    position: absolute;
+    bottom: 21px;
+    left: 20px;
+    background-color: rgb(0, 255, 255);
+
+}
+
+#next-right {
+    position: absolute;
+    bottom: 21px;
+    right: 20px;
+    background-color: rgb(0, 238, 255);
+
+}
+
+.main-input {
+    position: relative;
+    width: 65%;
+    display: grid;
+    grid-template-areas:
+        "a b"
+        "c d"
+        "e g"
+        "h k"
+        "l l"
+        "i i";
+    gap: 10px;
+    padding: 0 10px 0 10px;
+}
+
+#dien-thoai {
+    grid-area: a;
+}
+
+#mau-sac {
+    grid-area: b;
+}
+
+#rom {
+    grid-area: c;
+}
+
+#ram {
+    grid-area: d;
+}
+
+#so-luong {
+    grid-area: e;
+}
+
+#gia-ban {
+    grid-area: g;
+}
+
+#pin {
+    grid-area: h;
+}
+
+#man-hinh {
+    grid-area: k;
+}
+
+#camera {
+    grid-area: l;
+}
+
+#mo-ta-san-pham {
+    grid-area: i;
+    height: 60px;
+    padding: 5px 10px 5px 10px;
+    box-shadow: 4px -4px 1px 0px black;
+    border-radius: 10px;
+
+}
+
+#dien-thoai,
+#mau-sac,
+#rom,
+#ram,
+#gia-ban,
+#so-luong,
+#man-hinh,
+#pin,
+#camera {
+    height: 40px;
+    padding: 0 5px 0 5px;
+    margin: 0;
+    box-shadow: 4px -4px 1px 0px black;
+    border-radius: 10px;
+}
+
+#cancel-menu2 {
+    background-color: greenyellow;
+    box-shadow: 3px -3px 0px 0px black;
+}
+
+#save-menu2 {
+    background-color: red;
+    box-shadow: 3px -3px 0px 0px black;
+}
+
+/**=============================================**/

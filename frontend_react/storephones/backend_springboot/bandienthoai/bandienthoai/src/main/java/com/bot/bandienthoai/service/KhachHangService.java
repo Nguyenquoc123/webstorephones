@@ -1,7 +1,10 @@
 package com.bot.bandienthoai.service;
 
 import java.io.File;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
@@ -12,12 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bot.bandienthoai.configuration.JWTUtil;
 import com.bot.bandienthoai.dto.reponse.AuthenticationReponse;
+import com.bot.bandienthoai.dto.reponse.KhachHangInQuanLyReponse;
 import com.bot.bandienthoai.dto.reponse.KhachHangReponse;
+import com.bot.bandienthoai.dto.reponse.ThongKeTaiKhoanReponse;
 import com.bot.bandienthoai.dto.reponse.ThongTinGiaoDichReponse;
 import com.bot.bandienthoai.entity.KhachHang;
 import com.bot.bandienthoai.exception.ErrorCode;
 import com.bot.bandienthoai.exception.RunException;
 import com.bot.bandienthoai.mapper.KhachHangMapper;
+import com.bot.bandienthoai.mapper.ThongKeMapper;
 import com.bot.bandienthoai.mapper.ThongTinGiaoDichMapper;
 import com.bot.bandienthoai.repository.DonHangRepository;
 import com.bot.bandienthoai.repository.KhachHangRepository;
@@ -41,6 +47,8 @@ public class KhachHangService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
+	@Autowired
+	ThongKeMapper thongKeMapper;
 	public AuthenticationReponse signUp(KhachHangRequest kh) {
 		Optional<KhachHang> khachhang_ = khachHangRepository.findByUserName(kh.getUserName());
 		if (khachhang_.isPresent()) {
@@ -62,6 +70,8 @@ public class KhachHangService {
 		tmp.setNgaySinh(kh.getNgaySinh());
 		tmp.setUserName(kh.getUserName());
 		tmp.setPassword(passwordEncoder.encode(kh.getPassword()));
+		tmp.setTrangThai(1);
+		tmp.setNgayDangKy(new Date());
 		try {
 			tmp = khachHangRepository.save(tmp);
 
@@ -168,7 +178,8 @@ public class KhachHangService {
 			if (tmp.isPresent())
 				throw new RunException(ErrorCode.SDT_Exists);
 		}
-
+		System.out.println("Update hồ sở");
+		System.out.println(request.getNgaySinh());
 		kh.setHoTen(request.getHoTen());
 		kh.setDiaChi(request.getDiaChi());
 		kh.setEmail(request.getEmail());
@@ -183,5 +194,22 @@ public class KhachHangService {
 		return getInfo();
 	}
 	
+	
+	public ThongKeTaiKhoanReponse thongKeTaiKhoan() {
+		Optional<Object> tmp = khachHangRepository.thongKeKhachHang();
+		return thongKeMapper.toThongKeTaiKhoanReponse((Object[]) tmp.get());
+	}
+	
+	public List<KhachHangInQuanLyReponse> search(String keyword){
+		if(keyword == null || keyword.isEmpty())
+			return getDSKhachHang();
+		keyword = "%" + keyword.toLowerCase() + "%";
+		List<KhachHang> lst = khachHangRepository.search(keyword);
+		return lst.stream().map(khachHangMapper::toKhachHangInQuanLyReponse).collect(Collectors.toList());
+	}
+	public List<KhachHangInQuanLyReponse> getDSKhachHang(){
+		List<KhachHang> lst = khachHangRepository.getDSKhachHang();
+		return lst.stream().map(khachHangMapper::toKhachHangInQuanLyReponse).collect(Collectors.toList());
+	}
 	
 }

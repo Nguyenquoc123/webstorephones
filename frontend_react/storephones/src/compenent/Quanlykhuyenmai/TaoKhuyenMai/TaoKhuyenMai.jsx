@@ -21,8 +21,9 @@ function TaoKhuyenMai({
     e.preventDefault();
 
     onSave();
-    onClose(); // Đóng form
+
   };
+  
 
   return (
     <div className="tao-container">
