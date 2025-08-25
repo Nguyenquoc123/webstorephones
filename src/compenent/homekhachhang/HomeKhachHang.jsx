@@ -7,6 +7,7 @@ import ShowDSDienThoai from "../showdsdienthoai/ShowDSDienThoai";
 
 import { fetchGetDSPhienBan, fetchGetDSPhienBanAndKhuyenMai, fetchSearchAndFilter, fetchSearchPhienBan } from "../../api/dienthoai";
 import Loading from "../loading/Loading";
+import { fetchGetDSInGioHang } from "../../api/giohang";
 
 function HomeKhachHang() {
     const [loading, setLoading] = useState(false);
@@ -62,9 +63,13 @@ function HomeKhachHang() {
     /// test 
     const loadDSPhienBanAndKhuyenMai = async () => {
         const response = await fetchGetDSPhienBanAndKhuyenMai();
+        console.log("Error ", response)
         if (response.code === 200) {
             console.log("Danh sách phiên bản và khuyến mãi", response.result)
             setDSPhienBan(response.result)
+        }
+        else{
+            console.log("Error ", response)
         }
     }
 
@@ -74,9 +79,16 @@ function HomeKhachHang() {
         if (!search.state?.searchValue) {
             // loadDSPhienBan();
             loadDSPhienBanAndKhuyenMai()
+            loadGioHang()
         }
 
     }, [])
+    const loadGioHang = async () => {
+        const response = await fetchGetDSInGioHang();
+        if(response.code === 200){
+            localStorage.setItem("soluongaddnew", response.result.length)
+        }
+    }
     const loadDSPhienBan = async () => {
         setLoading(true)
         const result = await fetchGetDSPhienBan();

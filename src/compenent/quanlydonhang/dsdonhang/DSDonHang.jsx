@@ -2,7 +2,13 @@
 import '../dsdonhang/DSDonHang.css'
 function DSDonHang({ dsDonHang, clickXemChiTiet }) {
     const thanhToan = (value) => {
-        return value ? "Đã thanh toán" : "Chưa thanh toán";
+        if(!value) return ''
+        console.log("Cái gì đó", typeof value, value)
+        if(value === 1)
+            return "Chưa thanh toán"
+        else if(value === 2)
+            return "Đã thanh toán"
+        return "Thanh toán thất bại"
     }
     const phuongThucThanhToan = (value) => {
         if (value === 1) {
@@ -56,9 +62,9 @@ function DSDonHang({ dsDonHang, clickXemChiTiet }) {
                                             <p>{item.hoTen}</p>
                                             <p>SĐT: {item.soDienThoai}</p>
                                             <p>Email: {item.email}</p>
-                                            <p>Địa chỉ: {item.diaChiNhanHang}</p>
+                                            <p>Địa chỉ: {item.diaChi}</p>
                                         </td>
-                                        <td>{item.tongTien}</td>
+                                        <td>{item.tongTien.toLocaleString('vi-VN')} đ</td>
                                         <td>{thanhToan(item.trangThaiThanhToan)}</td>
                                         <td>{phuongThucThanhToan(item.phuongThucThanhToan)}</td>
                                         <td>{trangThaiDonHang(item.trangThai)}</td>
