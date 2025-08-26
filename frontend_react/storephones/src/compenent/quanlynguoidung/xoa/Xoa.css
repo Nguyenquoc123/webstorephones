@@ -1,79 +1,177 @@
-.xoa-overlay {
+/* Xoa.css - Modal xóa người dùng */
+
+.xoa-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4); /* Làm mờ nền */
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.xoa-modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.xoa-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eaeaea;
+  background-color: #f8f9fa;
+}
+
+.xoa-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #d93025;
+  font-weight: 600;
+}
+
+.xoa-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  border-radius: 50%;
 }
 
-.xoa-container {
-  background: white;
+.xoa-close-btn:hover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.xoa-modal-content {
   padding: 20px;
-  border-radius: 12px;
-  width: 380px;
-  max-width: 90%;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-  animation: fadeIn 0.3s ease-in-out;
 }
 
-.xoa-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  color: #d9534f;
-}
-
-.xoa-message {
-  font-size: 16px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.xoa-actions {
+.xoa-warning {
   display: flex;
-  justify-content: space-around;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #fff9f9;
+  border-left: 4px solid #d93025;
+  border-radius: 4px;
 }
 
-.btn-cancel {
-  padding: 8px 16px;
-  border: none;
-  background: #ccc;
+.xoa-warning-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.xoa-warning p {
+  margin: 0;
+  color: #d93025;
+  font-weight: 500;
+}
+
+.xoa-user-info {
+  margin-bottom: 10px;
+  padding: 15px;
+  background-color: #f8f9fa;
   border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
 }
 
-.btn-cancel:hover {
-  background: #999;
+.xoa-info-row {
+  display: flex;
+  margin-bottom: 10px;
 }
 
-.btn-delete {
+.xoa-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.xoa-info-label {
+  font-weight: 600;
+  width: 100px;
+  flex-shrink: 0;
+  color: #495057;
+}
+
+.xoa-info-value {
+  color: #6c757d;
+}
+
+.xoa-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #eaeaea;
+  background-color: #f8f9fa;
+}
+
+.xoa-cancel-btn {
   padding: 8px 16px;
-  border: none;
-  background: #d9534f;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+}
+
+.xoa-cancel-btn:hover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.xoa-confirm-btn {
+  padding: 8px 16px;
+  background-color: #d93025;
   color: white;
-  border-radius: 6px;
+  border: 1px solid #d93025;
+  border-radius: 4px;
   cursor: pointer;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
 }
 
-.btn-delete:hover {
-  background: #c9302c;
+.xoa-confirm-btn:hover {
+  background-color: #c5221f;
+  border-color: #c5221f;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
+/* Responsive design */
+@media (max-width: 576px) {
+  .xoa-modal {
+    width: 95%;
   }
-  to {
-    opacity: 1;
-    transform: scale(1);
+
+  .xoa-info-row {
+    flex-direction: column;
+  }
+
+  .xoa-info-label {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .xoa-modal-actions {
+    flex-direction: column;
+  }
+
+  .xoa-cancel-btn,
+  .xoa-confirm-btn {
+    width: 100%;
   }
 }

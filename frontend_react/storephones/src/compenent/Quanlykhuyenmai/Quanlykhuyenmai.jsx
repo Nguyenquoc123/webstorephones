@@ -272,7 +272,7 @@ function Quanlykhuyenmai() {
       setShowPopup({
         show: true,
         type: false,
-        message: "Ngày kết thúc phải lớn ngày hiện tại",
+        message: "Ngày kết thúc phải lớn hơn ngày hiện tại",
       });
       return true;
     } else if (formAddKhuyenMai.dsDienThoai.length <= 0) {

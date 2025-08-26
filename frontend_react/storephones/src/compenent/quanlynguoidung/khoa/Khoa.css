@@ -1,0 +1,150 @@
+.khoa-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.khoa-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 480px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.khoa-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eaeaea;
+  background-color: #f9fafb;
+}
+
+.khoa-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.khoa-close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #6c757d;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.khoa-close-btn:hover {
+  background: #e9ecef;
+  color: #111827;
+}
+
+.khoa-modal-content {
+  padding: 20px;
+}
+
+.khoa-warning {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #fffaf0;
+  border-left: 4px solid #f59e0b;
+  border-radius: 4px;
+}
+
+.khoa-warning-icon {
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.khoa-warning p {
+  margin: 0;
+  color: #b45309;
+  font-weight: 500;
+}
+
+.khoa-user-info {
+  margin-bottom: 10px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.khoa-info-row {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.khoa-info-label {
+  font-weight: 600;
+  width: 140px;
+  flex-shrink: 0;
+  color: #374151;
+}
+
+.khoa-info-value {
+  color: #6b7280;
+}
+
+.khoa-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #eaeaea;
+  background-color: #f9fafb;
+}
+
+.khoa-cancel-btn {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.khoa-cancel-btn:hover {
+  background-color: #e5e7eb;
+}
+
+.khoa-confirm-btn {
+  padding: 8px 16px;
+  background-color: #f59e0b;
+  color: white;
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.khoa-confirm-btn:hover {
+  background-color: #d97706;
+  border-color: #d97706;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .khoa-modal {
+    width: 95%;
+  }
+  .khoa-modal-actions {
+    flex-direction: column;
+  }
+  .khoa-cancel-btn,
+  .khoa-confirm-btn {
+    width: 100%;
+  }
+}
