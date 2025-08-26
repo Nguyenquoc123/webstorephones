@@ -5,6 +5,8 @@ import { Form, useNavigate } from "react-router-dom";
 import { fetchGetInfo, fetchUpdateInfo } from "../../api/authApi";
 import Loading from "../loading/Loading";
 import Popup from "../popup/Popup";
+import { useNavigate } from "react-router-dom";
+import MenuKhachHang from "../menukhachhang/MenuKhachHang";
 
 const HoSoCaNhan = () => {
   const navigate = useNavigate();

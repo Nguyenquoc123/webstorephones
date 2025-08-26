@@ -15,6 +15,7 @@ import HoSoCaNhan from "./compenent/hosocanhan/HoSoCaNhan";
 import QuanLyNguoiDung from "./compenent/quanlynguoidung/QuanLyNguoiDung";
 import MenuAdmin from "./compenent/menuadmin/MenuAdmin.jsx";
 import './App.css';
+<<<<<<< HEAD
 import ThongTinDatHang from "./compenent/thongtindathang/ThongTinDatHang";
 import DonHangKhachHang from "./compenent/donhangkhachhang/DonHangKhachHang";
 import PageChiTietDonHangKhachHang from "./compenent/pagechitietdonhangkhachhang/PageChiTietDonHangKhachHang";
@@ -23,6 +24,12 @@ import PageLichSuDatHang from "./compenent/lichsudathang/PageLichSuDatHang";
 import GDThanhCong from './compenent/ketquagiaodich/GDThanhCong/GDThanhCong'
 import GDThatBai from "./compenent/ketquagiaodich/GDThatBai/GDThatBai";
 
+=======
+import ThongKeDoanhSo from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSo";
+import ThongKeKhachHang from "./compenent/ThongKe/ThongKeKhachHang/ThongKeKhachHang";
+import ThongKeDoanhSoTheoThang from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSoTheoThang";
+import ThongKeDoanhSoTHeoNam from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSoTheoNam";
+>>>>>>> 80d877cfe96449a7fa1fb5d54e44f5f8458cdc1a
 
 function App() {
   return (
@@ -50,6 +57,10 @@ function App() {
         <Route path="/home/lichsudathang" element={<PageLichSuDatHang />} />
         <Route path="/home/giaodichthanhcong/:maDonHang" element={<GDThanhCong />} />
         <Route path="/home/giaodichthatbai/:maDonHang" element={<GDThatBai />} />
+        <Route path="/ThongKedoanhso" element={<ThongKeDoanhSo />} />
+        <Route path="/ThongKedoanhso/thang" element={<ThongKeDoanhSoTheoThang />} />
+        <Route path="/ThongKedoanhso/nam" element={<ThongKeDoanhSoTHeoNam />} />
+        <Route path="/Thongkekhachhang" element={<ThongKeKhachHang />} />
       </Routes>
     </BrowserRouter>
   );
