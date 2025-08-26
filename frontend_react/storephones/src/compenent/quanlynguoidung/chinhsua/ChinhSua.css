@@ -1,0 +1,87 @@
+.chinhSua-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.chinhSua-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 95%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.chinhSua-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.chinhSua-header h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chinhSua-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chinhSua-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.chinhSua-form input,
+.chinhSua-form select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.chinhSua-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.cancel-btn {
+  padding: 8px 14px;
+  background: #ccc;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn {
+  padding: 8px 14px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #0056b3;
+}

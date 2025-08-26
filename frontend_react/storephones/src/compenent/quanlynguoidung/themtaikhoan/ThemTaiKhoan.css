@@ -1,0 +1,130 @@
+/* Overlay */
+.add-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal box */
+.add-modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Header */
+.add-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eaeaea;
+  background-color: #f8f9fa;
+}
+
+.add-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.add-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6c757d;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.add-close-btn:hover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+/* Form */
+.add-form {
+  padding: 20px;
+}
+
+.add-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.add-form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.add-form-group input,
+.add-form-group select {
+  padding: 8px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Actions */
+.add-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.add-cancel-btn {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.add-cancel-btn:hover {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.add-confirm-btn {
+  padding: 8px 16px;
+  background-color: #2563eb;
+  color: white;
+  border: 1px solid #2563eb;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.add-confirm-btn:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .add-modal {
+    width: 95%;
+  }
+  .add-modal-actions {
+    flex-direction: column;
+  }
+  .add-cancel-btn,
+  .add-confirm-btn {
+    width: 100%;
+  }
+}

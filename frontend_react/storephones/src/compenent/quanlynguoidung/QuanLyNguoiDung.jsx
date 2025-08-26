@@ -3,87 +3,211 @@ import "./QuanLyNguoiDung.css";
 import MenuAdmin from "../menuadmin/MenuAdmin";
 import search from "../../icons/icon-search.png";
 import Xoa from "./xoa/Xoa";
+import ThemTaiKhoan from "./themtaikhoan/ThemTaiKhoan";
+import ChinhSua from "./chinhsua/ChinhSua";
 
 const QuanLyNguoiDung = () => {
-  // State để điều khiển popup xoá
-  const [showXoa, setShowXoa] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // Hàm khi bấm vào icon xoá
-  const handleDeleteClick = (user) => {
-    setSelectedUser(user); // lưu user cần xoá
-    setShowXoa(true); // mở popup xoá
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      name: "Trần Đại Đức",
+      phone: "0393340406",
+      email: "daiducka123@gmail.com",
+      status: "Hoạt động",
+      createdDate: "15/1/2024",
+      locked: false,
+    },
+    {
+      id: 2,
+      name: "Phạm Thị Dung",
+      phone: "0934567890",
+      email: "phamthidung@gmail.com",
+      status: "Bị khóa",
+      createdDate: "12/1/2024",
+      locked: true,
+    },
+  ]);
+
+  // --- State cho bộ lọc ---
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("Tất cả trạng thái");
+
+  // --- State cho checkbox ---
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  // Mở modal xóa 1 user
+  const handleOpenDelete = (user) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
   };
 
-  // Hàm xác nhận xoá
-  const handleConfirmDelete = () => {
-    console.log("Đã xoá:", selectedUser);
-    // Ở đây bạn có thể gọi API xoá user
-    setShowXoa(false);
+  // Xoá 1 user
+  const handleDeleteUser = (userId) => {
+    setUsers(users.filter((user) => user.id !== userId));
+    setShowDeleteModal(false);
     setSelectedUser(null);
   };
 
-  // Hàm huỷ xoá
+  // Xoá nhiều user
+  const handleDeleteSelected = () => {
+    setUsers(users.filter((user) => !selectedIds.includes(user.id)));
+    setSelectedIds([]);
+  };
+
+  // Hủy xoá
   const handleCancelDelete = () => {
-    setShowXoa(false);
+    setShowDeleteModal(false);
     setSelectedUser(null);
   };
+
+  // Khoá / mở khoá
+  const handleToggleLock = (userId) => {
+    setUsers(
+      users.map((user) =>
+        user.id === userId
+          ? {
+              ...user,
+              locked: !user.locked,
+              status: user.locked ? "Hoạt động" : "Bị khóa",
+            }
+          : user
+      )
+    );
+  };
+
+  // Thêm user
+  const handleAddUser = (newUser) => {
+    setUsers([
+      ...users,
+      { ...newUser, id: Date.now(), createdDate: "26/08/2025" },
+    ]);
+    setShowAddModal(false);
+  };
+
+  // Chỉnh sửa user
+  const handleOpenEdit = (user) => {
+    setSelectedUser(user);
+    setShowEditModal(true);
+  };
+
+  const handleEditUser = (updatedUser) => {
+    setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
+    setShowEditModal(false);
+    setSelectedUser(null);
+  };
+
+  // --- Checkbox ---
+  const toggleCheckbox = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedIds(filteredUsers.map((u) => u.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+
+  // --- Bộ lọc ---
+  const filteredUsers = users.filter((u) => {
+    const matchSearch =
+      u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchStatus =
+      statusFilter === "Tất cả trạng thái" || u.status === statusFilter;
+
+    return matchSearch && matchStatus;
+  });
+
+  // Thống kê
+  const tongTaiKhoan = users.length;
+  const hoatDong = users.filter((u) => !u.locked).length;
+  const biKhoa = users.filter((u) => u.locked).length;
+  const moiHomNay = users.filter((u) => u.createdDate === "26/08/2025").length;
 
   return (
     <>
-      {/* MenuAdmin luôn ở trên */}
       <MenuAdmin />
 
       <div className="QLU-container">
-        {/* Thống kê tổng quan */}
         <div className="QLU-header">
           <div className="QLU-card">
-            <span className="QLU-title">Tổng tài khoảng</span>
-            <strong className="QLU-value">35</strong>
+            <span className="QLU-title">Tổng tài khoản</span>
+            <strong className="QLU-value">{tongTaiKhoan}</strong>
           </div>
           <div className="QLU-card">
             <span className="QLU-title">Đang hoạt động</span>
-            <strong className="QLU-value">14</strong>
+            <strong className="QLU-value">{hoatDong}</strong>
           </div>
           <div className="QLU-card">
             <span className="QLU-title">Bị khoá</span>
-            <strong className="QLU-value">2</strong>
+            <strong className="QLU-value">{biKhoa}</strong>
           </div>
           <div className="QLU-card">
             <span className="QLU-title">Mới hôm nay</span>
-            <strong className="QLU-value">5</strong>
+            <strong className="QLU-value">{moiHomNay}</strong>
           </div>
         </div>
 
-        {/* Thanh tìm kiếm + bộ lọc */}
         <div className="QLU-active">
           <div className="search-box" role="Search">
             <input
               className="search"
               type="search"
               placeholder="Tìm kiếm tài khoản"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <img className="icon-search" src={search} alt="" />
           </div>
+
           <label htmlFor="status">
             Trạng thái:{" "}
-            <select id="status">
+            <select
+              id="status"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
               <option>Tất cả trạng thái</option>
-              <option>Bị khoá</option>
+              <option>Bị khóa</option>
               <option>Hoạt động</option>
             </select>
           </label>
 
-          <button className="QLU-btn">Thêm tài khoản</button>
+          <button className="QLU-btn" onClick={() => setShowAddModal(true)}>
+            Thêm tài khoản
+          </button>
+
+          {selectedIds.length > 0 && (
+            <button className="QLU-btn danger" onClick={handleDeleteSelected}>
+              Xoá đã chọn ({selectedIds.length})
+            </button>
+          )}
         </div>
 
-        {/* Bảng danh sách user */}
         <div className="QLU-table-container">
           <table className="QLU-user-table">
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    onChange={toggleSelectAll}
+                    checked={
+                      selectedIds.length > 0 &&
+                      selectedIds.length === filteredUsers.length
+                    }
+                  />
                 </th>
                 <th>NGƯỜI DÙNG</th>
                 <th>EMAIL</th>
@@ -93,101 +217,88 @@ const QuanLyNguoiDung = () => {
               </tr>
             </thead>
             <tbody>
-              {/* User 1 */}
-              <tr>
-                <td>
-                  <input type="checkbox" />
-                </td>
-                <td>
-                  <div className="QLU-user-info">
-                    <div className="QLU-avatar">Đ</div>
-                    <div>
-                      <strong>Trần Đại Đức</strong>
-                      <br />
-                      <span>0393340406</span>
+              {filteredUsers.map((user) => (
+                <tr key={user.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(user.id)}
+                      onChange={() => toggleCheckbox(user.id)}
+                    />
+                  </td>
+                  <td>
+                    <div className="QLU-user-info">
+                      <div className="QLU-avatar">{user.name.charAt(0)}</div>
+                      <div>
+                        <strong>{user.name}</strong>
+                        <br />
+                        <span>{user.phone}</span>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>daiducka123@gmail.com</td>
-                <td>
-                  <span className="QLU-badge status active">Hoạt động</span>
-                </td>
-                <td>15/1/2024</td>
-                <td>
-                  <span className="QLU-action edit">✏️</span>
-                  <span className="QLU-action lock">🔒</span>
-                  {/* 🗑️ Khi bấm vào thì mở popup xoá */}
-                  <span
-                    className="QLU-action delete"
-                    onClick={() =>
-                      handleDeleteClick({
-                        name: "Trần Đại Đức",
-                        email: "daiducka123@gmail.com",
-                      })
-                    }
-                  >
-                    🗑️
-                  </span>
-                </td>
-              </tr>
-
-              {/* User 2 */}
-              <tr>
-                <td>
-                  <input type="checkbox" />
-                </td>
-                <td>
-                  <div className="QLU-user-info">
-                    <div className="QLU-avatar">P</div>
-                    <div>
-                      <strong>Phạm Thị Dung</strong>
-                      <br />
-                      <span>0934567890</span>
-                    </div>
-                  </div>
-                </td>
-                <td>phamthidung@gmail.com</td>
-                <td>
-                  <span className="QLU-badge status blocked">Bị khóa</span>
-                </td>
-                <td>12/1/2024</td>
-                <td>
-                  <span className="QLU-action edit">✏️</span>
-                  <span className="QLU-action lock">🔒</span>
-                  <span
-                    className="QLU-action delete"
-                    onClick={() =>
-                      handleDeleteClick({
-                        name: "Phạm Thị Dung",
-                        email: "phamthidung@gmail.com",
-                      })
-                    }
-                  >
-                    🗑️
-                  </span>
-                </td>
-              </tr>
+                  </td>
+                  <td>{user.email}</td>
+                  <td>
+                    <span
+                      className={`QLU-badge status ${
+                        user.status === "Hoạt động" ? "active" : "blocked"
+                      }`}
+                    >
+                      {user.status}
+                    </span>
+                  </td>
+                  <td>{user.createdDate}</td>
+                  <td>
+                    <span
+                      className="QLU-action edit"
+                      onClick={() => handleOpenEdit(user)}
+                      title="Chỉnh sửa"
+                    >
+                      ✏️
+                    </span>
+                    <span
+                      className="QLU-action lock"
+                      onClick={() => handleToggleLock(user.id)}
+                      title={user.locked ? "Mở khóa" : "Khóa tài khoản"}
+                    >
+                      {user.locked ? "🔓" : "🔒"}
+                    </span>
+                    <span
+                      className="QLU-action delete"
+                      onClick={() => handleOpenDelete(user)}
+                      title="Xóa tài khoản"
+                    >
+                      🗑️
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-
-        {/* Phân trang */}
-        <div className="QLU-pagination">
-          <button className="btn-ct">Trước</button>
-          <button className="btn-active">1</button>
-          <button className="btn-active">2</button>
-          <button className="btn-active">3</button>
-          <button className="btn-ct">Sau</button>
-        </div>
       </div>
 
-      {/* Popup Xoá */}
-      <Xoa
-        show={showXoa}
-        clickCancel={handleCancelDelete}
-        clickActive={handleConfirmDelete}
-        message={`Bạn có chắc muốn xoá người dùng "${selectedUser?.name}" không?`}
-      />
+      {showAddModal && (
+        <ThemTaiKhoan
+          onClose={() => setShowAddModal(false)}
+          onSave={handleAddUser}
+        />
+      )}
+
+      {showEditModal && (
+        <ChinhSua
+          user={selectedUser}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleEditUser}
+        />
+      )}
+
+      {showDeleteModal && (
+        <Xoa
+          user={selectedUser}
+          onClose={handleCancelDelete}
+          onConfirm={handleDeleteUser}
+        />
+      )}
     </>
   );
 };
