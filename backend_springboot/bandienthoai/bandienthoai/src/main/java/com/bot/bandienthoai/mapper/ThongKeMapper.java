@@ -2,6 +2,9 @@ package com.bot.bandienthoai.mapper;
 
 import org.mapstruct.Mapper;
 
+import com.bot.bandienthoai.dto.reponse.DashBoardReponse;
+import com.bot.bandienthoai.dto.reponse.DoanhThuReponse;
+import com.bot.bandienthoai.dto.reponse.ThongKeDanhMucReponse;
 import com.bot.bandienthoai.dto.reponse.ThongKeTaiKhoanReponse;
 
 @Mapper(componentModel = "spring")
@@ -14,5 +17,42 @@ public interface ThongKeMapper {
 		tk.setMoiDangKy(Integer.valueOf(data[3].toString()));
 		
 		return tk;
+	}
+	
+	default DashBoardReponse toDashBoardReponse(Object[] data) {
+		if (data == null || data.length < 4) {
+	        return null;
+	    }
+
+	    DashBoardReponse response = new DashBoardReponse();
+
+	    response.setDoanhThu(data[0] != null ? Double.valueOf(data[0].toString()) : 0.0);
+	    response.setDonHang(data[1] != null ? Integer.valueOf(data[1].toString()) : 0);
+	    response.setKhachHang(data[2] != null ? Integer.valueOf(data[2].toString()) : 0);
+	    response.setDoanhSo(data[3] != null ? Double.valueOf(data[3].toString()) : 0.0);
+	    
+	    return response;
+	}
+	default DoanhThuReponse toDoanhThuReponse(Object[] data) {
+		if(data == null || data.length < 2)
+			return null;
+		DoanhThuReponse response = new DoanhThuReponse();
+		if(data[0] != null) {
+			response.setName(data[0].toString());
+			response.setValue(Double.valueOf(data[1].toString()));
+		}
+		return response;
+		
+	}
+	default ThongKeDanhMucReponse tothoDanhMucReponse(Object[] data) {
+		if(data == null || data.length < 2)
+			return null;
+		ThongKeDanhMucReponse response = new ThongKeDanhMucReponse();
+		if(data[0] != null) {
+			response.setName(data[0].toString());
+			response.setValue(Integer.valueOf(data[1].toString()));
+		}
+		return response;
+		
 	}
 }

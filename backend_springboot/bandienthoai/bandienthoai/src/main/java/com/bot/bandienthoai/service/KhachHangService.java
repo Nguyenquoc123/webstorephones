@@ -212,4 +212,24 @@ public class KhachHangService {
 		return lst.stream().map(khachHangMapper::toKhachHangInQuanLyReponse).collect(Collectors.toList());
 	}
 	
+	public String khoaTaiKhoan(Integer maKhachHang) {
+		Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang);
+		if(kh.isEmpty()) {
+			throw new RunException(ErrorCode.KhachHang_Not_Found);
+		}
+		KhachHang khachHang = kh.get();
+		khachHang.setTrangThai(-1);
+		khachHang = khachHangRepository.save(khachHang);
+		return "Đã khóa tài khoản";
+	}
+	public String moKhoaTaiKhoan(Integer maKhachHang) {
+		Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang);
+		if(kh.isEmpty()) {
+			throw new RunException(ErrorCode.KhachHang_Not_Found);
+		}
+		KhachHang khachHang = kh.get();
+		khachHang.setTrangThai(1);
+		khachHang = khachHangRepository.save(khachHang);
+		return "Đã mở khóa tài khoản";
+	}
 }

@@ -28,7 +28,7 @@ function HomeKhachHang() {
     const [dataPage, setDataPage] = useState({
         page: 0,
         totalPage: 1,
-        size: 1,
+        size: 30,
         typePhanTrang: false ,
         changePhanTrang: ''
     });

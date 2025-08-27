@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 
 import {
@@ -17,6 +17,8 @@ import BieuDoCot from "../../../components/bieudo/BieuDoCot";
 import BieuDoDuong from "../../../components/bieudo/BIeuDoDuong";
 import Table from "../../../components/componentTable/Table";
 import { useNavigate } from "react-router-dom";
+import { fetchGetDashBoard, fetchGetDoanhThu, fetchGetTKDanhMuc } from "../../../api/thongke";
+import LoaiThongKe from "../LoaiThongKe/LoaiThongKe";
 
 ChartJS.register(
   CategoryScale,
@@ -31,27 +33,36 @@ ChartJS.register(
 
 export default function ThongKeDoanhSoTheoThang() {
   const navigate = useNavigate();
+  const today = new Date();
+  const defaultMonth = `${today.getFullYear()}-${String(
+    today.getMonth() + 1
+  ).padStart(2, "0")}`; // "2025-08"
 
-  const databieudocot = [
-    { name: "Điện Thoại", value: 713 },
-    { name: "LapTop", value: 234 },
-    { name: "Đồng Hồ", value: 63 },
-    { name: "Phụ Kiện", value: 500 }
-  ]
-  const databieudoduong = [
-    { name: "Tháng 1", value: 200 },
-    { name: "Tháng 2", value: 350 },
-    { name: "Tháng 3", value: 500 },
-    { name: "Tháng 4", value: 450 },
-    { name: "Tháng 5", value: 600 },
-    { name: "Tháng 6", value: 700 },
-    { name: "Tháng 7", value: 800 },
-    { name: "Tháng 8", value: 750 },
-    { name: "Tháng 9", value: 900 },
-    { name: "Tháng 10", value: 950 },
-    { name: "Tháng 11", value: 1100 },
-    { name: "Tháng 12", value: 1200 }
-  ]
+  const [month, setMonth] = useState(defaultMonth);
+  // const databieudocot = [
+  //   { name: "Điện Thoại", value: 713 },
+  //   { name: "LapTop", value: 234 },
+  //   { name: "Đồng Hồ", value: 63 },
+  //   { name: "Phụ Kiện", value: 500 }
+  // ]
+
+  const [databieudocot, setDataBieuDoCot] = useState([])
+  // const databieudoduong = [
+  //   { name: "Tháng 1", value: 200 },
+  //   { name: "Tháng 2", value: 350 },
+  //   { name: "Tháng 3", value: 500 },
+  //   { name: "Tháng 4", value: 450 },
+  //   { name: "Tháng 5", value: 600 },
+  //   { name: "Tháng 6", value: 700 },
+  //   { name: "Tháng 7", value: 800 },
+  //   { name: "Tháng 8", value: 750 },
+  //   { name: "Tháng 9", value: 900 },
+  //   { name: "Tháng 10", value: 950 },
+  //   { name: "Tháng 11", value: 1100 },
+  //   { name: "Tháng 12", value: 1200 }
+  // ]
+
+  const [databieudoduong, setDataBieuDoDuong] = useState([])
 
   const columns = [
     { name: 'stt' },
@@ -86,9 +97,52 @@ export default function ThongKeDoanhSoTheoThang() {
   // };
 
 
-  const dataCard = { doanhThu: '555.000.000 đ', donHang: 852, khachHang: 850, doanhSo: '55,6%' }
+  // const dataCard = { doanhThu: '555.000.000 đ', donHang: 852, khachHang: 850, doanhSo: '55,6%' }
+  const [dataCard, setDataCard] = useState({ doanhThu: '', donHang: '', khachHang: '', doanhSo: '' })
+  
+  const getDashBoard = async () => {
+    const params = new URLSearchParams();
+    const [nam, thang] = month.split('-')
+    params.append('type', 'month')
+    params.append('nam', nam)
+    params.append('month', thang)
+    const response = await fetchGetDashBoard(params);
+    if (response.code === 200) {
+      console.log(response)
+      setDataCard(response.result)
+    }
+  }
+  useEffect(() => {
+    getDoanhThu();
+  }, [])
+  const getDoanhThu = async () => {
+    getDashBoard();
+    getTKDanhMuc();
+    const [nam, thang] = month.split('-')
+    console.log("Thống kê doanh thu tháng: ", month)
+    const params = new URLSearchParams();
+    params.append("type", 'month')
+    params.append('nam', nam);
+    params.append('month', thang);
+    const response = await fetchGetDoanhThu(params);
+    if (response.code === 200) {
+      console.log(response)
+      setDataBieuDoDuong(response.result)
+    }
+  }
 
+  const getTKDanhMuc = async () => {
+    const [nam, thang] = month.split('-')
+    const params = new URLSearchParams();
+     params.append("type", 'month')
+    params.append('nam', nam);
+    params.append('month', thang);
 
+    const response = await fetchGetTKDanhMuc(params);
+    if (response.code === 200) {
+      setDataBieuDoCot(response.result)
+    }
+  }
   return (
     <>
       <MenuAdmin />
@@ -102,7 +156,7 @@ export default function ThongKeDoanhSoTheoThang() {
             <option value="Theo năm">Theo năm</option>
           </select>
         </div>
-
+        <LoaiThongKe type={'month'} value={month} inputData={setMonth} clickThongKe={getDoanhThu}/>
         {/* Thống kê */}
         <div className="stats">
           <div className="stat-card">

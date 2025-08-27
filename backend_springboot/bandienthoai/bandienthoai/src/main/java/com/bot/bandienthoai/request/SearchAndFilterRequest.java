@@ -11,7 +11,7 @@ public class SearchAndFilterRequest {
 	private Double minGia;
 	private Double maxGia;
 	private List<String> boNho;
-	private Boolean filter;
+	private boolean filter;
 	private Integer page;
 	private Integer size;
 }
