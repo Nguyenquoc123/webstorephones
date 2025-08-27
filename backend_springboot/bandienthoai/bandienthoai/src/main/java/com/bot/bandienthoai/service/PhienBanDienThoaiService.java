@@ -1,3 +1,4 @@
+
 package com.bot.bandienthoai.service;
 
 import java.io.File;
@@ -344,7 +345,7 @@ public class PhienBanDienThoaiService {
 					.collect(Collectors.toList());
 		}
 
-		if (request.getFilter()) {
+		if (request.isFilter()) {
 			return entityManagerService.filterPhienBan(lst, request, page, size);
 		}
 

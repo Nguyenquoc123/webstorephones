@@ -79,6 +79,9 @@ public class ConfigSecurity {
                 .requestMatchers("/dsdonhangkhachhang").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/dsdonhangkhachhanghientai").hasAuthority("ROLE_KHACHHANG")
                 .requestMatchers("/dsdonhangkhachhanglichsu").hasAuthority("ROLE_KHACHHANG")
+                .requestMatchers("/getdashboard").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/getdoanhthu").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/gettkdanhmuc").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
             );
             http.oauth2ResourceServer(oauth2 -> oauth2

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.bot.bandienthoai.dto.reponse.ChiTietDonHangReponse;
+import com.bot.bandienthoai.dto.reponse.DashBoardReponse;
 import com.bot.bandienthoai.dto.reponse.DonHangKhachHangReponse;
 import com.bot.bandienthoai.dto.reponse.DonHangReponse;
 import com.bot.bandienthoai.dto.reponse.KetQuaDonHangReponse;
@@ -76,7 +77,21 @@ public class DonHangService {
 		return lst.stream().map(donHangMapper::toDonHangReponse).collect(Collectors.toList());
 	}
 
-	public void updateSoLuong(List<ChiTietDonHang> ctdh, Integer type) {
+//	public void updateSoLuong(List<ChiTietDonHang> ctdh, Integer type) {
+//		for (ChiTietDonHang dh : ctdh) {
+//			Optional<PhienBanDienThoai> pb = phienBanDienThoaiRepository.findById(dh.getPhienBanDienThoai().getMaPhienBan());
+//			if (pb.isPresent()) {
+//				PhienBanDienThoai t = pb.get();
+//				t.setSoLuong(t.getSoLuong() + type * dh.getSoLuong());
+//				t = phienBanDienThoaiRepository.save(t);
+//				System.out.println("Cập nhập số lượng");
+//			}
+//			System.out.println("Không cập nhập số lượng");
+//		}
+//	}
+
+	public void updateSoLuong(String maDonHang, Integer type) {
+		List<ChiTietDonHang> ctdh = chiTietDonHangRepository.findByDonHang_maDonHang(maDonHang);
 		for (ChiTietDonHang dh : ctdh) {
 			Optional<PhienBanDienThoai> pb = phienBanDienThoaiRepository.findById(dh.getPhienBanDienThoai().getMaPhienBan());
 			if (pb.isPresent()) {
@@ -88,7 +103,6 @@ public class DonHangService {
 			System.out.println("Không cập nhập số lượng");
 		}
 	}
-
 	public DonHangReponse updateTrangThaiDonHang(DonHangUpdateRequest request) {
 		Optional<DonHang> donHang = donHangRepository.findByMaDonHang(request.getMaDonHang());
 		if (donHang.isEmpty()) {
@@ -103,7 +117,7 @@ public class DonHangService {
 		}
 
 		if (request.getTrangThai() == 6) {
-			updateSoLuong(dh.getChiTietDonHang(), 1);
+			updateSoLuong(dh.getMaDonHang(), 1);
 		}
 		return donHangMapper.toDonHangReponse(dh);
 	}
@@ -136,7 +150,7 @@ public class DonHangService {
 		dh.setTrangThaiThanhToan(request.getTrangThaiThanhToan());
 
 		dh = donHangRepository.save(dh);
-		List<ChiTietDonHang> dsChiTiet = new ArrayList<ChiTietDonHang>();
+		
 		for (SanPhamMuaRequest sp : request.getDsMua()) {
 			Optional<PhienBanDienThoai> phienBan = phienBanDienThoaiRepository.findById(sp.getMaPhienBan());
 			if (phienBan.isPresent()) {
@@ -148,12 +162,12 @@ public class DonHangService {
 
 				ctdh = chiTietDonHangRepository.save(ctdh);
 
-				dsChiTiet.add(ctdh);
+				
 			}
 
 		}
 
-		updateSoLuong(dsChiTiet, -1);
+		updateSoLuong(dh.getMaDonHang(), -1);
 		
 		return new KetQuaDonHangReponse(dh.getMaDonHang(), dh.getTongTien(), "");
 	}
@@ -168,7 +182,12 @@ public class DonHangService {
 		}
 		DonHang dh = donHang.get();
 		dh.setTrangThaiThanhToan(trangThaiThanhToan);
-		
+		if(trangThaiThanhToan == 3) {
+			dh.setTrangThai(6);
+			updateSoLuong(maDonHang, 1);
+		}
 		dh = donHangRepository.save(dh);
 	}
+	
+	
 }

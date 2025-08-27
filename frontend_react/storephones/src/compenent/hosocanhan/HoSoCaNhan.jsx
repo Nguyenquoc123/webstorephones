@@ -5,7 +5,7 @@ import { Form, useNavigate } from "react-router-dom";
 import { fetchGetInfo, fetchUpdateInfo } from "../../api/authApi";
 import Loading from "../loading/Loading";
 import Popup from "../popup/Popup";
-import { useNavigate } from "react-router-dom";
+
 import MenuKhachHang from "../menukhachhang/MenuKhachHang";
 
 const HoSoCaNhan = () => {
@@ -195,8 +195,8 @@ const HoSoCaNhan = () => {
               avatarImg && avatarImg instanceof File
                 ? URL.createObjectURL(avatarImg)
                 : avatarImg
-                ? avatarImg
-                : "/images/anh-dai-dien-mac-dinh-18.jpg"
+                  ? avatarImg
+                  : "/images/anh-dai-dien-mac-dinh-18.jpg"
             }
             alt="avatar"
             className="avatar"
@@ -228,6 +228,13 @@ const HoSoCaNhan = () => {
           </button>
         </div>
       </div>
+      <Loading show={showLoading} />
+      {
+        showPopup.show &&
+        <Popup type={showPopup.type} message={showPopup.message}
+          onclose={() => setShowPopup({ ...showPopup, show: false })}
+        />
+      }
     </div>
   );
 };

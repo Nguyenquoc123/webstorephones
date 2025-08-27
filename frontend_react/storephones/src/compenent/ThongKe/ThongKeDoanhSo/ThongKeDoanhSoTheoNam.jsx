@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 
 import {
@@ -18,6 +18,8 @@ import BieuDoDuong from "../../../components/bieudo/BIeuDoDuong";
 import Table from "../../../components/componentTable/Table";
 import BieuDoTron from "../../../components/bieudo/BieuDoTron";
 import { useNavigate } from "react-router-dom";
+import LoaiThongKe from "../LoaiThongKe/LoaiThongKe";
+import { fetchGetDashBoard, fetchGetDoanhThu, fetchGetTKDanhMuc } from "../../../api/thongke";
 
 ChartJS.register(
   CategoryScale,
@@ -33,20 +35,27 @@ ChartJS.register(
 
 export default function ThongKeDoanhSoTheoNam() {
   const navigate = useNavigate();
-  const databieudocot = [
-    { name: "Điện Thoại", value: 13 },
-    { name: "LapTop", value: 23 },
-    { name: "Đồng Hồ", value: 6 },
-  ]
+  const today = new Date();
+  const yearDefault = today.getFullYear();
+  const [year, setYear] = useState(yearDefault)
 
 
-  const databieudoduong = [
 
-    { name: "2022", value: 300000 },
-    { name: "2023", value: 200000 },
-    { name: "2024", value: 350000 },
-    { name: "2025", value: 500000 },
-  ]
+  // const databieudocot = [
+  //   { name: "Điện Thoại", value: 13 },
+  //   { name: "LapTop", value: 23 },
+  //   { name: "Đồng Hồ", value: 6 },
+  // ]
+  const [databieudocot, setDataBieuDoCot] = useState([])
+
+  // const databieudoduong = [
+
+  //   { name: "2022", value: 300000 },
+  //   { name: "2023", value: 200000 },
+  //   { name: "2024", value: 350000 },
+  //   { name: "2025", value: 500000 },
+  // ]
+  const [databieudoduong, setDataBieuDoDuong] = useState([])
 
   const columns = [
     { name: 'stt' },
@@ -80,8 +89,50 @@ export default function ThongKeDoanhSoTheoNam() {
   // };
 
 
-  const dataCard = { doanhThu: '890.000.000 đ', donHang: 9952, khachHang: 2350, doanhSo: '15,6%' }
+  // const dataCard = { doanhThu: '890.000.000 đ', donHang: 9952, khachHang: 2350, doanhSo: '15,6%' }
+  const [dataCard, setDataCard] = useState({ doanhThu: '', donHang: '', khachHang: '', doanhSo: '' })
 
+  const getDashBoard = async () => {
+    const params = new URLSearchParams();
+
+    // if (type)
+    params.append("type", 'year');
+    params.append("nam", year);
+
+    const response = await fetchGetDashBoard(params);
+    if (response.code === 200) {
+      console.log(response.result)
+      setDataCard(response.result)
+    }
+    console.log(response)
+  }
+  const getDoanhThu = async () => {
+    getDashBoard();
+    getTKDanhMuc();
+    console.log("Thống kê doanh thu năm: ", year)
+    const params = new URLSearchParams();
+    params.append("type", 'year')
+    params.append('nam', year);
+    const response = await fetchGetDoanhThu(params);
+    if (response.code === 200) {
+      console.log(response)
+      setDataBieuDoDuong(response.result)
+    }
+  }
+
+  const getTKDanhMuc = async () => {
+    const params = new URLSearchParams();
+    params.append("type", 'year')
+    params.append('nam', year);
+
+    const response = await fetchGetTKDanhMuc(params);
+    if (response.code === 200) {
+      setDataBieuDoCot(response.result)
+    }
+  }
+  useEffect(() => {
+    getDoanhThu();
+  }, [])
 
   return (
     <>
@@ -96,7 +147,7 @@ export default function ThongKeDoanhSoTheoNam() {
             <option value="Theo tháng">Theo tháng</option>
           </select>
         </div>
-
+        <LoaiThongKe type={'year'} value={year} inputData={setYear} clickThongKe={getDoanhThu} />
         {/* Thống kê */}
         <div className="stats">
           <div className="stat-card">
