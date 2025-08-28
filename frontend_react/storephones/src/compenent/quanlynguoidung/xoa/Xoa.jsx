@@ -31,7 +31,7 @@ const Xoa = ({ user, onClose, onConfirm }) => {
           <div className="xoa-user-info">
             <div className="xoa-info-row">
               <span className="xoa-info-label">Tên người dùng:</span>
-              <span className="xoa-info-value">{user.name}</span>
+              <span className="xoa-info-value">{user.hoTen}</span>
             </div>
             <div className="xoa-info-row">
               <span className="xoa-info-label">Email:</span>
@@ -39,11 +39,11 @@ const Xoa = ({ user, onClose, onConfirm }) => {
             </div>
             <div className="xoa-info-row">
               <span className="xoa-info-label">Trạng thái:</span>
-              <span className="xoa-info-value">{user.status}</span>
+              <span className="xoa-info-value">{user.trangThai === 1? "Hoạt động": "Bị khóa"}</span>
             </div>
             <div className="xoa-info-row">
               <span className="xoa-info-label">Ngày tạo:</span>
-              <span className="xoa-info-value">{user.createdDate}</span>
+              <span className="xoa-info-value">{user.ngayDangKy}</span>
             </div>
           </div>
         </div>

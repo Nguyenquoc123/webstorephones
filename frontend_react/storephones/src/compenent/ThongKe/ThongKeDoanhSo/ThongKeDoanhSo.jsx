@@ -17,8 +17,9 @@ import BieuDoCot from "../../../components/bieudo/BieuDoCot";
 import BieuDoDuong from "../../../components/bieudo/BIeuDoDuong";
 import Table from "../../../components/componentTable/Table";
 import { useNavigate } from "react-router-dom";
-import { fetchGetDashBoard, fetchGetDoanhThu, fetchGetTKDanhMuc } from "../../../api/thongke";
+import { fetchGetDashBoard, fetchGetDoanhThu, fetchGetSPNoiBat, fetchGetTKDanhMuc } from "../../../api/thongke";
 import LoaiThongKe from "../LoaiThongKe/LoaiThongKe";
+import Loading from "../../loading/Loading";
 
 ChartJS.register(
   CategoryScale,
@@ -35,6 +36,7 @@ export default function ThongKeDoanhSo() {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0];
   const [day, setDay] = useState(today)
+  const [showLoading, setShowLoading] = useState(false)
   // const databieudocot = [
   //   { name: "Điện Thoại", value: 13 },
   //   { name: "LapTop", value: 23 },
@@ -62,13 +64,14 @@ export default function ThongKeDoanhSo() {
   ]
   // them data trong table
 
-  const topProducts = [
-    { stt: 1, name: "iPhone 16 promax", price: "27.000.000 đ", orders: 102 },
-    { stt: 2, name: "iPhone 14 promax", price: "20.000.000 đ", orders: 100 },
-    { stt: 3, name: "iPhone 15 promax", price: "22.000.000 đ", orders: 99 },
-    { stt: 4, name: "iPhone 12 promax", price: "14.000.000 đ", orders: 90 },
-    { stt: 5, name: "Samsung A6", price: "22.000.000 đ", orders: 89 },
-  ];
+  // const topProducts = [
+  //   { stt: 1, name: "iPhone 16 promax", price: "27.000.000 đ", orders: 102 },
+  //   { stt: 2, name: "iPhone 14 promax", price: "20.000.000 đ", orders: 100 },
+  //   { stt: 3, name: "iPhone 15 promax", price: "22.000.000 đ", orders: 99 },
+  //   { stt: 4, name: "iPhone 12 promax", price: "14.000.000 đ", orders: 90 },
+  //   { stt: 5, name: "Samsung A6", price: "22.000.000 đ", orders: 89 },
+  // ];
+  const [topProducts, setTopProducts] = useState([])
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -98,23 +101,26 @@ export default function ThongKeDoanhSo() {
 
     const response = await fetchGetDashBoard(params);
     if (response.code === 200) {
-      console.log(response.result)
+      // console.log(response.result)
       setDataCard(response.result)
     }
-      console.log(response)
+      // console.log(response)
   }
   const getDoanhThu = async () => {
+    setShowLoading(true)
     getDashBoard()
     getTKDanhMuc();
+    getSPNoiBat()
     console.log("Thống kê doanh thu ngày: ", day)
     const params = new URLSearchParams();
     params.append("type", 'day')
     params.append('day', day);
     const response = await fetchGetDoanhThu(params);
     if(response.code === 200){
-      console.log(response)
+      // console.log(response)
       setDataBieuDoDuong(response.result)
     }
+    setShowLoading(false)
   }
   const getTKDanhMuc = async () =>{
     const params = new URLSearchParams();
@@ -125,6 +131,18 @@ export default function ThongKeDoanhSo() {
     if(response.code === 200){
       setDataBieuDoCot(response.result)
     }
+  }
+
+  const getSPNoiBat = async () => {
+    const params = new URLSearchParams();
+    params.append("type", 'day')
+    params.append('day', day);
+
+    const response = await fetchGetSPNoiBat(params);
+    if(response.code === 200){
+      setTopProducts(response.result)
+    }
+    console.log("Sản Phẩm nổi bật",response)
   }
   useEffect(() => {
     getDoanhThu();
@@ -177,6 +195,8 @@ export default function ThongKeDoanhSo() {
           <Table columns={columns} data={topProducts} />
         </div>
       </div>
+
+      <Loading show={showLoading}/>
     </>
   );
 }

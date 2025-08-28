@@ -2,9 +2,12 @@ package com.bot.bandienthoai.mapper;
 
 import org.mapstruct.Mapper;
 
+import com.bot.bandienthoai.dto.reponse.DSKhachHangReponse;
 import com.bot.bandienthoai.dto.reponse.DashBoardReponse;
 import com.bot.bandienthoai.dto.reponse.DoanhThuReponse;
+import com.bot.bandienthoai.dto.reponse.SanPhamBanChayReponse;
 import com.bot.bandienthoai.dto.reponse.ThongKeDanhMucReponse;
+import com.bot.bandienthoai.dto.reponse.ThongKeKhachHangReponse;
 import com.bot.bandienthoai.dto.reponse.ThongKeTaiKhoanReponse;
 
 @Mapper(componentModel = "spring")
@@ -51,6 +54,46 @@ public interface ThongKeMapper {
 		if(data[0] != null) {
 			response.setName(data[0].toString());
 			response.setValue(Integer.valueOf(data[1].toString()));
+		}
+		return response;
+		
+	}
+	
+	default SanPhamBanChayReponse toSanPhamBanChayReponse(Object[] data) {
+		if(data == null || data.length < 3)
+			return null;
+		SanPhamBanChayReponse response = new SanPhamBanChayReponse();
+		if(data[0] != null) {
+			response.setName(data[0].toString());
+			response.setPrice(Double.valueOf(data[1].toString()));
+			response.setOrders(Integer.valueOf(data[2].toString()));
+		}
+		return response;
+		
+	}
+	default ThongKeKhachHangReponse toKeKhachHangReponse(Object[] data) {
+		if(data == null || data.length < 2)
+			return null;
+		ThongKeKhachHangReponse response = new ThongKeKhachHangReponse();
+		if(data[0] != null) {
+			response.setName(data[0].toString());
+			response.setValue(Integer.valueOf(data[1].toString()));
+			
+		}
+		return response;
+		
+	}
+	
+	default DSKhachHangReponse toDSKhachHangReponse(Object[] data) {
+		if(data == null || data.length < 4)
+			return null;
+		DSKhachHangReponse response = new DSKhachHangReponse();
+		if(data[0] != null) {
+			response.setId(Integer.valueOf(data[0].toString()));
+			response.setName(data[1].toString());
+			response.setEmail(data[1].toString());
+			response.setStatus(data[3].toString());
+			
 		}
 		return response;
 		

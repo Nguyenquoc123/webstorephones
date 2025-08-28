@@ -49,6 +49,9 @@ public class AuthenticationService {
 			if(!passwordEncoder.matches(request.getPassword(), kh.getPassword())) {
 				throw new RunException(ErrorCode.Password_InValid);
 			}
+			else if(kh.getTrangThai() == -1 || kh.getTrangThai() == 0) {
+				throw new RunException(ErrorCode.TaiKHoan_Block);
+			}
 			token = JWTUtil.generateToken(kh.getMaKhachHang(), kh.role);
 			return new AuthenticationReponse(kh.getMaKhachHang(), token, kh.role);
 		}

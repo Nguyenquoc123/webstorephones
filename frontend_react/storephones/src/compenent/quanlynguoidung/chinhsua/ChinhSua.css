@@ -85,3 +85,9 @@
 .save-btn:hover {
   background: #0056b3;
 }
+
+#reset-password {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
