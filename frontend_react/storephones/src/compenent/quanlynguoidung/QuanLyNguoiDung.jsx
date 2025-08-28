@@ -5,7 +5,16 @@ import search from "../../icons/icon-search.png";
 import Xoa from "./xoa/Xoa";
 import ThemTaiKhoan from "./themtaikhoan/ThemTaiKhoan";
 import ChinhSua from "./chinhsua/ChinhSua";
-import { fetchEditKhachHang, fetchGetDSKhachHang, fetchKhoaMoKhachHan, fetchKhoaMoKhachHang, fetchTimKiemKhachHang, fetchXoa1TaiKhoan, fetchXoaNhieuTaiKhoan } from "../../api/khachhang";
+import {
+  fetchEditKhachHang,
+  fetchGetDSKhachHang,
+  fetchGetThongKeTK,
+  fetchKhoaMoKhachHan,
+  fetchKhoaMoKhachHang,
+  fetchTimKiemKhachHang,
+  fetchXoa1TaiKhoan,
+  fetchXoaNhieuTaiKhoan,
+} from "../../api/khachhang";
 import { fetchSigup } from "../../api/authApi";
 import Popup from "../popup/Popup";
 
@@ -15,60 +24,46 @@ const QuanLyNguoiDung = () => {
   const [showEditModal, setShowEditModal] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState(null);
-  const [showPopup, setShowPopup] = useState({ show: false, type: '', message: '' })
+  const [showPopup, setShowPopup] = useState({
+    show: false,
+    type: "",
+    message: "",
+  });
 
-  const [users, setUsers] = useState([
-    // {
-    //   id: 1,
-    //   name: "Trần Đại Đức",
-    //   phone: "0393340406",
-    //   email: "daiducka123@gmail.com",
-    //   status: "Hoạt động",
-    //   createdDate: "15/1/2024",
-    //   locked: false,
-    // },
-    // {
-    //   id: 2,
-    //   name: "Phạm Thị Dung",
-    //   phone: "0934567890",
-    //   email: "phamthidung@gmail.com",
-    //   status: "Bị khóa",
-    //   createdDate: "12/1/2024",
-    //   locked: true,
-    // },
-  ]);
+  const [users, setUsers] = useState([]);
 
   // --- State cho bộ lọc ---
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState("");
 
   // --- State cho checkbox ---
   const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
     loadDSKhachHang();
-  }, [])
+    loadThongKe();
+  }, []);
 
   useEffect(() => {
     loadDSKhachHang();
-  }, [statusFilter])
+  }, [statusFilter]);
 
   const loadDSKhachHang = async () => {
     const response = await fetchGetDSKhachHang(statusFilter);
     if (response.code === 200) {
-      setUsers(response.result)
-      console.log(response.result)
+      setUsers(response.result);
+      console.log(response.result);
     }
-  }
+  };
 
   const clickSearch = async () => {
-    console.log("Giá trị tìm kiếm ", searchTerm)
+    console.log("Giá trị tìm kiếm ", searchTerm);
     const response = await fetchTimKiemKhachHang(searchTerm);
     if (response.code === 200) {
-      setUsers(response.result)
+      setUsers(response.result);
     }
-    console.log(response)
-  }
+    console.log(response);
+  };
 
   // Mở modal xóa 1 user
   const handleOpenDelete = (user) => {
@@ -91,7 +86,6 @@ const QuanLyNguoiDung = () => {
     const response = await fetchXoaNhieuTaiKhoan(selectedIds);
     if (response.code === 200) {
       loadDSKhachHang();
-
     }
     setSelectedIds([]);
   };
@@ -116,17 +110,17 @@ const QuanLyNguoiDung = () => {
     if (response.code === 200) {
       setShowAddModal(false);
       loadDSKhachHang();
+    } else if (response.code === 10) {
+      setShowPopup({ show: true, type: false, message: "Username đã tồn tại" });
+    } else if (response.code === 11) {
+      setShowPopup({
+        show: true,
+        type: false,
+        message: "Số điện thoại đã tồn tại",
+      });
+    } else if (response.code === 12) {
+      setShowPopup({ show: true, type: false, message: "Email đã tồn tại" });
     }
-    else if (response.code === 10) {
-      setShowPopup({ show: true, type: false, message: 'Username đã tồn tại' })
-    }
-    else if (response.code === 11) {
-      setShowPopup({ show: true, type: false, message: 'Số điện thoại đã tồn tại' })
-    }
-    else if (response.code === 12) {
-      setShowPopup({ show: true, type: false, message: 'Email đã tồn tại' })
-    }
-
   };
 
   // Chỉnh sửa user
@@ -142,7 +136,6 @@ const QuanLyNguoiDung = () => {
       setShowEditModal(false);
       setSelectedUser(null);
     }
-
   };
 
   // --- Checkbox ---
@@ -162,16 +155,26 @@ const QuanLyNguoiDung = () => {
 
   // --- Bộ lọc ---
   const filteredUsers = (value) => {
-    console.log(value)
-    setStatusFilter(value)
+    console.log(value);
+    setStatusFilter(value);
     // loadDSKhachHang(value)
-  }
+  };
+  const [dashboard, setDashBoard] = useState({
+    tongTaiKhoan: 0,
+    hoatDong: 0,
+    biKhoa: 0,
+    moiDangKy: 0,
+  });
+
+  const loadThongKe = async () => {
+    const response = await fetchGetThongKeTK();
+    if (response.code === 200) {
+      setDashBoard(response.result);
+      console.log(response);
+    }
+  };
 
   // Thống kê
-  const tongTaiKhoan = users.length;
-  const hoatDong = users.filter((u) => !u.locked).length;
-  const biKhoa = users.filter((u) => u.locked).length;
-  const moiHomNay = users.filter((u) => u.createdDate === "26/08/2025").length;
 
   return (
     <>
@@ -181,19 +184,19 @@ const QuanLyNguoiDung = () => {
         <div className="QLU-header">
           <div className="QLU-card">
             <span className="QLU-title">Tổng tài khoản</span>
-            <strong className="QLU-value">{tongTaiKhoan}</strong>
+            <strong className="QLU-value">{dashboard.tongTaiKhoan}</strong>
           </div>
           <div className="QLU-card">
             <span className="QLU-title">Đang hoạt động</span>
-            <strong className="QLU-value">{hoatDong}</strong>
+            <strong className="QLU-value">{dashboard.hoatDong}</strong>
           </div>
           <div className="QLU-card">
             <span className="QLU-title">Bị khoá</span>
-            <strong className="QLU-value">{biKhoa}</strong>
+            <strong className="QLU-value">{dashboard.biKhoa}</strong>
           </div>
           <div className="QLU-card">
             <span className="QLU-title">Mới hôm nay</span>
-            <strong className="QLU-value">{moiHomNay}</strong>
+            <strong className="QLU-value">{dashboard.moiDangKy}</strong>
           </div>
         </div>
 
@@ -206,7 +209,12 @@ const QuanLyNguoiDung = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <img className="icon-search" src={search} alt="" onClick={clickSearch} />
+            <img
+              className="icon-search"
+              src={search}
+              alt=""
+              onClick={clickSearch}
+            />
           </div>
 
           <label htmlFor="status">
@@ -242,8 +250,7 @@ const QuanLyNguoiDung = () => {
                     type="checkbox"
                     onChange={toggleSelectAll}
                     checked={
-                      selectedIds.length > 0
-                      &&
+                      selectedIds.length > 0 &&
                       selectedIds.length === users.length
                     }
                   />
@@ -278,8 +285,9 @@ const QuanLyNguoiDung = () => {
                   <td>{user.email}</td>
                   <td>
                     <span
-                      className={`QLU-badge status ${user.trangThai === 1 ? "active" : "blocked"
-                        }`}
+                      className={`QLU-badge status ${
+                        user.trangThai === 1 ? "active" : "blocked"
+                      }`}
                     >
                       {user.trangThai === 1 ? "Hoạt đông" : "Bị khóa"}
                     </span>
@@ -298,7 +306,7 @@ const QuanLyNguoiDung = () => {
                       onClick={() => handleToggleLock(user.maKhachHang)}
                       title={user.locked ? "Mở khóa" : "Khóa tài khoản"}
                     >
-                      {user.locked ? "🔓" : "🔒"}
+                      {user.trangThai == 1 ? "🔓" : "🔒"}
                     </span>
                     <span
                       className="QLU-action delete"
@@ -338,9 +346,13 @@ const QuanLyNguoiDung = () => {
         />
       )}
 
-      {showPopup.show && <Popup type={showPopup.type} message={showPopup.message}
-        onclose={() => setShowPopup({ ...showPopup, show: false })}
-      />}
+      {showPopup.show && (
+        <Popup
+          type={showPopup.type}
+          message={showPopup.message}
+          onclose={() => setShowPopup({ ...showPopup, show: false })}
+        />
+      )}
     </>
   );
 };

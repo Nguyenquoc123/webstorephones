@@ -8,6 +8,7 @@
   padding: 20px;
   position: absolute;
   right: 350px;
+  z-index: 9999;
 }
 
 .thongbao-title {
@@ -37,7 +38,8 @@
   cursor: pointer;
 }
 
-.thongbao-card:hover {
+.thongbao-card:hover,
+.san-pham {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -57,7 +59,7 @@
 
 .thongbao-content {
   flex: 1;
-  min-width: 0; 
+  min-width: 0;
 }
 
 .thongbao-text {

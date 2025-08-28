@@ -77,7 +77,7 @@ public class KhachHangController {
 	}
 	
 	@GetMapping("/searchkhachhang")
-	public APIReponse<List<KhachHangInQuanLyReponse>> searchKhachHang(@RequestParam(required = false, defaultValue = "") String keyword){
+	public APIReponse<List<KhachHangInQuanLyReponse>> searchKhachHang(@RequestParam(name = "keyword",required = false, defaultValue = "") String keyword){
 		return APIReponse.<List<KhachHangInQuanLyReponse>>builder().result(khachHangService.search(keyword)).build();
 	}
 	

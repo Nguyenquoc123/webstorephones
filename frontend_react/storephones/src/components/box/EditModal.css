@@ -95,7 +95,6 @@
   background: #388e3c;
 }
 
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -132,4 +131,10 @@
   outline: none;
   transition: all 0.2s ease;
   font-size: 14px;
+}
+.error-text {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  margin-bottom: 0;
 }

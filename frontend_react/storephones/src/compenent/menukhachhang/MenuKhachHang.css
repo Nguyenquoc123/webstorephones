@@ -154,7 +154,7 @@
   background-color: #e6f0fa;
   padding: 20px;
   z-index: 10;
-  background: linear-gradient(90deg, #2bffd8, #41aaff, #2ed2ff);
+  background: linear-gradient(90deg, #2bffd8, #41aaff);
   border-right: 1px solid black;
 }
 

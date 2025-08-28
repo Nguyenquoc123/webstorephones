@@ -12,71 +12,71 @@ function MenuAdmin() {
     setShowLogout(false);
   };
   const clickLogout = () => {
-  localStorage.removeItem("token");
-  navigate("/");
-};
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
-return (
-  <div className="container">
-    <div className="menu">
-      <div className="menu-left">
-        <img
-          onClick={() => setShowMenuByIcon(!showMenuByIcon)}
-          id="icon-menu"
-          src="/images/icon-menu.png"
-        />
-        <p id="logo">Phone Stores</p>
+  return (
+    <div className="container">
+      <div className="menu">
+        <div className="menu-left">
+          <img
+            onClick={() => setShowMenuByIcon(!showMenuByIcon)}
+            id="icon-menu"
+            src="/images/icon-menu.png"
+          />
+          <p id="logo">Phone Stores</p>
+        </div>
+
+        <div
+          className="logout-admin"
+          onMouseEnter={() => setShowLogout(true)}
+          onMouseLeave={() => setShowLogout(false)}
+        >
+          <img
+            src="/images/user-logout.png"
+            alt=""
+            onClick={() => setShowLogout(!showLogout)}
+          />
+        </div>
       </div>
 
+      {/* Menu bên trái */}
       <div
-        className="logout-admin"
+        style={{ display: showMenuByIcon ? "block" : "none" }}
+        className="nav-menu"
+      >
+        <p onClick={() => navigate("/danhmuc")}>Quản lý danh mục</p>
+        <p onClick={() => navigate("/dienthoai")}>Quản lý điện thoại</p>
+        <p onClick={() => navigate("/donhang")}>Quản lý đơn hàng</p>
+        <p onClick={() => navigate("/khuyenmai")}>Quản lý khuyến mãi</p>
+        <p onClick={() => navigate("/thongkedoanhso")}>Thống kê doanh số</p>
+        <p onClick={() => navigate("/thongkekhachhang")}>Thống kê khách hàng</p>
+        <p onClick={() => navigate("/quanlyuser")}>Quản lý người dùng</p>
+      </div>
+
+      {/* Nút Logout */}
+      <div
+        className="btn-logout-admin"
         onMouseEnter={() => setShowLogout(true)}
         onMouseLeave={() => setShowLogout(false)}
+        style={{ display: showLogout ? "block" : "none" }}
       >
-        <img
-          src="/images/user-logout.png"
-          alt=""
-          onClick={() => setShowLogout(!showLogout)}
-        />
+        <button
+          id="btn-logout-admin-child"
+          onClick={() => setClickedLogout(true)}
+        >
+          Logout
+        </button>
       </div>
-    </div>
 
-    {/* Menu bên trái */}
-    <div
-      style={{ display: showMenuByIcon ? "block" : "none" }}
-      className="nav-menu"
-    >
-      <p onClick={() => navigate("/danhmuc")}>Quản lý danh mục</p>
-      <p onClick={() => navigate("/dienthoai")}>Quản lý điện thoại</p>
-      <p onClick={() => navigate("/donhang")}>Quản lý đơn hàng</p>
-      <p onClick={() => navigate("/khuyenmai")}>Quản lý khuyến mãi</p>
-      <p onClick={() => navigate("/thongkedoanhso")}>Thống kê doanh số</p>
-      <p onClick={() => navigate("/thongkekhachhang")}>Thống kê khách hàng</p>
-      <p onClick={() => navigate("/quanlyuser")}>Quản lý người dùng</p>
+      <Logout
+        show={clickedLogout}
+        clickCancel={clickCancel}
+        clickActive={clickLogout}
+      />
     </div>
-
-    {/* Nút Logout */}
-    <div
-      className="btn-logout-admin"
-      onMouseEnter={() => setShowLogout(true)}
-      onMouseLeave={() => setShowLogout(false)}
-      style={{ display: showLogout ? "block" : "none" }}
-    >
-      <button
-        id="btn-logout-admin-child"
-        onClick={() => setClickedLogout(true)}
-      >
-        Logout
-      </button>
-    </div>
-
-    <Logout
-      show={clickedLogout}
-      clickCancel={clickCancel}
-      clickActive={clickLogout}
-    />
-  </div>
-)
-};
+  );
+}
 
 export default MenuAdmin;
