@@ -17,8 +17,9 @@ import BieuDoCot from "../../../components/bieudo/BieuDoCot";
 import BieuDoDuong from "../../../components/bieudo/BIeuDoDuong";
 import Table from "../../../components/componentTable/Table";
 import { useNavigate } from "react-router-dom";
-import { fetchGetDashBoard, fetchGetDoanhThu, fetchGetTKDanhMuc } from "../../../api/thongke";
+import { fetchGetDashBoard, fetchGetDoanhThu, fetchGetSPNoiBat, fetchGetTKDanhMuc } from "../../../api/thongke";
 import LoaiThongKe from "../LoaiThongKe/LoaiThongKe";
+import Loading from "../../loading/Loading";
 
 ChartJS.register(
   CategoryScale,
@@ -39,6 +40,8 @@ export default function ThongKeDoanhSoTheoThang() {
   ).padStart(2, "0")}`; // "2025-08"
 
   const [month, setMonth] = useState(defaultMonth);
+
+  const [showLoading, setShowLoading] = useState(false)
   // const databieudocot = [
   //   { name: "Điện Thoại", value: 713 },
   //   { name: "LapTop", value: 234 },
@@ -72,13 +75,15 @@ export default function ThongKeDoanhSoTheoThang() {
   ]
   // them data trong table
 
-  const topProducts = [
-    { stt: 1, name: "iPhone 16 promax", price: "27.000.000 đ", orders: 102 },
-    { stt: 2, name: "iPhone 14 promax", price: "20.000.000 đ", orders: 100 },
-    { stt: 3, name: "iPhone 15 promax", price: "22.000.000 đ", orders: 99 },
-    { stt: 4, name: "iPhone 12 promax", price: "14.000.000 đ", orders: 90 },
-    { stt: 5, name: "Samsung A6", price: "22.000.000 đ", orders: 89 },
-  ];
+  // const topProducts = [
+  //   { stt: 1, name: "iPhone 16 promax", price: "27.000.000 đ", orders: 102 },
+  //   { stt: 2, name: "iPhone 14 promax", price: "20.000.000 đ", orders: 100 },
+  //   { stt: 3, name: "iPhone 15 promax", price: "22.000.000 đ", orders: 99 },
+  //   { stt: 4, name: "iPhone 12 promax", price: "14.000.000 đ", orders: 90 },
+  //   { stt: 5, name: "Samsung A6", price: "22.000.000 đ", orders: 89 },
+  // ];
+  const [topProducts, setTopProducts] = useState([])
+
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -99,7 +104,7 @@ export default function ThongKeDoanhSoTheoThang() {
 
   // const dataCard = { doanhThu: '555.000.000 đ', donHang: 852, khachHang: 850, doanhSo: '55,6%' }
   const [dataCard, setDataCard] = useState({ doanhThu: '', donHang: '', khachHang: '', doanhSo: '' })
-  
+
   const getDashBoard = async () => {
     const params = new URLSearchParams();
     const [nam, thang] = month.split('-')
@@ -108,7 +113,7 @@ export default function ThongKeDoanhSoTheoThang() {
     params.append('month', thang)
     const response = await fetchGetDashBoard(params);
     if (response.code === 200) {
-      console.log(response)
+      // console.log(response)
       setDataCard(response.result)
     }
   }
@@ -116,8 +121,10 @@ export default function ThongKeDoanhSoTheoThang() {
     getDoanhThu();
   }, [])
   const getDoanhThu = async () => {
+    setShowLoading(true)
     getDashBoard();
     getTKDanhMuc();
+    getSPNoiBat();
     const [nam, thang] = month.split('-')
     console.log("Thống kê doanh thu tháng: ", month)
     const params = new URLSearchParams();
@@ -126,15 +133,17 @@ export default function ThongKeDoanhSoTheoThang() {
     params.append('month', thang);
     const response = await fetchGetDoanhThu(params);
     if (response.code === 200) {
-      console.log(response)
+      // console.log(response)
       setDataBieuDoDuong(response.result)
     }
+
+    setShowLoading(false)
   }
 
   const getTKDanhMuc = async () => {
     const [nam, thang] = month.split('-')
     const params = new URLSearchParams();
-     params.append("type", 'month')
+    params.append("type", 'month')
     params.append('nam', nam);
     params.append('month', thang);
 
@@ -142,6 +151,20 @@ export default function ThongKeDoanhSoTheoThang() {
     if (response.code === 200) {
       setDataBieuDoCot(response.result)
     }
+  }
+
+  const getSPNoiBat = async () => {
+    const [nam, thang] = month.split('-')
+    const params = new URLSearchParams();
+    params.append("type", 'month')
+    params.append('nam', nam);
+    params.append('month', thang);
+
+    const response = await fetchGetSPNoiBat(params);
+    if (response.code === 200) {
+      setTopProducts(response.result)
+    }
+    console.log("Sản Phẩm nổi bật",response)
   }
   return (
     <>
@@ -156,7 +179,7 @@ export default function ThongKeDoanhSoTheoThang() {
             <option value="Theo năm">Theo năm</option>
           </select>
         </div>
-        <LoaiThongKe type={'month'} value={month} inputData={setMonth} clickThongKe={getDoanhThu}/>
+        <LoaiThongKe type={'month'} value={month} inputData={setMonth} clickThongKe={getDoanhThu} />
         {/* Thống kê */}
         <div className="stats">
           <div className="stat-card">
@@ -190,6 +213,8 @@ export default function ThongKeDoanhSoTheoThang() {
           <Table columns={columns} data={topProducts} />
         </div>
       </div>
+
+      <Loading show={showLoading}/>
     </>
   );
 }

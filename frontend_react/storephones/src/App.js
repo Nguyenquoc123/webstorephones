@@ -27,7 +27,7 @@ import ThongKeDoanhSo from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSo";
 import ThongKeKhachHang from "./compenent/ThongKe/ThongKeKhachHang/ThongKeKhachHang";
 import ThongKeDoanhSoTheoThang from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSoTheoThang";
 import ThongKeDoanhSoTHeoNam from "./compenent/ThongKe/ThongKeDoanhSo/ThongKeDoanhSoTheoNam";
-
+import ThongKeKhachHangThang from "./compenent/ThongKe/ThongKeKhachHang/ThongKeKhachHangThang.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -58,6 +58,7 @@ function App() {
         <Route path="/ThongKedoanhso/thang" element={<ThongKeDoanhSoTheoThang />} />
         <Route path="/ThongKedoanhso/nam" element={<ThongKeDoanhSoTHeoNam />} />
         <Route path="/Thongkekhachhang" element={<ThongKeKhachHang />} />
+        <Route path="/Thongkekhachhangthang" element={<ThongKeKhachHangThang />} />
       </Routes>
     </BrowserRouter>
   );

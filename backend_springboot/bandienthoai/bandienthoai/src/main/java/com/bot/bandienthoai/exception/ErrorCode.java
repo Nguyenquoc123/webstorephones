@@ -43,6 +43,7 @@ public enum ErrorCode {
 	CartItem_In_Cart(30, "Đã có trong giỏ hàng"),
 	Dia_Chi_Not_Null(31, "Vui lòng nhập địa chỉ"),
 	DonHang_Not_Found(32, "Không tìm thấy đơn hàng"),
+	TaiKHoan_Block(33, "Tài khoản đã bị khóa"),
 	
 	;
 	int code;

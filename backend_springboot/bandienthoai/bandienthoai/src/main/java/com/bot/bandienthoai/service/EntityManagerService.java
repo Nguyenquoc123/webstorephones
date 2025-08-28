@@ -14,10 +14,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.bot.bandienthoai.dto.reponse.DSKhachHangReponse;
 import com.bot.bandienthoai.dto.reponse.DashBoardReponse;
 import com.bot.bandienthoai.dto.reponse.DoanhThuReponse;
+import com.bot.bandienthoai.dto.reponse.KhachHangInQuanLyReponse;
 import com.bot.bandienthoai.dto.reponse.PhienBanDienThoaiKhuyenMaiReponse;
+import com.bot.bandienthoai.dto.reponse.SanPhamBanChayReponse;
 import com.bot.bandienthoai.dto.reponse.ThongKeDanhMucReponse;
+import com.bot.bandienthoai.dto.reponse.ThongKeKhachHangReponse;
+import com.bot.bandienthoai.dto.reponse.ThongKeTaiKhoanReponse;
 import com.bot.bandienthoai.entity.KhuyenMai_DienThoai;
 import com.bot.bandienthoai.entity.PhienBanDienThoai;
 import com.bot.bandienthoai.mapper.ImagesMapper;
@@ -245,7 +250,7 @@ public class EntityManagerService {
 				        2
 				    ) AS tangTruong
 				FROM donhang d
-				WHERE d.trangthai = 1;
+				WHERE d.trangthai = 4;
 								""";
 
 		Query query = entityManager.createNativeQuery(sql);
@@ -284,7 +289,7 @@ public class EntityManagerService {
 				        2
 				    ) AS tangTruong
 				FROM DonHang d
-				WHERE d.trangthai = 1;
+				WHERE d.trangthai = 4;
 
 								    """;
 
@@ -321,7 +326,7 @@ public class EntityManagerService {
 				        2
 				    ) AS tangTruong
 				FROM DonHang d
-				WHERE d.trangthai = 1;
+				WHERE d.trangthai = 4;
 
 								""";
 		java.sql.Date sqlDay = java.sql.Date.valueOf(day);
@@ -348,7 +353,7 @@ public class EntityManagerService {
 		LEFT JOIN donhang dh
 		       ON MONTH(dh.ngaytao) = m.thang
 		      AND YEAR(dh.ngaytao) = :nam
-		      AND dh.trangthai = 1
+		      AND dh.trangthai = 4
 		GROUP BY m.thang
 		ORDER BY m.thang
 				""";
@@ -374,7 +379,7 @@ public class EntityManagerService {
 			       ON DAY(dh.ngaytao) = d.ngay
 			      AND MONTH(dh.ngaytao) = :month
 			      AND YEAR(dh.ngaytao) = :year
-			      AND dh.trangthai = 1
+			      AND dh.trangthai = 4
 			GROUP BY d.ngay
 			ORDER BY d.ngay
 				""";
@@ -400,7 +405,7 @@ public class EntityManagerService {
 			LEFT JOIN donhang dh
 			       ON DATEPART(HOUR, dh.ngaytao) = h.gio
 			      AND CAST(dh.ngaytao AS DATE) = :ngay
-			      AND dh.trangthai = 1
+			      AND dh.trangthai = 4
 			GROUP BY h.gio
 			ORDER BY h.gio
 
@@ -416,12 +421,12 @@ public class EntityManagerService {
 		"""
 			SELECT TOP 5 dm.TenDanhMuc, COUNT(DISTINCT dh.MaDonHang) AS SoLuongDonHang
 			FROM DanhMuc dm
-			JOIN DienThoai dt ON dm.MaDanhMuc = dt.MaDanhMuc
-			JOIN PhienBanDienThoai pb ON dt.MaDienThoai = pb.MaDienThoai
-			JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
-			JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang
-			where year(dh.ngaytao) = :nam
-			GROUP BY dm.MaDanhMuc, dm.TenDanhMuc
+			LEFT JOIN DienThoai dt ON dm.MaDanhMuc = dt.MaDanhMuc 
+			LEFT JOIN PhienBanDienThoai pb ON dt.MaDienThoai = pb.MaDienThoai
+			Left JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
+			Left JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang and dh.TrangThai = 4
+			AND year(dh.ngaytao) = :nam
+			GROUP BY dm.TenDanhMuc
 			ORDER BY SoLuongDonHang DESC;
 
 				""";
@@ -435,12 +440,12 @@ public class EntityManagerService {
 		"""
 			SELECT TOP 5 dm.TenDanhMuc, COUNT(DISTINCT dh.MaDonHang) AS SoLuongDonHang
 			FROM DanhMuc dm
-			JOIN DienThoai dt ON dm.MaDanhMuc = dt.MaDanhMuc
-			JOIN PhienBanDienThoai pb ON dt.MaDienThoai = pb.MaDienThoai
-			JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
-			JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang
-			where year(dh.ngaytao) = :nam and Month(dh.ngayTao) = :thang
-			GROUP BY dm.MaDanhMuc, dm.TenDanhMuc
+			LEFT JOIN DienThoai dt ON dm.MaDanhMuc = dt.MaDanhMuc 
+			LEFT JOIN PhienBanDienThoai pb ON dt.MaDienThoai = pb.MaDienThoai
+			Left JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
+			Left JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang and dh.TrangThai = 4
+			AND year(dh.ngaytao) = :nam and Month(dh.ngayTao) = :thang
+			GROUP BY dm.TenDanhMuc
 			ORDER BY SoLuongDonHang DESC;
 
 				""";
@@ -455,12 +460,11 @@ public class EntityManagerService {
 		"""
 			SELECT TOP 5 dm.TenDanhMuc, COUNT(DISTINCT dh.MaDonHang) AS SoLuongDonHang
 			FROM DanhMuc dm
-			JOIN DienThoai dt ON dm.MaDanhMuc = dt.MaDanhMuc
-			JOIN PhienBanDienThoai pb ON dt.MaDienThoai = pb.MaDienThoai
-			JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
-			JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang
-			where cast(dh.ngaytao as Date) = :ngay
-			GROUP BY dm.MaDanhMuc, dm.TenDanhMuc
+			LEFT JOIN DienThoai dt ON dm.MaDanhMuc = dt.MaDanhMuc
+			LEFT JOIN PhienBanDienThoai pb ON dt.MaDienThoai = pb.MaDienThoai
+			Left JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
+			Left JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang AND cast(dh.ngaytao as Date) = :ngay and dh.TrangThai = 4
+			GROUP BY dm.TenDanhMuc
 			ORDER BY SoLuongDonHang DESC;
 
 				""";
@@ -470,4 +474,236 @@ public class EntityManagerService {
 		return lst.stream().map(thongKeMapper::tothoDanhMucReponse).collect(Collectors.toList());
 	}
 	
+	public List<SanPhamBanChayReponse> getSPBanChayNam(int year){
+		String sql = """
+			SELECT TOP 5 dt.TenDienThoai, pb.giaBan,
+				COUNT(DISTINCT dh.MaDonHang) AS SoLuongDonHang
+				FROM DienThoai dt 
+				JOIN PhienBanDienThoai pb On dt.MaDienThoai = pb.MaDienThoai
+				JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
+				JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang
+				where Year(dh.NgayTao) = :nam AND dh.TrangThai = 4
+				GROUP BY pb.MaPhienBan, dt.TenDienThoai, pb.giaBan
+				ORDER BY SoLuongDonHang DESC;
+
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		List<Object[]> lst = query.getResultList();
+		return lst.stream().map(thongKeMapper::toSanPhamBanChayReponse).collect(Collectors.toList());
+	}
+	public List<SanPhamBanChayReponse> getSPBanChayThang(int year, int month){
+		String sql = """
+			SELECT TOP 5 dt.TenDienThoai, pb.giaBan,
+				COUNT(DISTINCT dh.MaDonHang) AS SoLuongDonHang
+				FROM DienThoai dt 
+				JOIN PhienBanDienThoai pb On dt.MaDienThoai = pb.MaDienThoai
+				JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
+				JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang
+				where Year(dh.NgayTao) = :nam And Month(dh.NgayTao) = :thang AND dh.TrangThai = 4
+				GROUP BY pb.MaPhienBan, dt.TenDienThoai, pb.giaBan
+				ORDER BY SoLuongDonHang DESC;
+
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		query.setParameter("thang", month);
+		List<Object[]> lst = query.getResultList();
+		return lst.stream().map(thongKeMapper::toSanPhamBanChayReponse).collect(Collectors.toList());
+	}
+	public List<SanPhamBanChayReponse> getSPBanChayNgay(LocalDate day){
+		String sql = """
+			SELECT TOP 5 dt.TenDienThoai, pb.giaBan, 
+				COUNT(DISTINCT dh.MaDonHang) AS SoLuongDonHang
+				FROM DienThoai dt 
+				JOIN PhienBanDienThoai pb On dt.MaDienThoai = pb.MaDienThoai
+				JOIN ChiTietDonHang ct ON pb.MaPhienBan = ct.MaPhienBan
+				JOIN DonHang dh ON ct.MaDonHang = dh.MaDonHang
+				where Cast(dh.NgayTao as Date) = :ngay AND dh.TrangThai = 4
+				GROUP BY pb.MaPhienBan, dt.TenDienThoai, pb.giaBan
+				ORDER BY SoLuongDonHang DESC;
+
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("ngay", day);
+		List<Object[]> lst = query.getResultList();
+		return lst.stream().map(thongKeMapper::toSanPhamBanChayReponse).collect(Collectors.toList());
+	}
+	
+	public ThongKeTaiKhoanReponse getThongKeKhachHangNam(int year) {
+		String sql = """
+			Select ISNULL(Count(kh.maKhachHang), 0) as soluongkh,
+			 	IsNULL(Sum(Case When kh.trangThai = 1 Then 1 Else 0 End), 0),
+			 	IsNULL(Sum(Case When kh.trangThai = -1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When Year(kh.NgayDangKy) = :nam Then 1 Else 0 End), 0)
+			From KhachHang kh	
+			Where Year(kh.NgayDangKy) = :nam
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		Object[] kq = (Object[]) query.getSingleResult();
+		return thongKeMapper.toThongKeTaiKhoanReponse(kq);
+	}
+	
+	public ThongKeTaiKhoanReponse getThongKeKhachHangThang(int year, int month) {
+		String sql = """
+			Select ISNULL(Count(kh.maKhachHang), 0),
+			 	ISNULL(Sum(Case When kh.trangThai = 1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When kh.trangThai = -1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When Year(kh.NgayDangKy) = :nam And Month(kh.NgayDangKy) = :thang Then 1 Else 0 End), 0)
+			From KhachHang kh	
+			Where Year(kh.NgayDangKy) = :nam AND Month(kh.NgayDangKy) = :thang
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		query.setParameter("thang", month);
+		Object[] kq = (Object[]) query.getSingleResult();
+		return thongKeMapper.toThongKeTaiKhoanReponse(kq);
+	}
+	public ThongKeTaiKhoanReponse getThongKeKhachHangNgay(LocalDate day) {
+		String sql = """
+			Select ISNULL(Count(kh.maKhachHang), 0),
+			 	ISNULL(Sum(Case When kh.trangThai = 1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When kh.trangThai = -1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When Cast(kh.NgayDangKy as Date) = :ngay Then 1 Else 0 End), 0)
+			From KhachHang kh	
+			Where Cast(kh.NgayDangKy as Date) = :ngay
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("ngay", day);
+		Object[] kq = (Object[]) query.getSingleResult();
+		return thongKeMapper.toThongKeTaiKhoanReponse(kq);
+	}
+	
+	public List<ThongKeKhachHangReponse> getTKKhachHangNam(int year){
+		String sql = """ 
+			WITH  ThangCTE AS (
+			    SELECT 1 AS thang
+			    UNION ALL
+			    SELECT thang + 1
+			    FROM ThangCTE
+			    WHERE thang < 12
+			)
+			SELECT 
+			    t.thang,
+			    ISNULL(Count(kh.maKhachHang), 0) AS soLuongKhachHang
+			FROM ThangCTE t
+			LEFT JOIN KhachHang kh 
+			    ON YEAR(kh.NgayDangKy) = :nam AND t.thang = Month(kh.NgayDangKy)
+			GROUP BY t.thang
+			ORDER BY t.thang;
+	
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		List<Object[]> kq = query.getResultList();
+		return kq.stream().map(thongKeMapper::toKeKhachHangReponse).collect(Collectors.toList());
+
+	}
+	public List<ThongKeKhachHangReponse> getTKKhachHangThang(int year, int month){
+		String sql = """ 
+			WITH NgayCTE AS (
+			    SELECT 1 AS ngay
+			    UNION ALL
+			    SELECT ngay + 1
+			    FROM NgayCTE
+			    WHERE ngay < DAY(EOMONTH(DATEFROMPARTS(:nam, :thang, 1)))
+			)
+			SELECT 
+			    t.ngay,
+			    ISNULL(Count(kh.maKhachHang), 0) AS soLuongKhachHang
+			FROM NgayCTE t
+			LEFT JOIN KhachHang kh 
+			    ON MONTH(kh.NgayDangKy) = :thang
+			   AND YEAR(kh.NgayDangKy) = :nam
+			    AND Day(kh.NgayDangKy) = t.ngay
+			GROUP BY t.ngay
+			ORDER BY t.ngay
+	
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		query.setParameter("thang", month);
+		List<Object[]> kq = query.getResultList();
+		return kq.stream().map(thongKeMapper::toKeKhachHangReponse).collect(Collectors.toList());
+	}
+	public List<ThongKeKhachHangReponse> getTKKhachHangNgay(LocalDate day){
+		String sql = """ 
+			WITH hours AS (
+			   SELECT 0 AS gio
+			    UNION ALL
+			    SELECT gio + 1
+			    FROM hours
+			    WHERE gio < 23
+			)
+			SELECT  RIGHT('00' + CAST(h.gio AS VARCHAR(2)), 2) + ':00' AS gio_hien_thi,
+			       ISNULL(Count(kh.maKhachHang), 0) as SoLuong
+			FROM hours h
+			LEFT JOIN KhachHang kh 
+			   ON DATEPART(HOUR, dh.ngaytao) = h.gio
+			      AND CAST(dh.ngaytao AS DATE) = :ngay
+			GROUP BY h.gio
+			ORDER BY h.gio;
+	
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("ngay", day);
+		List<Object[]> kq = query.getResultList();
+		return kq.stream().map(thongKeMapper::toKeKhachHangReponse).collect(Collectors.toList());
+	}
+	
+	public List<DSKhachHangReponse> getDSKhachHangNam(int year){
+		String sql= """
+			Select kh.maKhachHang, kh.hoten, kh.email,
+			Case When kh.TrangThai = 1 Then N'Hoạt động' Else 'Ngưng hoạt động' End
+			From KhachHang kh
+			Where Year(kh.NgayDangKy) = :nam	
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		List<Object[]> kq = query.getResultList();
+		return kq.stream().map(thongKeMapper::toDSKhachHangReponse).collect(Collectors.toList());
+	}
+	
+	public List<DSKhachHangReponse> getDSKhachHangThang(int year, int month){
+		String sql= """
+			Select kh.maKhachHang, kh.hoten, kh.email,
+			Case When kh.TrangThai = 1 Then N'Hoạt động' Else 'Ngưng hoạt động' End
+			From KhachHang kh
+			Where Year(kh.NgayDangKy) = :nam AND Month(kh.NgayDangKy) = :thang
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("nam", year);
+		query.setParameter("thang", month);
+		List<Object[]> kq = query.getResultList();
+		return kq.stream().map(thongKeMapper::toDSKhachHangReponse).collect(Collectors.toList());
+	}
+	
+	public List<DSKhachHangReponse> getDSKhachHangNgay(LocalDate day){
+		String sql= """
+			Select kh.maKhachHang, kh.hoten, kh.email,
+			Case When kh.TrangThai = 1 Then N'Hoạt động' Else 'Ngưng hoạt động' End
+			From KhachHang kh
+			Where Cast(kh.ngaydangky as DATE) = :ngay
+		""";
+		Query query = entityManager.createNativeQuery(sql);
+		query.setParameter("ngay", day);
+		List<Object[]> kq = query.getResultList();
+		return kq.stream().map(thongKeMapper::toDSKhachHangReponse).collect(Collectors.toList());
+	}
+	
+	
+	// thống kê khách hàng
+//	public List<KhachHangInQuanLyReponse> getDsKhachHangInQuanLy(){
+//		String sql = """
+//		Select kh.maKhachHang, kh.hoTen, kh.soDienThoai, kh.Email, kh.NgayDangKy, 
+//				Case when kh.TRangThai = 1 Then N'Hoạt động' Else N'Bị khóa' End,
+//				Case when kh.TrangThai = 1 Then True Else False End
+//			From KhachHang kh
+//			
+//		""";
+//		Query query = entityManager.createNativeQuery(sql);
+//		List<Object[]> kq = query.getResultList();
+//		return kq.stream().map(thongKeMapper::toDSKhachHangReponse).collect(Collectors.toList());
+//	}
 }

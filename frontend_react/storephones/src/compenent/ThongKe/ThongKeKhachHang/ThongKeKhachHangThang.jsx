@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { Line, Bar } from "react-chartjs-2";
-import "./ThongKeKhachHang.css";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchGetDashBoardKhachHang, fetchGetTKDSKhachHang, fetchGetTKKhachHang } from "../../../api/thongke";
 import MenuAdmin from "../../menuadmin/MenuAdmin";
+import LoaiThongKe from "../LoaiThongKe/LoaiThongKe";
 import BieuDoDuong from "../../../components/bieudo/BIeuDoDuong";
-import Table from "../../../components/componentTable/Table";
 import BieuDoTron from "../../../components/bieudo/BieuDoTron";
 import CardThongKe from "../../../components/cart/CardThongKe";
-import { fetchGetDashBoardKhachHang, fetchGetTKDSKhachHang, fetchGetTKKhachHang } from "../../../api/thongke";
-import LoaiThongKe from "../LoaiThongKe/LoaiThongKe";
-import { useNavigate } from "react-router-dom";
+import Table from "../../../components/componentTable/Table";
 import Loading from "../../loading/Loading";
 
-
-export default function ThongKeKhachHang() {
-    const navigate = useNavigate()
+function ThongKeKhachHangThang({type}) {
+    const navigate = useNavigate();
     const today = new Date();
-    const yearDefault = today.getFullYear();
-    const [year, setYear] = useState(yearDefault)
+    const defaultMonth = `${today.getFullYear()}-${String(
+        today.getMonth() + 1
+    ).padStart(2, "0")}`; // "2025-08"
+
+    const [month, setMonth] = useState(defaultMonth);
 
     const [showLoading, setShowLoading] = useState(false)
     const [dataCard, setDataCard] = useState([
@@ -26,20 +26,7 @@ export default function ThongKeKhachHang() {
         { title: "Khách hàng không còn hoạt động", value: 150, icon: "❌" },
     ]);
 
-    // const databieudoduong = [
-    //     { name: "Tháng 1", value: 200 },
-    //     { name: "Tháng 2", value: 350 },
-    //     { name: "Tháng 3", value: 500 },
-    //     { name: "Tháng 4", value: 450 },
-    //     { name: "Tháng 5", value: 600 },
-    //     { name: "Tháng 6", value: 700 },
-    //     { name: "Tháng 7", value: 800 },
-    //     { name: "Tháng 8", value: 750 },
-    //     { name: "Tháng 9", value: 900 },
-    //     { name: "Tháng 10", value: 950 },
-    //     { name: "Tháng 11", value: 1100 },
-    //     { name: "Tháng 12", value: 1200 },
-    // ]
+
     const [databieudoduong, setDataBieuDoDuong] = useState([])
 
 
@@ -56,26 +43,25 @@ export default function ThongKeKhachHang() {
         { name: 'status' }
     ]
 
-    // const topProducts = [
-    //     { id: 1, name: "Truong Văn Sang", email: "sang@gmail.com", status: "Hoạt động" },
-    //     { id: 2, name: "Lê Vinh", email: "vinh@gmail.com", status: "Hoạt động" },
-    //     { id: 3, name: "Quế Minh", email: "que@gmail.com", status: "Hoạt động" },
-    //     { id: 4, name: "Trương Văn Minh", email: "minh@gmail.com", status: "Hoạt động" },
-    //     { id: 5, name: "Hiệp Phùng", email: "phung@gmail.com", status: "Ngưng hoạt động" },
-    // ];
-    const [dsKhachHang, setDSKhachHang] = useState([])
-    const options = {
-        responsive: true,
-        plugins: { legend: { display: false } },
-    };
 
-    const loadDashBoardKhachHangNam = async () => {
+
+
+    const [dsKhachHang, setDSKhachHang] = useState([])
+    // const options = {
+    //     responsive: true,
+    //     plugins: { legend: { display: false } },
+    // };
+
+    const loadDashBoardKhachHangThang = async () => {
         setShowLoading(true)
+
         loadTkKhachHang();
         loadDSKhachHang();
+        const [nam, thang] = month.split('-')
         const params = new URLSearchParams();
-        params.append("type", 'year')
-        params.append('nam', year);
+        params.append("type", 'month')
+        params.append('nam', nam);
+        params.append('month', thang);
         const response = await fetchGetDashBoardKhachHang(params);
         if (response.code === 200) {
             console.log("DashBoard khách hàng Theo Năm: ", response.result)
@@ -112,20 +98,24 @@ export default function ThongKeKhachHang() {
     }
 
     const loadTkKhachHang = async () => {
+        const [nam, thang] = month.split('-')
         const params = new URLSearchParams();
-        params.append("type", 'year')
-        params.append('nam', year);
+        params.append("type", 'month')
+        params.append('nam', nam);
+        params.append('month', thang);
         const response = await fetchGetTKKhachHang(params);
         if (response.code === 200) {
-            console.log("Thống kê khách hàng theo năm", response.result)
+            console.log("Thống kê khách hàng theo thags", response.result)
             setDataBieuDoDuong(response.result)
         }
     }
 
     const loadDSKhachHang = async () => {
+        const [nam, thang] = month.split('-')
         const params = new URLSearchParams();
-        params.append("type", 'year')
-        params.append('nam', year);
+        params.append("type", 'month')
+        params.append('nam', nam);
+        params.append('month', thang);
         const response = await fetchGetTKDSKhachHang(params)
 
         if (response.code === 200) {
@@ -134,7 +124,7 @@ export default function ThongKeKhachHang() {
     }
 
     useEffect(() => {
-        loadDashBoardKhachHangNam();
+        loadDashBoardKhachHangThang();
     }, [])
 
     const handleChange = (e) => {
@@ -153,11 +143,11 @@ export default function ThongKeKhachHang() {
                 <div className="dashboard-header">
                     <h2>Thống kê khách hàng</h2>
                     <select onChange={handleChange}>
-                        <option value="Theo năm">Theo năm</option>
                         <option value="Theo tháng">Theo tháng</option>
+                        <option value="Theo năm">Theo năm</option>
                     </select>
                 </div>
-                <LoaiThongKe type={'year'} value={year} inputData={setYear} clickThongKe={loadDashBoardKhachHangNam} />
+                <LoaiThongKe type={'month'} value={month} inputData={setMonth} clickThongKe={loadDashBoardKhachHangThang} />
                 {/* Thống kê */}
                 <div className="stats">
                     {dataCard.map((item, index) => (
@@ -176,5 +166,6 @@ export default function ThongKeKhachHang() {
 
             <Loading show={showLoading}/>
         </>
-    );
+    )
 }
+export default ThongKeKhachHangThang;

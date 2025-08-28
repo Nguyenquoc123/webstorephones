@@ -6,36 +6,83 @@ const ChinhSua = ({ user, onClose, onSave }) => {
     hoten: "",
     email: "",
     sdt: "",
-    matkhau: "",
-    vaitro: "user",
+    resetpassword: false
   });
+
+  const [err, setErr] = useState({
+    hoten: "",
+    email: "",
+    sdt: "",
+    resetpassword: false
+  })
 
   // Load dữ liệu user vào form khi mở modal
   useEffect(() => {
     if (user) {
       setFormData({
-        hoten: user.hoten || "",
+        hoten: user.hoTen || "",
         email: user.email || "",
-        sdt: user.sdt || "",
-        matkhau: user.matkhau || "",
-        vaitro: user.vaitro || "user",
+        sdt: user.soDienThoai || "",
+        resetpassword: false
       });
     }
   }, [user]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (key, value) => {
+    setFormData({ ...formData, [key]: value })
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onSave) {
-      onSave({ ...user, ...formData });
+    console.log("Thông tin edit", formData)
+    if(!validCheck())
+      return;
+    
+    const data = {
+      'hoTen': formData.hoten,
+      'email': formData.email,
+      'soDienThoai': formData.sdt,
+      'resetpassword': formData.resetpassword
     }
-    onClose();
+    onSave(data);
+    return;
   };
+  const validCheck = () => {
+    let hasError = false;
+    let newErr = {
+      email: '',
+      hoTen: '',
+      soDienThoai: ''
+    }
 
+    // email
+    if (!formData.email.trim()) {
+      newErr.email = "Vui lòng nhập email";
+      hasError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErr.email = "Email không hợp lệ";
+      hasError = true;
+    }
+    // số điện thoại
+    if (!formData.soDienThoai.trim()) {
+      newErr.soDienThoai = "Vui lòng nhập số điện thoại";
+      hasError = true;
+    } else if (!/^(0[0-9]{9,10})$/.test(formData.soDienThoai)) {
+      newErr.soDienThoai = "Số điện thoại không hợp lệ";
+      hasError = true;
+    }
+    // họ và tên
+    if (!formData.hoTen.trim()) {
+      newErr.hoTen = "Vui lòng nhập họ và tên";
+      hasError = true;
+    } else if (!/^[\p{L}\s]+$/u.test(formData.hoTen)) {
+      newErr.hoTen = "Họ và tên chỉ chứa chữ cái";
+      hasError = true;
+    }
+
+    setErr(newErr);
+    return !hasError;
+  }
   if (!user) return null; // Nếu chưa chọn user thì không render
 
   return (
@@ -55,7 +102,7 @@ const ChinhSua = ({ user, onClose, onSave }) => {
               type="text"
               name="hoten"
               value={formData.hoten}
-              onChange={handleChange}
+              onChange={(e) => handleChange('hoten', e.target.value)}
               required
             />
           </label>
@@ -66,7 +113,7 @@ const ChinhSua = ({ user, onClose, onSave }) => {
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => handleChange('email', e.target.value)}
               required
             />
           </label>
@@ -77,33 +124,24 @@ const ChinhSua = ({ user, onClose, onSave }) => {
               type="text"
               name="sdt"
               value={formData.sdt}
-              onChange={handleChange}
+              onChange={(e) => handleChange('sdt', e.target.value)}
               required
             />
           </label>
 
-          <label>
-            Mật khẩu:
+          <label id="reset-password">
+
             <input
-              type="password"
-              name="matkhau"
-              value={formData.matkhau}
-              onChange={handleChange}
-              required
+              type="checkbox"
+              name="resetpassword"
+              checked={formData.resetpassword}
+              onChange={(e) => handleChange('resetpassword', e.target.checked)}
+
             />
+            Reset mật khẩu về mặc định
           </label>
 
-          <label>
-            Vai trò:
-            <select
-              name="vaitro"
-              value={formData.vaitro}
-              onChange={handleChange}
-            >
-              <option value="user">Người dùng</option>
-              <option value="admin">Quản trị</option>
-            </select>
-          </label>
+
 
           <div className="chinhSua-actions">
             <button type="button" className="cancel-btn" onClick={onClose}>

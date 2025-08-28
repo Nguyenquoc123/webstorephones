@@ -279,6 +279,7 @@ function DienThoai() {
   };
 
   const clickSaveEditDienThoai = async (e) => {
+    console.log(formAddDienThoai)
     const data = new FormData();
 
     data.append("maDienThoai", formAddDienThoai.maDienThoai);

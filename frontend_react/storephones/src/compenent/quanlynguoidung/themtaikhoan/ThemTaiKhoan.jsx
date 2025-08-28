@@ -3,34 +3,125 @@ import "./ThemTaiKhoan.css";
 
 const ThemTaiKhoan = ({ onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    status: "Hoạt động",
+    email: '',
+    userName: '',
+    hoTen: '',
+    soDienThoai: '',
+    gioiTinh: 1,
+    ngaySinh: '',
+    password: ''
+
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const [err, setErr] = useState({
+    email: '',
+    userName: '',
+    hoTen: '',
+    soDienThoai: '',
+    gioiTinh: 'Nam',
+    ngaySinh: '',
+    password: '',
+    againpassword: ''
+  })
+
+  const validCheck = () => {
+    let hasError = false;
+    let newErr = {
+      email: '',
+      userName: '',
+      hoTen: '',
+      soDienThoai: '',
+      gioiTinh: 'Nam',
+      ngaySinh: '',
+      password: '',
+      againpassword: ''
+    }
+    // check username
+    if (!formData.userName.trim()) {
+      newErr.userName = "Vui lòng nhập username";
+      hasError = true;
+    } else if (formData.userName.length < 6) {
+      newErr.userName = "Username phải có ít nhất 6 ký tự";
+      hasError = true;
+    } else if (!/^[A-Za-z0-9]+$/.test(formData.userName)) {
+      newErr.userName = "Username chỉ được chứa chữ và số";
+      hasError = true;
+    }
+
+    // email
+    if (!formData.email.trim()) {
+      newErr.email = "Vui lòng nhập email";
+      hasError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErr.email = "Email không hợp lệ";
+      hasError = true;
+    }
+    // số điện thoại
+    if (!formData.soDienThoai.trim()) {
+      newErr.soDienThoai = "Vui lòng nhập số điện thoại";
+      hasError = true;
+    } else if (!/^(0[0-9]{9,10})$/.test(formData.soDienThoai)) {
+      newErr.soDienThoai = "Số điện thoại không hợp lệ";
+      hasError = true;
+    }
+    // họ và tên
+    if (!formData.hoTen.trim()) {
+      newErr.hoTen = "Vui lòng nhập họ và tên";
+      hasError = true;
+    } else if (!/^[\p{L}\s]+$/u.test(formData.hoTen)) {
+      newErr.hoTen = "Họ và tên chỉ chứa chữ cái";
+      hasError = true;
+    }
+    // ngày sinh
+    if (!formData.ngaySinh) {
+      newErr.ngaySinh = "Vui lòng nhập ngày sinh";
+      hasError = true;
+    } else {
+      const today = new Date();
+      const ngaySinh = new Date(formData.ngaySinh);
+      if (ngaySinh > today) {
+        newErr.ngaySinh = "Ngày sinh không hợp lệ";
+        hasError = true;
+      }
+    }
+    // check password
+    if (!formData.password.trim()) {
+      newErr.password = "Vui lòng nhập password";
+      hasError = true;
+    } else if (formData.password.length < 8) {
+      newErr.password = "Password phải có ít nhất 8 ký tự";
+      hasError = true;
+    }
+    
+    setErr(newErr);
+    return !hasError;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Tạo user mới (giả lập)
+    console.log("Thong tin tk: ", formData)
+    if (!validCheck())
+      return;
+    // Tạo data
     const newUser = {
-      id: Date.now(),
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      status: formData.status,
-      createdDate: new Date().toLocaleDateString("vi-VN"),
-      locked: formData.status !== "Hoạt động",
+      'email': formData.email,
+      'userName': formData.userName,
+      'hoTen': formData.hoTen,
+      'soDienThoai': formData.soDienThoai,
+      'gioiTinh': formData.gioiTinh,
+      'ngaySinh': formData.gioiTinh,
+      'password': formData.password
     };
 
     onSave(newUser);
-    onClose();
+    // onClose();
   };
+
+  const changeInput = (key, value) => {
+    setFormData({ ...formData, [key]: value })
+  }
+
+
 
   return (
     <div className="add-modal-overlay">
@@ -44,14 +135,27 @@ const ThemTaiKhoan = ({ onClose, onSave }) => {
 
         <form className="add-form" onSubmit={handleSubmit}>
           <div className="add-form-group">
+            <label>Tên đăng nhập</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.userName}
+              onChange={(e) => changeInput('userName', e.target.value)}
+              required
+            />
+            {err.userName && <span className="err-add">{err.userName}</span>}
+          </div>
+
+          <div className="add-form-group">
             <label>Họ và tên</label>
             <input
               type="text"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={formData.hoTen}
+              onChange={(e) => changeInput('hoTen', e.target.value)}
               required
             />
+            {err.hoTen && <span className="err-add">{err.hoTen}</span>}
           </div>
 
           <div className="add-form-group">
@@ -59,10 +163,11 @@ const ThemTaiKhoan = ({ onClose, onSave }) => {
             <input
               type="tel"
               name="phone"
-              value={formData.phone}
-              onChange={handleChange}
+              value={formData.soDienThoai}
+              onChange={(e) => changeInput('soDienThoai', e.target.value)}
               required
             />
+            {err.soDienThoai && <span className="err-add">{err.soDienThoai}</span>}
           </div>
 
           <div className="add-form-group">
@@ -71,21 +176,47 @@ const ThemTaiKhoan = ({ onClose, onSave }) => {
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => changeInput('email', e.target.value)}
               required
             />
+            {err.email && <span className="err-add">{err.email}</span>}
           </div>
 
           <div className="add-form-group">
-            <label>Trạng thái</label>
+            <label>Ngày sinh</label>
+            <input
+              type="date" lang="vi"
+              name="ngay-sinh"
+              value={formData.ngaySinh}
+              onChange={(e) => changeInput('ngaySinh', e.target.value)}
+              required
+            />
+            {err.ngaySinh && <span className="err-add">{err.ngaySinh}</span>}
+          </div>
+
+          <div className="add-form-group">
+            <label>Giới tính</label>
             <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
+              name="gioi-tinh"
+              value={formData.gioiTinh}
+              onChange={(e) => changeInput('gioiTinh', e.target.value)}
             >
-              <option>Hoạt động</option>
-              <option>Bị khóa</option>
+              <option value={1}>Nam</option>
+              <option value={2}>Nữ</option>
+              <option value={3}>Khác</option>
             </select>
+          </div>
+
+          <div className="add-form-group">
+            <label>Mật khẩu</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={(e) => changeInput('password', e.target.value)}
+              required
+            />
+            {err.password && <span className="err-add">{err.password}</span>}
           </div>
 
           <div className="add-modal-actions">
