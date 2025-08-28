@@ -104,7 +104,7 @@ function MenuKhachHang({ search }) {
       </div>
       <div
         style={{ display: showMenuByIcon ? "block" : "none" }}
-        className="nav-menu"
+        className="KH-nav-menu"
       >
         <p onClick={() => navigate("/home/HoSoCaNhan")}>Hồ sơ cá nhân</p>
         <p onClick={() => navigate("/home/donhang")}>Đơn hàng hiện tại</p>
