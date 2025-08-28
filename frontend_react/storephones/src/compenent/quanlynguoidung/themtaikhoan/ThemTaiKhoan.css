@@ -49,6 +49,7 @@
   height: 30px;
   border-radius: 50%;
 }
+
 .add-close-btn:hover {
   background-color: #e9ecef;
   color: #495057;
@@ -60,9 +61,18 @@
 }
 
 .add-form-group {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
+}
+
+.err-add {
+  position: absolute;
+  bottom: -15px;
+  font-size: 11px;
+  left: 9px;
+  color: red;
 }
 
 .add-form-group label {
@@ -96,6 +106,7 @@
   cursor: pointer;
   font-weight: 500;
 }
+
 .add-cancel-btn:hover {
   background-color: #e9ecef;
   color: #495057;
@@ -110,6 +121,7 @@
   cursor: pointer;
   font-weight: 500;
 }
+
 .add-confirm-btn:hover {
   background-color: #1d4ed8;
   border-color: #1d4ed8;
@@ -120,9 +132,11 @@
   .add-modal {
     width: 95%;
   }
+
   .add-modal-actions {
     flex-direction: column;
   }
+
   .add-cancel-btn,
   .add-confirm-btn {
     width: 100%;
