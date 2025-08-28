@@ -21,9 +21,10 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer> {
 	@Query("""
 			Select Count(kh.maKhachHang),
 			 	Sum(Case When kh.trangThai = 1 Then 1 Else 0 End),
-			 	Sum(Case When kh.trangThai = -1 Then 1 Else 0 End),
-			 	Sum(Case When Cast(kh.ngayDangKy as Date) = Cast(GetDate() as Date) Then 1 Else 0 End)
+			 	Sum(Case When kh.trangThai = 0 Then 1 Else 0 End),
+			 	IsNull(Sum(Case When Cast(kh.ngayDangKy as Date) = Cast(GetDate() as Date) Then 1 Else 0 End), 0)
 			From KhachHang kh
+			where kh.trangThai <> -1
 			""")
 	Optional<Object> thongKeKhachHang();
 

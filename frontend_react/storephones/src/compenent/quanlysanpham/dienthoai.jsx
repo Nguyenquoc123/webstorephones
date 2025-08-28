@@ -21,10 +21,15 @@ import DSPhienBan from "./dsphienban/DSPhienBan";
 import DelDienThoai from "./deldienthoai/DelDienThoai";
 import SuaPhienBan from "./suaphienban/SuaPhienBan";
 import DelPhienBan from "./delphienban/DelPhienBan";
+import Popup from "../popup/Popup";
 function DienThoai() {
   const [menubar, setMenu] = useState(1);
   const [dsDienThoai, setDSDienThoai] = useState([]);
-  const [showPopup, setShowPopup] = useState(null);
+  const [showPopup, setShowPopup] = useState({
+    show: false,
+    type: "",
+    message: "",
+  });
   const [dsPhienBan, setDSPhienBan] = useState([]);
   const [showAction, setShowAction] = useState(-1);
   const [lstImgDelete, setLstImgDelete] = useState([]);
@@ -201,10 +206,10 @@ function DienThoai() {
     const result = await fetchAddDienThoai(data);
     if (result.code === 200) {
       setDSDienThoai([...dsDienThoai, result.result]);
-      showpopup(true, result.message);
+      setShowPopup({ show: true, type: true, message: "Thêm thành công" });
       resetFormAddDienThoai();
     } else {
-      showpopup(false, result.message);
+      setShowPopup({ show: true, type: false, message: result.message });
     }
     console.log(result);
   };
@@ -238,9 +243,9 @@ function DienThoai() {
       console.log("Thêm thành công.");
       setDSPhienBan([...dsPhienBan, result.result]);
       resetFormAddPhienBan();
-      showpopup(true, result.message);
+      setShowPopup({ show: true, type: true, message: "Thêm thành công" });
     } else {
-      showpopup(false, result.message);
+      setShowPopup({ show: true, type: false, message: result.message });
     }
   };
 
@@ -279,7 +284,7 @@ function DienThoai() {
   };
 
   const clickSaveEditDienThoai = async (e) => {
-    console.log(formAddDienThoai)
+    console.log(formAddDienThoai);
     const data = new FormData();
 
     data.append("maDienThoai", formAddDienThoai.maDienThoai);
@@ -532,6 +537,14 @@ function DienThoai() {
         clickCancelDeletePhienBan={clickCancelDeletePhienBan}
         clickSaveDeletePhienBan={clickSaveDeletePhienBan}
       />
+
+      {showPopup.show && (
+        <Popup
+          type={showpopup.type}
+          message={showPopup.message}
+          onclose={() => setShowPopup({ ...showpopup, show: false })}
+        />
+      )}
     </>
   );
 }

@@ -534,7 +534,7 @@ public class EntityManagerService {
 		String sql = """
 			Select ISNULL(Count(kh.maKhachHang), 0) as soluongkh,
 			 	IsNULL(Sum(Case When kh.trangThai = 1 Then 1 Else 0 End), 0),
-			 	IsNULL(Sum(Case When kh.trangThai = -1 Then 1 Else 0 End), 0),
+			 	IsNULL(Sum(Case When kh.trangThai = 0 Then 1 Else 0 End), 0),
 			 	ISNULL(Sum(Case When Year(kh.NgayDangKy) = :nam Then 1 Else 0 End), 0)
 			From KhachHang kh	
 			Where Year(kh.NgayDangKy) = :nam
@@ -549,7 +549,7 @@ public class EntityManagerService {
 		String sql = """
 			Select ISNULL(Count(kh.maKhachHang), 0),
 			 	ISNULL(Sum(Case When kh.trangThai = 1 Then 1 Else 0 End), 0),
-			 	ISNULL(Sum(Case When kh.trangThai = -1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When kh.trangThai = 0 Then 1 Else 0 End), 0),
 			 	ISNULL(Sum(Case When Year(kh.NgayDangKy) = :nam And Month(kh.NgayDangKy) = :thang Then 1 Else 0 End), 0)
 			From KhachHang kh	
 			Where Year(kh.NgayDangKy) = :nam AND Month(kh.NgayDangKy) = :thang
@@ -564,7 +564,7 @@ public class EntityManagerService {
 		String sql = """
 			Select ISNULL(Count(kh.maKhachHang), 0),
 			 	ISNULL(Sum(Case When kh.trangThai = 1 Then 1 Else 0 End), 0),
-			 	ISNULL(Sum(Case When kh.trangThai = -1 Then 1 Else 0 End), 0),
+			 	ISNULL(Sum(Case When kh.trangThai = 0 Then 1 Else 0 End), 0),
 			 	ISNULL(Sum(Case When Cast(kh.NgayDangKy as Date) = :ngay Then 1 Else 0 End), 0)
 			From KhachHang kh	
 			Where Cast(kh.NgayDangKy as Date) = :ngay
@@ -655,7 +655,7 @@ public class EntityManagerService {
 	public List<DSKhachHangReponse> getDSKhachHangNam(int year){
 		String sql= """
 			Select kh.maKhachHang, kh.hoten, kh.email,
-			Case When kh.TrangThai = 1 Then N'Hoạt động' Else 'Ngưng hoạt động' End
+			Case When kh.TrangThai = 1 Then N'Hoạt động' Else N'Ngưng hoạt động' End
 			From KhachHang kh
 			Where Year(kh.NgayDangKy) = :nam	
 		""";
@@ -668,7 +668,7 @@ public class EntityManagerService {
 	public List<DSKhachHangReponse> getDSKhachHangThang(int year, int month){
 		String sql= """
 			Select kh.maKhachHang, kh.hoten, kh.email,
-			Case When kh.TrangThai = 1 Then N'Hoạt động' Else 'Ngưng hoạt động' End
+			Case When kh.TrangThai = 1 Then N'Hoạt động' Else N'Ngưng hoạt động' End
 			From KhachHang kh
 			Where Year(kh.NgayDangKy) = :nam AND Month(kh.NgayDangKy) = :thang
 		""";
@@ -682,7 +682,7 @@ public class EntityManagerService {
 	public List<DSKhachHangReponse> getDSKhachHangNgay(LocalDate day){
 		String sql= """
 			Select kh.maKhachHang, kh.hoten, kh.email,
-			Case When kh.TrangThai = 1 Then N'Hoạt động' Else 'Ngưng hoạt động' End
+			Case When kh.TrangThai = 1 Then N'Hoạt động' Else N'Ngưng hoạt động' End
 			From KhachHang kh
 			Where Cast(kh.ngaydangky as DATE) = :ngay
 		""";

@@ -20,7 +20,7 @@
 }
 #logo {
   padding-left: 10%;
-  font-size: 30px;
+  font-size: 50px;
   font-family: "Italianno";
   font-weight: bolder;
   margin: 0;
@@ -86,7 +86,7 @@
 }
 
 /**============================================================**/
-.nav-menu {
+/* .nav-menu {
   display: none;
   width: 250px;
   height: 100vh;
@@ -106,6 +106,31 @@
 .nav-menu p:hover {
   color: rgb(0, 174, 255);
   text-shadow: 1px -1px 1px #ff0000;
-}
+} */
 
 /** =========================================================***/
+
+.nav-menu {
+  width: 250px;
+  height: 150vh;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  background-color: #e6f0fa;
+  padding: 20px;
+  z-index: 10;
+  background: linear-gradient(90deg, #6d6dfe, #9affdb);
+  border-right: 1px solid black;
+}
+
+.nav-menu p {
+  font-size: large;
+  font-weight: 600;
+  border-bottom: 2px solid;
+  cursor: pointer;
+}
+
+.nav-menu p:hover {
+  color: rgb(250, 250, 250);
+  text-shadow: 1px -1px 1px #ff0800;
+}
