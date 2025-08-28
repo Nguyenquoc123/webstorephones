@@ -28,6 +28,7 @@ import com.bot.bandienthoai.mapper.ThongTinGiaoDichMapper;
 import com.bot.bandienthoai.repository.DonHangRepository;
 import com.bot.bandienthoai.repository.KhachHangRepository;
 import com.bot.bandienthoai.request.ChangePasswordRequest;
+import com.bot.bandienthoai.request.EditKhachHangRequest;
 import com.bot.bandienthoai.request.KhachHangRequest;
 import com.bot.bandienthoai.request.UpdateHoSoRequest;
 
@@ -202,16 +203,53 @@ public class KhachHangService {
 	
 	public List<KhachHangInQuanLyReponse> search(String keyword){
 		if(keyword == null || keyword.isEmpty())
-			return getDSKhachHang();
+			return getDSKhachHang(null);
 		keyword = "%" + keyword.toLowerCase() + "%";
 		List<KhachHang> lst = khachHangRepository.search(keyword);
 		return lst.stream().map(khachHangMapper::toKhachHangInQuanLyReponse).collect(Collectors.toList());
 	}
-	public List<KhachHangInQuanLyReponse> getDSKhachHang(){
-		List<KhachHang> lst = khachHangRepository.getDSKhachHang();
+	public List<KhachHangInQuanLyReponse> getDSKhachHang(Integer search){
+		List<KhachHang> lst = khachHangRepository.getDSKhachHang(search);
 		return lst.stream().map(khachHangMapper::toKhachHangInQuanLyReponse).collect(Collectors.toList());
 	}
 	
+	public String khoaMoTaiKhoan(Integer maKhachHang) {
+		Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang);
+		if(kh.isEmpty()) {
+			throw new RunException(ErrorCode.KhachHang_Not_Found);
+		}
+		KhachHang khachHang = kh.get();
+		if(khachHang.getTrangThai() == 1)
+			khachHang.setTrangThai(0);
+		else
+			khachHang.setTrangThai(1);
+		khachHang = khachHangRepository.save(khachHang);
+		return khachHang.getTrangThai() == 0 ? "Đã khóa tài khoản" : "Đã mở khóa tài khoản";
+	}
+	public String xoaTaiKhoan(Integer maKhachHang) {
+		Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang);
+		if(kh.isEmpty()) {
+			throw new RunException(ErrorCode.KhachHang_Not_Found);
+		}
+		KhachHang khachHang = kh.get();	
+		khachHang.setTrangThai(-1);
+		khachHang = khachHangRepository.save(khachHang);
+		return "Đã xóa tài khoản";
+	}
+	
+	public String xoaNhieuTaiKhoan(List<Integer> ds) {
+		for(Integer maKhachHang : ds) {
+			Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang);
+			if(kh.isEmpty()) {
+				throw new RunException(ErrorCode.KhachHang_Not_Found);
+			}
+			KhachHang khachHang = kh.get();	
+			khachHang.setTrangThai(-1);
+			khachHang = khachHangRepository.save(khachHang);
+		}
+		
+		return "Đã xóa tài khoản";
+	}
 	public String khoaTaiKhoan(Integer maKhachHang) {
 		Optional<KhachHang> kh = khachHangRepository.findById(maKhachHang);
 		if(kh.isEmpty()) {
@@ -231,5 +269,32 @@ public class KhachHangService {
 		khachHang.setTrangThai(1);
 		khachHang = khachHangRepository.save(khachHang);
 		return "Đã mở khóa tài khoản";
+	}
+	
+	public String editKhachHang(EditKhachHangRequest request) {
+		Optional<KhachHang> kh = khachHangRepository.findById(request.getMaKhachHang());
+		if(kh.isEmpty()) {
+			throw new RunException(ErrorCode.KhachHang_Not_Found);
+		}
+		
+		Optional<KhachHang> khachhang_ = khachHangRepository.findByEmail(request.getEmail());
+		if (khachhang_.isPresent()) {
+			throw new RunException(ErrorCode.Email_Exists);
+		}
+		khachhang_ = khachHangRepository.findBySoDienThoai(request.getSoDienThoai());
+		if (khachhang_.isPresent()) {
+			throw new RunException(ErrorCode.SDT_Exists);
+		}
+		
+		KhachHang khachHang = new KhachHang();
+		khachHang.setHoTen(request.getHoTen());
+		khachHang.setEmail(request.getEmail());
+		khachHang.setSoDienThoai(request.getSoDienThoai());
+		if(request.isResetpassword()) {
+			khachHang.setPassword(passwordEncoder.encode("11111111"));
+		}
+		
+		khachHang = khachHangRepository.save(khachHang);
+		return "Update thành công";
 	}
 }

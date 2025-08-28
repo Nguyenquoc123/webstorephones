@@ -30,19 +30,19 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer> {
 	@Query("""
 			Select kh
 			From KhachHang kh
-			Where (:keyword IS NULL Or :keyword = '')
+			Where kh.trangThai <> -1 AND ( (:keyword IS NULL Or :keyword = '')
 			   Or (Lower(kh.hoTen) Like %:keyword%
 			       Or Lower(kh.userName) Like %:keyword%
 			       Or Lower(kh.email) Like %:keyword%
-			       Or Lower(kh.soDienThoai) Like %:keyword%)
+			       Or Lower(kh.soDienThoai) Like %:keyword%))
 			""")
 	List<KhachHang> search(@Param("keyword") String keyword);
 
 	@Query("""
 			Select kh
 			From KhachHang kh
-			Where kh.trangThai <> -1
-
+			Where kh.trangThai <> -1 AND (:trangThai IS NULL  OR kh.trangThai = :trangThai)
 			""")
-	List<KhachHang> getDSKhachHang();
+	List<KhachHang> getDSKhachHang(@Param("trangThai") Integer trangThai);
+	
 }

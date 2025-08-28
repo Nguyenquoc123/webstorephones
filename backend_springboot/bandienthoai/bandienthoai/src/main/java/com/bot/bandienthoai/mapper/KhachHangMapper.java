@@ -19,4 +19,10 @@ public interface KhachHangMapper {
 	KhachHangReponse toKhachHangReponse(KhachHang khachHang);
 	
 	KhachHangInQuanLyReponse toKhachHangInQuanLyReponse(KhachHang khachHang);
+	
+//	default KhachHangInQuanLyReponse toKhachHangInQuanLyReponse(Object[] data) {
+//		KhachHangInQuanLyReponse kh = new KhachHangInQuanLyReponse();
+//		kh.setMaKhachHang(Integer.valueOf(data[0].toString()));
+//		kh.setHoTen(null);
+//	}
 }

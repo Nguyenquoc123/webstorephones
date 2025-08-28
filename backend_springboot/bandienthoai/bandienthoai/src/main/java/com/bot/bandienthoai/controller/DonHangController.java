@@ -25,6 +25,7 @@ import com.bot.bandienthoai.dto.reponse.DoanhThuReponse;
 import com.bot.bandienthoai.dto.reponse.DonHangKhachHangReponse;
 import com.bot.bandienthoai.dto.reponse.DonHangReponse;
 import com.bot.bandienthoai.dto.reponse.KetQuaDonHangReponse;
+import com.bot.bandienthoai.dto.reponse.SanPhamBanChayReponse;
 import com.bot.bandienthoai.dto.reponse.ThongKeDanhMucReponse;
 import com.bot.bandienthoai.entity.DonHang;
 import com.bot.bandienthoai.exception.ErrorCode;
@@ -149,6 +150,25 @@ public class DonHangController {
 	    	return APIReponse.<List<ThongKeDanhMucReponse>>builder().result(entityManagerService.thongKeDanhMucNgay(day)).build() ;
 	    } else {
 	        return APIReponse.<List<ThongKeDanhMucReponse>>builder()
+	                .code(400)
+	                .message("Tham số không hợp lệ")
+	                .build();
+	    }
+	}
+	
+	@GetMapping("/getspbanchay")
+	public APIReponse<List<SanPhamBanChayReponse>> getSPBanChay( @RequestParam(name = "type", required = false) String type,
+	        @RequestParam(name = "nam", required = false) Integer nam,
+	        @RequestParam(name = "month", required = false) Integer month,
+	        @RequestParam(name = "day", required = false)  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day ){
+		if ("year".equalsIgnoreCase(type) && nam != null) {
+	        return APIReponse.<List<SanPhamBanChayReponse>>builder().result(entityManagerService.getSPBanChayNam(nam)).build() ;
+	    } else if ("month".equalsIgnoreCase(type) && nam != null && month != null) {
+	    	return APIReponse.<List<SanPhamBanChayReponse>>builder().result(entityManagerService.getSPBanChayThang(nam, month)).build() ;
+	    } else if ("day".equalsIgnoreCase(type) && day != null) {
+	    	return APIReponse.<List<SanPhamBanChayReponse>>builder().result(entityManagerService.getSPBanChayNgay(day)).build() ;
+	    } else {
+	        return APIReponse.<List<SanPhamBanChayReponse>>builder()
 	                .code(400)
 	                .message("Tham số không hợp lệ")
 	                .build();
