@@ -188,6 +188,7 @@ const HoSoCaNhan = () => {
   };
   return (
     <div>
+      <MenuKhachHang />
       <div className="HSCN-profile-info">
         <label htmlFor="avatar-img">
           <img
@@ -195,8 +196,8 @@ const HoSoCaNhan = () => {
               avatarImg && avatarImg instanceof File
                 ? URL.createObjectURL(avatarImg)
                 : avatarImg
-                  ? avatarImg
-                  : "/images/anh-dai-dien-mac-dinh-18.jpg"
+                ? avatarImg
+                : "/images/anh-dai-dien-mac-dinh-18.jpg"
             }
             alt="avatar"
             className="avatar"
@@ -229,12 +230,13 @@ const HoSoCaNhan = () => {
         </div>
       </div>
       <Loading show={showLoading} />
-      {
-        showPopup.show &&
-        <Popup type={showPopup.type} message={showPopup.message}
+      {showPopup.show && (
+        <Popup
+          type={showPopup.type}
+          message={showPopup.message}
           onclose={() => setShowPopup({ ...showPopup, show: false })}
         />
-      }
+      )}
     </div>
   );
 };
